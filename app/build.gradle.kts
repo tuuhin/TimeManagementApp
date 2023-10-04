@@ -1,6 +1,8 @@
 plugins {
 	id("com.android.application")
 	kotlin("android")
+	id("com.google.devtools.ksp")
+	id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -61,6 +63,17 @@ dependencies {
 	implementation("androidx.compose.ui:ui-tooling-preview")
 	implementation("androidx.compose.material3:material3")
 
+	//navigation
+	implementation("androidx.navigation:navigation-compose:2.7.3")
+	implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+	//lifecycle runtime compose
+	implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+	//hilt
+	implementation("com.google.dagger:hilt-android:2.48")
+	ksp("com.google.dagger:hilt-android-compiler:2.48")
+	//datastore
+	implementation("androidx.datastore:datastore-preferences:1.0.0")
+	//tests
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.5")
 	androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

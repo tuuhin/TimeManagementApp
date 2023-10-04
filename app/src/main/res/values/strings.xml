@@ -1,3 +1,13 @@
 <resources>
   <string name="app_name">TimeManagementApp</string>
+
+  <string name="settings_title">Settings</string>
+  <string name="session_settings_title">Session</string>
+  <string name="session_focus_duration">Focus Duration</string>
+  <string name="session_break_duration">Break Duration</string>
+  <string name="session_count">Session Count</string>
+  <string name="session_notification_title">Notification</string>
+  <string name="airplane_mode_title">AirPlane Mode</string>
+  <string name="airplane_mode_text">Views Current Airplane Mode</string>
+
 </resources>
