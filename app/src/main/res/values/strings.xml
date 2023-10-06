@@ -3,11 +3,20 @@
 
   <string name="settings_title">Settings</string>
   <string name="session_settings_title">Session</string>
-  <string name="session_focus_duration">Focus Duration</string>
-  <string name="session_break_duration">Break Duration</string>
-  <string name="session_count">Session Count</string>
+  <string name="session_focus_title">Focus Duration</string>
+  <string name="session_focus_text">Minutes to focus</string>
+  <string name="session_break_title">Break Duration</string>
+  <string name="session_break_text">Breaks in between two focus session</string>
+  <string name="session_count_title">Session Count</string>
+  <string name="session_count_text">The number of focus duration for a session to complete</string>
   <string name="session_notification_title">Notification</string>
   <string name="airplane_mode_title">AirPlane Mode</string>
-  <string name="airplane_mode_text">Views Current Airplane Mode</string>
-
+  <string name="airplane_mode_text">Views Current Airplane Mode Status</string>
+  <!--  Notification Channel Info-->
+  <string name="channel_name">Service Channel</string>
+  <string name="channel_id">Service Channel Id</string>
+  <string name="channel_desc">A channel to show the current onh=going session</string>
+  <string name="notification_action_pause">Pause</string>
+  <string name="notification_action_stop">Stop</string>
+  <string name="notification_action_start">Start</string>
 </resources>
