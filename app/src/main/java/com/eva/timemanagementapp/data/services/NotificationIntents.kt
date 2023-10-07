@@ -4,8 +4,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.eva.timemanagementapp.MainActivity
+import com.eva.timemanagementapp.utils.RequestCodes
+import com.eva.timemanagementapp.utils.SessionServiceActions
 
-abstract class NotificationIntents(
+class NotificationIntents(
 	private val context: Context
 ) {
 
@@ -16,7 +18,7 @@ abstract class NotificationIntents(
 		context: Context,
 		requestCodes: RequestCodes,
 		intent: Intent,
-		flags: Int = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
+		flags: Int = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
 	) = PendingIntent.getService(context, requestCodes.code, intent, flags)
 
 	private fun buildActivityIntent(
@@ -26,38 +28,49 @@ abstract class NotificationIntents(
 		flags: Int = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
 	) = PendingIntent.getActivity(context, requestCodes.code, intent, flags)
 
-	protected val pausePendingIntent: PendingIntent
+	val pausePendingIntent: PendingIntent
 		get() = buildServicePendingIntent(
 			context = context,
-			requestCodes = RequestCodes.PAUSE_SESSION_TIMER,
+			requestCodes = RequestCodes.PAUSE_TIMER,
 			intent = serviceIntent.apply {
-				action = SessionServiceActions.PAUSE_SESSION_STOPWATCH.action
+				action = SessionServiceActions.PAUSE_TIMER.action
 			},
 		)
 
 
-	protected val stopPendingIntent: PendingIntent
+	val stopPendingIntent: PendingIntent
 		get() = buildServicePendingIntent(
 			context = context,
-			requestCodes = RequestCodes.STOP_SESSION_TIMER,
+			requestCodes = RequestCodes.STOP_TIMER,
 			intent = serviceIntent.apply {
-				action = SessionServiceActions.STOP_SESSION_STOPWATCH.action
+				action = SessionServiceActions.STOP_TIMER.action
 			},
 		)
 
-	protected val startPendingIntent: PendingIntent
+	val resumePendingIntent: PendingIntent
 		get() = buildServicePendingIntent(
 			context = context,
-			requestCodes = RequestCodes.START_SESSION_TIMER,
+			requestCodes = RequestCodes.RESUME_TIMER,
 			intent = serviceIntent.apply {
-				action = SessionServiceActions.START_SESSION_STOPWATCH.action
+				action = SessionServiceActions.RESUME_TIMER.action
 			},
 		)
 
-	protected val contentActivityIntent: PendingIntent
+	val startPendingIntent: PendingIntent
+		get() = buildServicePendingIntent(
+			context = context,
+			requestCodes = RequestCodes.START_TIMER,
+			intent = serviceIntent.apply {
+				action = SessionServiceActions.START_TIMER.action
+			},
+		)
+
+	val contentActivityIntent: PendingIntent
 		get() = buildActivityIntent(
 			context = context,
 			requestCodes = RequestCodes.START_ACTIVITY,
-			intent = activityIntent
+			intent = activityIntent.apply {
+				flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+			}
 		)
 }

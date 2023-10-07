@@ -1,5 +1,6 @@
 package com.eva.timemanagementapp.di
 
+import android.app.NotificationManager
 import android.content.Context
 import com.eva.timemanagementapp.data.services.NotificationBuilderHelper
 import dagger.Module
@@ -19,5 +20,11 @@ object SessionTimerModule {
 		@ApplicationContext context: Context
 	): NotificationBuilderHelper = NotificationBuilderHelper(context)
 
+	@Provides
+	@ServiceScoped
+	fun providesNotificationManager(
+		@ApplicationContext context: Context
+	): NotificationManager =
+		context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 }

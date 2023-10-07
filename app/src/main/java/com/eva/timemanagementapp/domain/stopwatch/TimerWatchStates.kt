@@ -1,6 +1,7 @@
 package com.eva.timemanagementapp.domain.stopwatch
 
-enum class StopWatchStates {
+enum class TimerWatchStates {
+	IDLE,
 	RUNNING,
 	PAUSED,
 }
