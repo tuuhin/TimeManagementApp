@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -21,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
@@ -30,14 +30,15 @@ import java.time.LocalTime
 fun TimerClockFace(
 	time: LocalTime,
 	modifier: Modifier = Modifier,
+	timeFontFamily: FontFamily = FontFamily.Default,
 	hourTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
-	hourColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
 	minuteTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
-	minutesColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+	separatorStyle: TextStyle = MaterialTheme.typography.displaySmall,
 	secondsTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
+	hourColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+	minutesColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 	secondsColor: Color = MaterialTheme.colorScheme.onTertiaryContainer,
 	separatorColor: Color = MaterialTheme.colorScheme.tertiary,
-	separatorStyle: TextStyle = MaterialTheme.typography.displaySmall
 ) {
 	Row(
 		modifier = modifier,
@@ -51,7 +52,7 @@ fun TimerClockFace(
 		) { hour ->
 			Text(
 				text = "$hour".padStart(2, '0'),
-				style = hourTextStyle,
+				style = hourTextStyle.copy(fontFamily = timeFontFamily),
 				color = hourColor,
 			)
 		}
@@ -68,7 +69,7 @@ fun TimerClockFace(
 		) { minutes ->
 			Text(
 				text = "$minutes".padStart(2, '0'),
-				style = minuteTextStyle,
+				style = minuteTextStyle.copy(fontFamily = timeFontFamily),
 				color = minutesColor,
 			)
 		}
@@ -85,7 +86,7 @@ fun TimerClockFace(
 		) { seconds ->
 			Text(
 				text = "$seconds".padStart(2, '0'),
-				style = secondsTextStyle,
+				style = secondsTextStyle.copy(fontFamily = timeFontFamily),
 				color = secondsColor,
 			)
 		}
@@ -97,7 +98,7 @@ private fun AnimatedContentTransitionScope<Int>.incrementAnimation(): ContentTra
 		slideInVertically { height -> height } + fadeIn() togetherWith slideOutVertically { height -> -height } + fadeOut()
 	} else {
 		slideInVertically { height -> -height } + fadeIn() togetherWith slideOutVertically { height -> height } + fadeOut()
-	} using SizeTransform(clip = false)
+	}
 }
 
 @Preview(

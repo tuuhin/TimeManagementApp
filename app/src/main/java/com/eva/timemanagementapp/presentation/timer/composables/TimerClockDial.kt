@@ -31,19 +31,18 @@ import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 fun TimerClockDial(
 	coveredAngle: Float,
 	modifier: Modifier = Modifier,
-	dialWidth: Float = 16f,
-	shadowColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
-	primaryDialColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
-	coverDialColor: Color = MaterialTheme.colorScheme.primaryContainer
+	dialWidth: Float = 12f,
+	thinDialWidth: Float = 8f,
+	shadowRadius: Float = 16f,
+	shadowColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+	primaryDialColor: Color = MaterialTheme.colorScheme.secondary,
+	coverDialColor: Color = MaterialTheme.colorScheme.secondary
 ) {
 
 	val animatedAngle by animateFloatAsState(
 		targetValue = coveredAngle,
 		label = "Clock Animation",
-		animationSpec = tween(
-			easing = FastOutLinearInEasing,
-			durationMillis = 100
-		)
+		animationSpec = tween(easing = FastOutLinearInEasing, durationMillis = 1)
 	)
 
 	Spacer(modifier = modifier
@@ -57,15 +56,15 @@ fun TimerClockDial(
 				strokeCap = StrokeCap.Round
 			}
 
-			paint.asFrameworkPaint()
+			paint
+				.asFrameworkPaint()
 				.apply {
-					val shadowRadius = dialWidth + 5
 					setShadowLayer(
 						shadowRadius,
 						0f,
 						0f,
 						shadowColor
-							.copy(alpha = 0.5f)
+							.copy(alpha = 0.75f)
 							.toArgb()
 					)
 				}
@@ -73,7 +72,7 @@ fun TimerClockDial(
 			onDrawBehind {
 				drawCircle(
 					color = primaryDialColor,
-					style = Stroke(cap = StrokeCap.Round, width = 8f)
+					style = Stroke(cap = StrokeCap.Round, width = thinDialWidth)
 				)
 				drawIntoCanvas { canvas ->
 					val rect = Rect(Offset.Zero, size)

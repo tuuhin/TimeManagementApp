@@ -1,6 +1,9 @@
 package com.eva.timemanagementapp.presentation.navigation
 
 import android.content.res.Configuration
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -17,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @Composable
-fun TimerBottomNavigation(
+fun AppBottomNavigationBar(
 	onRouteSelected: (Screens) -> Unit,
 	isRouteSelected: (Screens) -> Boolean,
 	modifier: Modifier = Modifier,
@@ -35,17 +38,26 @@ fun TimerBottomNavigation(
 				selected = isSelected,
 				onClick = { onRouteSelected(screen) },
 				icon = {
-					Icon(
-						painter = if (isSelected) painterResource(id = screen.activeIcon)
-						else painterResource(id = screen.icon),
-						contentDescription = screen.route
+					Crossfade(
+						targetState = isSelected,
+						animationSpec = tween(easing = FastOutLinearInEasing),
+						label = "Navigation Icon Transition ${screen.route}"
+					) { condition ->
+						Icon(
+							painter = if (condition) painterResource(id = screen.activeIcon)
+							else painterResource(id = screen.icon),
+							contentDescription = screen.route
+						)
+					}
+				},
+				label = {
+					Text(
+						text = stringResource(id = screen.label),
+						style = MaterialTheme.typography.titleSmall
 					)
 				},
-				label = { Text(text = stringResource(id = screen.label)) },
-				alwaysShowLabel = false,
 				colors = NavigationBarItemDefaults.colors(
-					selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-					selectedTextColor = MaterialTheme.colorScheme.primary,
+					selectedTextColor = MaterialTheme.colorScheme.secondary,
 				)
 			)
 		}
@@ -59,8 +71,8 @@ fun TimerBottomNavigation(
 	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
 @Composable
-fun TimerBottomNavigationPreview() = TimeManagementAppTheme {
-	TimerBottomNavigation(
+fun AppBottomNavigationBarPreview() = TimeManagementAppTheme {
+	AppBottomNavigationBar(
 		onRouteSelected = {},
 		isRouteSelected = { it == Screens.TimerRoute },
 	)

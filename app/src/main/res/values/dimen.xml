@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <dimen name="scaffold_padding">16dp</dimen>
   <dimen name="settings_card_padding">16dp</dimen>
   <dimen name="menu_option_padding">8dp</dimen>
+  <dimen name="timer_watch_padding">20dp</dimen>
 </resources>

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
+import com.eva.timemanagementapp.utils.extensions.toMillisOfDay
 import java.time.LocalTime
 
 @Composable
@@ -27,8 +28,8 @@ fun TimerClockStyle(
 ) {
 	val angle by remember(currentTime, timerTime) {
 		derivedStateOf {
-			val currentTimeSeconds = currentTime.toSecondOfDay().toFloat()
-			val timerTimeSeconds = timerTime.toSecondOfDay().toFloat()
+			val currentTimeSeconds = currentTime.toMillisOfDay().toFloat()
+			val timerTimeSeconds = timerTime.toMillisOfDay().toFloat()
 			val angle = (timerTimeSeconds - currentTimeSeconds) / timerTimeSeconds * 360f
 			angle
 		}
@@ -38,8 +39,14 @@ fun TimerClockStyle(
 		modifier = modifier.aspectRatio(1f),
 		contentAlignment = Alignment.Center
 	) {
-		TimerClockDial(coveredAngle = angle, modifier = Modifier.fillMaxSize())
-		TimerClockFace(time = currentTime)
+		TimerClockDial(
+			coveredAngle = angle,
+			modifier = Modifier.fillMaxSize()
+		)
+		TimerClockFace(
+			time = currentTime,
+			modifier = Modifier.align(Alignment.Center)
+		)
 	}
 
 }
