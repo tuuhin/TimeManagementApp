@@ -15,18 +15,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import java.time.LocalTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TimerWatch(
 	scope: CoroutineScope,
-	initialState: LocalTime = LocalTime.MIN,
+	initialTimerInMillis: Long = 1000L,
 	private val interval: Long = 10L,
 ) {
 
-	private val _elapsedTime = MutableStateFlow(0L)
-	private val _states = MutableStateFlow(TimerWatchStates.IDLE)
+	private val _elapsedTime = MutableStateFlow(value = initialTimerInMillis)
 
+	private val _states = MutableStateFlow(TimerWatchStates.IDLE)
 	val state = _states.asStateFlow()
 
 	private var timerJob: Job? = null
@@ -37,21 +38,22 @@ class TimerWatch(
 	}.stateIn(
 		scope = scope,
 		started = SharingStarted.Lazily,
-		initialValue = initialState
+		initialValue = LocalTime.ofSecondOfDay(initialTimerInMillis)
 	)
 
 	init {
 		timerJob = _states.flatMapLatest { state ->
 			getCurrentTimeInMills(isRunning = state == TimerWatchStates.RUNNING)
 		}.onEach { diff ->
-			_elapsedTime.update { current -> current - diff }
+			val current = _elapsedTime.updateAndGet { current -> current - diff }
+			if (current < 0L) {
+				_states.update { TimerWatchStates.COMPLETED }
+			}
 		}.launchIn(scope)
+
 	}
 
-	fun cancelTimerJob() {
-		timerJob?.cancel()
-	}
-
+	fun cancelTimerJob() = timerJob?.cancel()
 
 	private fun getCurrentTimeInMills(isRunning: Boolean): Flow<Long> = flow {
 		var timeOld = System.currentTimeMillis()
@@ -73,9 +75,15 @@ class TimerWatch(
 		_states.update { TimerWatchStates.IDLE }
 	}
 
-	fun start(time: LocalTime) {
-		val startMills = time.toSecondOfDay() * 1000L
-		_elapsedTime.update { startMills }
-		_states.update { TimerWatchStates.RUNNING }
+	fun setModeIdle() = _states.update { TimerWatchStates.IDLE }
+
+	fun setTime(minutes: Int) {
+		val time = LocalTime.of(0, minutes, 0)
+		val milliSeconds = time.toSecondOfDay() * 1000L
+		_elapsedTime.update { milliSeconds }
+
 	}
+
+	fun start() = _states.update { TimerWatchStates.RUNNING }
+
 }

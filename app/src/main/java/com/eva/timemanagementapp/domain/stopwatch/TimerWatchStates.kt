@@ -4,4 +4,5 @@ enum class TimerWatchStates {
 	IDLE,
 	RUNNING,
 	PAUSED,
+	COMPLETED,
 }

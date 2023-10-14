@@ -43,12 +43,9 @@ class NotificationBuilderHelper(
 			.setSmallIcon(R.drawable.ic_timer)
 			.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 			.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-			.setOngoing(true)
 			.setCategory(Intent.CATEGORY_INFO)
 			.setOnlyAlertOnce(true)
 			.setContentIntent(intents.contentActivityIntent)
-			.addAction(pauseAction)
-			.addAction(stopAction)
 
 
 	val notification: Notification
@@ -57,18 +54,20 @@ class NotificationBuilderHelper(
 
 	@SuppressLint("RestrictedApi")
 	fun setPauseAction(): NotificationCompat.Builder {
-		return _notificationBuilder.apply {
-			val actions = arrayListOf(pauseAction, stopAction)
-			mActions = actions
-		}
+		return _notificationBuilder.setOngoing(true)
+			.apply {
+				val actions = arrayListOf(pauseAction, stopAction)
+				mActions = actions
+			}
 	}
 
 	@SuppressLint("RestrictedApi")
 	fun setResumeAction(): NotificationCompat.Builder {
-		return _notificationBuilder.apply {
-			val actions = arrayListOf(resumeAction, stopAction)
-			mActions = actions
-		}
+		return _notificationBuilder.setOngoing(true)
+			.apply {
+				val actions = arrayListOf(resumeAction, stopAction)
+				mActions = actions
+			}
 	}
 
 	fun setContentTitle(title: String) = _notificationBuilder
@@ -77,5 +76,11 @@ class NotificationBuilderHelper(
 
 	fun setContentText(text: String) = _notificationBuilder
 		.setContentText(text)
+
+	fun setCompletedNotification(title: String, text: String) = _notificationBuilder
+		.setOngoing(false)
+		.setContentTitle(title)
+		.setContentText(text)
+		.clearActions()
 
 }
