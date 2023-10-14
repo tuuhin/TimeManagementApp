@@ -4,50 +4,42 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.stopwatch.TimerWatchStates
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @Composable
-fun TimerControls(
+fun TimerPlayPause(
 	state: TimerWatchStates,
 	onPause: () -> Unit,
 	onResume: () -> Unit,
-	onStart: () -> Unit,
-	modifier: Modifier = Modifier,
-	buttonSpacing: Dp = 16.dp
+	modifier: Modifier = Modifier
 ) {
-	Row(
-		modifier = modifier,
-		horizontalArrangement = Arrangement.spacedBy(space = buttonSpacing)
+	AnimatedVisibility(
+		visible = state !in listOf(TimerWatchStates.IDLE, TimerWatchStates.COMPLETED),
+		enter = fadeIn() + slideInHorizontally(),
+		exit = fadeOut() + slideOutHorizontally()
 	) {
-		ExtendedFloatingActionButton(
-			onClick = onStart,
-			contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-			containerColor = MaterialTheme.colorScheme.secondaryContainer
-		) {
-			Text(text = "Start")
-		}
-		AnimatedVisibility(
-			visible = state != TimerWatchStates.IDLE,
-			enter = fadeIn() + slideInVertically(),
-			exit = fadeOut() + slideOutVertically()
+		Row(
+			modifier = modifier,
+			horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
+			verticalAlignment = Alignment.CenterVertically
 		) {
 			FloatingActionButton(
 				onClick = {
@@ -78,14 +70,22 @@ fun TimerControls(
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
-@Composable
-fun TimerControlsPreview() = TimeManagementAppTheme {
-	TimerControls(
-		state = TimerWatchStates.RUNNING,
-		onPause = { },
-		onResume = { },
-		onStart = { },
+
+class TimerPlayPauseStates :
+	CollectionPreviewParameterProvider<TimerWatchStates>(
+		listOf(TimerWatchStates.PAUSED, TimerWatchStates.RUNNING)
 	)
+
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Composable
+fun TimerPlayPausePreview(
+	@PreviewParameter(TimerPlayPauseStates::class)
+	state: TimerWatchStates
+) = TimeManagementAppTheme {
+	TimerPlayPause(state = state, onPause = {}, onResume = { })
 }

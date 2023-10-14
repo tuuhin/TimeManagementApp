@@ -75,14 +75,15 @@ fun AppNavigationGraph(
 
 				val viewModel = hiltViewModel<TimerViewModel>()
 
-				val timerDuration by viewModel.timerDuration.collectAsStateWithLifecycle()
-
+				val timerDuration by service.timerDuration.collectAsStateWithLifecycle()
 				val state by service.stopWatch.state.collectAsStateWithLifecycle()
+				val mode by service.timerMode.collectAsStateWithLifecycle()
 				val elapsedTime by service.stopWatch.elapsedTime.collectAsStateWithLifecycle()
 
 				TimerScreen(
 					state = state,
 					timerTime = elapsedTime,
+					mode = mode,
 					timerDuration = timerDuration,
 					onTimerEvents = viewModel::onTimerEvents
 				)

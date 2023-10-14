@@ -1,7 +1,7 @@
 package com.eva.timemanagementapp.presentation.timer.composables
 
 import android.content.res.Configuration
-import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +26,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
+import com.eva.timemanagementapp.utils.extensions.toRadians
+import kotlin.math.cos
+import kotlin.math.sin
 
 @Composable
 fun TimerClockDial(
@@ -41,8 +44,8 @@ fun TimerClockDial(
 
 	val animatedAngle by animateFloatAsState(
 		targetValue = coveredAngle,
-		label = "Clock Animation",
-		animationSpec = tween(easing = FastOutLinearInEasing, durationMillis = 1)
+		label = "Timer Dial Animation",
+		animationSpec = tween(easing = FastOutSlowInEasing, durationMillis = 1)
 	)
 
 	Spacer(modifier = modifier
@@ -64,18 +67,32 @@ fun TimerClockDial(
 						0f,
 						0f,
 						shadowColor
-							.copy(alpha = 0.75f)
+							.copy(alpha = 0.25f)
 							.toArgb()
 					)
 				}
 
 			onDrawBehind {
+
+				val canvasRadius = size.height / 2f
+
 				drawCircle(
 					color = primaryDialColor,
 					style = Stroke(cap = StrokeCap.Round, width = thinDialWidth)
 				)
+
+				drawCircle(
+					coverDialColor,
+					radius = dialWidth,
+					center = Offset(
+						canvasRadius * (1 + sin(coveredAngle.toRadians())),
+						canvasRadius * (1 - cos(coveredAngle.toRadians()))
+					),
+				)
+
 				drawIntoCanvas { canvas ->
 					val rect = Rect(Offset.Zero, size)
+
 					canvas.drawArc(
 						rect = rect,
 						startAngle = 270f,
