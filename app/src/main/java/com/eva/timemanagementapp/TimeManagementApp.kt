@@ -3,6 +3,7 @@ package com.eva.timemanagementapp
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import dagger.hilt.android.HiltAndroidApp
 
@@ -13,13 +14,18 @@ class TimeManagementApp : Application() {
 	override fun onCreate() {
 		super.onCreate()
 
+		val channelId = getString(R.string.channel_id)
+		val channelName = getString(R.string.channel_name)
+		val channelDescription = getString(R.string.channel_desc)
+
 		val channel = NotificationChannel(
-			getString(R.string.channel_id),
-			getString(R.string.channel_name),
-			NotificationManager.IMPORTANCE_DEFAULT
+			channelId,
+			channelName,
+			NotificationManager.IMPORTANCE_HIGH
 		).apply {
-			description = getString(R.string.channel_desc)
+			description = channelDescription
 			setShowBadge(false)
+			lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
 		}
 		notificationManager?.createNotificationChannel(channel)
 	}

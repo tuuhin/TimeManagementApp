@@ -4,4 +4,5 @@
   <dimen name="settings_card_padding">16dp</dimen>
   <dimen name="menu_option_padding">8dp</dimen>
   <dimen name="timer_watch_padding">20dp</dimen>
+  <dimen name="timer_spacing">20dp</dimen>
 </resources>

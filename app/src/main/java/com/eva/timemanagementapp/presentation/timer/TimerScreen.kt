@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltipBox
 import androidx.compose.material3.Scaffold
@@ -23,14 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.domain.stopwatch.TimerWatchStates
+import com.eva.timemanagementapp.presentation.timer.composables.KeepScreenOnButton
 import com.eva.timemanagementapp.presentation.timer.composables.TimerClockStyle
 import com.eva.timemanagementapp.presentation.timer.composables.TimerModeBanner
 import com.eva.timemanagementapp.presentation.timer.composables.TimerModeControls
@@ -52,30 +48,19 @@ fun TimerScreen(
 	Scaffold(
 		modifier = modifier,
 		topBar = {
-			CenterAlignedTopAppBar(
-				title = { Text(text = stringResource(id = R.string.navigation_route_timer)) },
+			CenterAlignedTopAppBar(title = { Text(text = stringResource(id = R.string.navigation_route_timer)) },
 				actions = {
 					PlainTooltipBox(
-						tooltip = { Text(text = "Keep Screen On") },
-						containerColor = MaterialTheme.colorScheme.inverseSurface,
-						contentColor = MaterialTheme.colorScheme.inverseOnSurface
+						tooltip = {
+							Text(
+								text = stringResource(id = R.string.turn_on_keep_screen_mode),
+								style = MaterialTheme.typography.labelMedium
+							)
+						},
 					) {
-						IconButton(
-							onClick = {
-
-							},
-							colors = IconButtonDefaults.iconButtonColors(
-								contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-							)
-						) {
-							Icon(
-								painter = painterResource(id = R.drawable.ic_sun),
-								contentDescription = "keep screen On"
-							)
-						}
+						KeepScreenOnButton(modifier = Modifier.tooltipAnchor())
 					}
-				}
-			)
+				})
 		},
 	) { scPadding ->
 		Column(
@@ -88,14 +73,20 @@ fun TimerScreen(
 		) {
 
 			TimerModeBanner(modes = mode)
-			Spacer(modifier = Modifier.height(20.dp))
+			Spacer(
+				modifier = Modifier
+					.height(height = dimensionResource(id = R.dimen.timer_spacing))
+			)
 			TimerClockStyle(
 				currentTime = timerTime,
 				timerTime = timerDuration,
 				state = state,
 				modifier = Modifier.padding(all = dimensionResource(id = R.dimen.timer_watch_padding)),
 			)
-			Spacer(modifier = Modifier.height(20.dp))
+			Spacer(
+				modifier = Modifier
+					.height(height = dimensionResource(id = R.dimen.timer_spacing))
+			)
 			AnimatedVisibility(
 				visible = state in listOf(TimerWatchStates.IDLE, TimerWatchStates.COMPLETED),
 				enter = slideInVertically(),
@@ -108,7 +99,10 @@ fun TimerScreen(
 					onStop = { onTimerEvents(TimerEvents.OnStopSession) },
 				)
 			}
-			Spacer(modifier = Modifier.height(20.dp))
+			Spacer(
+				modifier = Modifier
+					.height(height = dimensionResource(id = R.dimen.timer_spacing))
+			)
 			TimerPlayPause(
 				state = state,
 				onPause = { onTimerEvents(TimerEvents.OnPause) },
@@ -122,8 +116,7 @@ fun TimerScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
 @Composable
 fun TimerScreenPreview(
-	@PreviewParameter(TimerModesPreviewParams::class)
-	mode: TimerModes,
+	@PreviewParameter(TimerModesPreviewParams::class) mode: TimerModes,
 ) = TimeManagementAppTheme {
 	TimerScreen(
 		mode = mode,

@@ -9,11 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
@@ -37,7 +39,10 @@ fun TimerModeControls(
 				contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
 				containerColor = MaterialTheme.colorScheme.secondaryContainer
 			) {
-				Text(text = "Start Focus", style = MaterialTheme.typography.titleMedium)
+				Text(
+					text = stringResource(id = R.string.timer_start_focus),
+					style = MaterialTheme.typography.titleMedium
+				)
 			}
 
 			TimerModes.BREAK_MODE -> {
@@ -46,14 +51,20 @@ fun TimerModeControls(
 					contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
 					containerColor = MaterialTheme.colorScheme.secondaryContainer
 				) {
-					Text(text = "Start Break", style = MaterialTheme.typography.titleMedium)
+					Text(
+						text = stringResource(id = R.string.timer_start_break),
+						style = MaterialTheme.typography.titleMedium
+					)
 				}
 				ExtendedFloatingActionButton(
 					onClick = onStop,
 					contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
 					containerColor = MaterialTheme.colorScheme.tertiaryContainer
 				) {
-					Text(text = "Stop Session", style = MaterialTheme.typography.titleMedium)
+					Text(
+						text = stringResource(id = R.string.stop_session),
+						style = MaterialTheme.typography.titleMedium
+					)
 				}
 			}
 		}

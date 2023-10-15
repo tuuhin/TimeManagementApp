@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -56,7 +57,10 @@ fun TimerModeBanner(
 						contentDescription = "Focus Mode",
 						colorFilter = ColorFilter.tint(color = contentColor)
 					)
-					Text(text = "Focus Mode", style = textStyle)
+					Text(
+						text = stringResource(id = R.string.timer_focus_mode),
+						style = textStyle
+					)
 				}
 
 				TimerModes.BREAK_MODE -> {
@@ -65,7 +69,10 @@ fun TimerModeBanner(
 						contentDescription = "Break Mode",
 						colorFilter = ColorFilter.tint(color = contentColor)
 					)
-					Text(text = "Break Mode", style = textStyle)
+					Text(
+						text = stringResource(id = R.string.timer_break_mode),
+						style = textStyle
+					)
 				}
 			}
 		}

@@ -14,7 +14,7 @@
   <!--  Notification Channel Info-->
   <string name="channel_name">Service Channel</string>
   <string name="channel_id">Service Channel Id</string>
-  <string name="channel_desc">A channel to show the current onh=going session</string>
+  <string name="channel_desc">A channel to show the current outgoing session</string>
   <string name="notification_action_pause">Pause</string>
   <string name="notification_action_stop">Stop</string>
   <string name="notification_action_resume">Resume</string>
@@ -28,4 +28,11 @@
   <!--Statistics-->
   <string name="total_session_count">Total Session </string>
   <string name="daily_session_count">Daily Average</string>
+  <!--  Timer-->
+  <string name="turn_on_keep_screen_mode">Keep the screen on</string>
+  <string name="timer_focus_mode">Focus Mode</string>
+  <string name="timer_break_mode">Break Mode</string>
+  <string name="timer_start_focus">Start Focus</string>
+  <string name="timer_start_break">Start Break</string>
+  <string name="stop_session">Stop Session</string>
 </resources>
