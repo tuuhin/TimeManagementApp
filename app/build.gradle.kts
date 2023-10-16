@@ -74,6 +74,8 @@ dependencies {
 	implementation("androidx.datastore:datastore-preferences:1.0.0")
 	//splash -api
 	implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
+	// material3-mdc only used for theme colors
+	implementation("com.google.android.material:material:1.10.0")
 	//tests
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.5")

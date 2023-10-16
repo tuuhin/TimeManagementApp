@@ -35,4 +35,5 @@
   <string name="timer_start_focus">Start Focus</string>
   <string name="timer_start_break">Start Break</string>
   <string name="stop_session">Stop Session</string>
+  <string name="notification_action_dismiss">Dismiss</string>
 </resources>
