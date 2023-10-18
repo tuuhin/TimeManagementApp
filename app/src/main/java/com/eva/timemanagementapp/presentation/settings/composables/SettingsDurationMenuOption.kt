@@ -36,14 +36,14 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.eva.timemanagementapp.R
-import com.eva.timemanagementapp.domain.models.SessionDurationOption
+import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @Composable
 fun SessionOptionDuration(
 	title: String,
-	selected: SessionDurationOption,
-	onSessionDurationChange: (SessionDurationOption) -> Unit,
+	selected: DurationOption,
+	onSessionDurationChange: (DurationOption) -> Unit,
 	modifier: Modifier = Modifier,
 	contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 	containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
@@ -74,7 +74,7 @@ fun SessionOptionDuration(
 			) {
 				Text(text = title, style = MaterialTheme.typography.titleMedium)
 				Text(
-					text = "${selected.minutes} ${SessionDurationOption.TIME_UNIT}",
+					text = "${selected.minutes} ${DurationOption.TIME_UNIT}",
 					style = MaterialTheme.typography.bodyMedium,
 					color = MaterialTheme.colorScheme.onSurfaceVariant,
 				)
@@ -103,9 +103,9 @@ fun SessionOptionDuration(
 					),
 					offset = menuAnchor
 				) {
-					SessionDurationOption.entries.forEach { duration ->
+					DurationOption.entries.forEach { duration ->
 						DropdownMenuItem(
-							text = { Text(text = "${duration.minutes} ${SessionDurationOption.TIME_UNIT}") },
+							text = { Text(text = "${duration.minutes} ${DurationOption.TIME_UNIT}") },
 							onClick = { onSessionDurationChange(duration) },
 							contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.menu_option_padding))
 						)
@@ -122,7 +122,7 @@ fun SessionOptionDuration(
 fun SessionOptionDurationPreview() = TimeManagementAppTheme {
 	SessionOptionDuration(
 		title = "Focus Duration",
-		selected = SessionDurationOption.FIFTEEN_MINUTES,
+		selected = DurationOption.FIFTEEN_MINUTES,
 		onSessionDurationChange = {},
 		modifier = Modifier.fillMaxWidth(),
 	)

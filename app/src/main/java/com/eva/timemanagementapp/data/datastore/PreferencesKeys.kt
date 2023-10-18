@@ -5,4 +5,5 @@ object PreferencesKeys {
 	const val FOCUS_DURATION = "FOCUS_DURATION"
 	const val BREAK_DURATION = "BREAK_DURATION"
 	const val SESSION_COUNT = "SESSION_COUNT"
+	const val ALLOW_SAVE_SESSIONS = "ALLOW_SAVE_SESSIONS"
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eva.timemanagementapp.domain.facade.ServiceDataRetriever
 import com.eva.timemanagementapp.domain.facade.SettingsPreferences
-import com.eva.timemanagementapp.domain.models.SessionDurationOption
+import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.domain.models.SessionNumberOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,20 +22,26 @@ class SettingsViewModel @Inject constructor(
 		.stateIn(
 			scope = viewModelScope,
 			started = SharingStarted.WhileSubscribed(2000L),
-			initialValue = SessionDurationOption.TEN_MINUTES
+			initialValue = DurationOption.TEN_MINUTES
 		)
 
 	val breakDuration = settingsPreferences.breakDuration
 		.stateIn(
 			scope = viewModelScope,
 			started = SharingStarted.WhileSubscribed(2000L),
-			initialValue = SessionDurationOption.TEN_MINUTES
+			initialValue = DurationOption.TEN_MINUTES
 		)
 
 	val sessionCount = settingsPreferences.sessionCount.stateIn(
 		scope = viewModelScope,
 		started = SharingStarted.WhileSubscribed(2000L),
 		initialValue = SessionNumberOption.TWO_TIMES
+	)
+
+	val isSaveSessionDataAllowed = settingsPreferences.isSaveSessions.stateIn(
+		scope = viewModelScope,
+		started = SharingStarted.WhileSubscribed(2000L),
+		initialValue = false
 	)
 
 	val isAirPlaneModeEnabled = retriever.serviceStatus
@@ -57,6 +63,10 @@ class SettingsViewModel @Inject constructor(
 
 			is ChangeSettingsEvent.OnBreakDurationChange -> viewModelScope.launch {
 				settingsPreferences.setBreakDuration(event.duration)
+			}
+
+			ChangeSettingsEvent.ToggleIsSaveSessionAllowed -> viewModelScope.launch {
+				settingsPreferences.setIsSaveSessions(!isSaveSessionDataAllowed.value)
 			}
 		}
 	}

@@ -52,6 +52,11 @@ android {
 	}
 }
 
+ksp {
+	arg("room.schemaLocation", "$projectDir/schemas")
+	arg("room.incremental", "true")
+}
+
 dependencies {
 
 	implementation("androidx.core:core-ktx:1.12.0")
@@ -76,6 +81,11 @@ dependencies {
 	implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 	// material3-mdc only used for theme colors
 	implementation("com.google.android.material:material:1.10.0")
+	//room
+	implementation("androidx.room:room-ktx:2.5.2")
+	implementation("androidx.room:room-runtime:2.5.2")
+	annotationProcessor("androidx.room:room-compiler:2.5.2")
+	ksp("androidx.room:room-compiler:2.5.2")
 	//tests
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.5")

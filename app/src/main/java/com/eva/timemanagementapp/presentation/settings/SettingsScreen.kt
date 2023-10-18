@@ -1,5 +1,6 @@
 package com.eva.timemanagementapp.presentation.settings
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,18 +19,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
-import com.eva.timemanagementapp.domain.models.SessionDurationOption
+import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.domain.models.SessionNumberOption
 import com.eva.timemanagementapp.presentation.settings.composables.SessionOptionDuration
 import com.eva.timemanagementapp.presentation.settings.composables.SessionOptionNumber
 import com.eva.timemanagementapp.presentation.settings.composables.SettingsSwitchOptions
+import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-	focusDuration: SessionDurationOption,
-	breakDuration: SessionDurationOption,
+	focusDuration: DurationOption,
+	breakDuration: DurationOption,
 	sessionCountOption: SessionNumberOption,
+	isSaveAllowed: Boolean,
 	isAirplaneModeEnabled: Boolean,
 	onChangeSettings: (ChangeSettingsEvent) -> Unit,
 	modifier: Modifier = Modifier
@@ -84,6 +87,15 @@ fun SettingsScreen(
 					}
 				)
 			}
+			item(key = R.string.allow_save_session_data) {
+				SettingsSwitchOptions(
+					title = stringResource(id = R.string.allow_save_session_data),
+					isChecked = isSaveAllowed,
+					onCheckChange = {
+						onChangeSettings(ChangeSettingsEvent.ToggleIsSaveSessionAllowed)
+					}
+				)
+			}
 			item {
 				Spacer(modifier = Modifier.height(12.dp))
 			}
@@ -108,14 +120,20 @@ fun SettingsScreen(
 }
 
 
-@Preview
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
-fun SettingsScreenPreview() {
+fun SettingsScreenPreview() = TimeManagementAppTheme {
 	SettingsScreen(
-		focusDuration = SessionDurationOption.TEN_MINUTES,
-		breakDuration = SessionDurationOption.TEN_MINUTES,
+		focusDuration = DurationOption.TEN_MINUTES,
+		breakDuration = DurationOption.TEN_MINUTES,
 		sessionCountOption = SessionNumberOption.TWO_TIMES,
 		isAirplaneModeEnabled = false,
-		onChangeSettings = {}
+		onChangeSettings = {},
+		isSaveAllowed = true
 	)
 }

@@ -36,4 +36,7 @@
   <string name="timer_start_break">Start Break</string>
   <string name="stop_session">Stop Session</string>
   <string name="notification_action_dismiss">Dismiss</string>
+
+  <string name="database_name">Time Management App Database</string>
+  <string name="allow_save_session_data">Save Sessions</string>
 </resources>
