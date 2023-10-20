@@ -90,14 +90,15 @@ fun SettingsScreen(
 			item(key = R.string.allow_save_session_data) {
 				SettingsSwitchOptions(
 					title = stringResource(id = R.string.allow_save_session_data),
+					subtitle = stringResource(id = R.string.allow_save_session_desc),
 					isChecked = isSaveAllowed,
-					onCheckChange = {
-						onChangeSettings(ChangeSettingsEvent.ToggleIsSaveSessionAllowed)
+					onCheckChange = { isAllowed ->
+						onChangeSettings(ChangeSettingsEvent.IsSaveSessionAllowed(isAllowed))
 					}
 				)
 			}
 			item {
-				Spacer(modifier = Modifier.height(12.dp))
+				Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.settings_section_padding)))
 			}
 			item(key = R.string.session_notification_title) {
 				Text(
@@ -112,7 +113,9 @@ fun SettingsScreen(
 					subtitle = stringResource(id = R.string.airplane_mode_text),
 					isChecked = isAirplaneModeEnabled,
 					onCheckChange = {},
-					isEnabled = false
+					isEnabled = false,
+					contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+					containerColor = MaterialTheme.colorScheme.tertiaryContainer,
 				)
 			}
 		}
@@ -126,6 +129,7 @@ fun SettingsScreen(
 @Preview(
 	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
+@Preview
 @Composable
 fun SettingsScreenPreview() = TimeManagementAppTheme {
 	SettingsScreen(

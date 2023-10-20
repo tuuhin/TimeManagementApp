@@ -9,12 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
@@ -26,12 +24,12 @@ fun TimerModeControls(
 	onBreakTimer: () -> Unit,
 	onStop: () -> Unit,
 	modifier: Modifier = Modifier,
-	buttonSpacing: Dp = 16.dp
 ) {
 	Row(
 		modifier = modifier,
-		horizontalArrangement = Arrangement.spacedBy(space = buttonSpacing),
-		verticalAlignment = Alignment.CenterVertically
+		horizontalArrangement = Arrangement
+			.spacedBy(dimensionResource(id = R.dimen.timer_button_spacing)),
+		verticalAlignment = Alignment.CenterVertically,
 	) {
 		when (mode) {
 			TimerModes.FOCUS_MODE -> ExtendedFloatingActionButton(
@@ -48,8 +46,8 @@ fun TimerModeControls(
 			TimerModes.BREAK_MODE -> {
 				ExtendedFloatingActionButton(
 					onClick = onBreakTimer,
-					contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-					containerColor = MaterialTheme.colorScheme.secondaryContainer
+					contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+					containerColor = MaterialTheme.colorScheme.tertiaryContainer
 				) {
 					Text(
 						text = stringResource(id = R.string.timer_start_break),
@@ -58,8 +56,8 @@ fun TimerModeControls(
 				}
 				ExtendedFloatingActionButton(
 					onClick = onStop,
-					contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-					containerColor = MaterialTheme.colorScheme.tertiaryContainer
+					contentColor = MaterialTheme.colorScheme.onErrorContainer,
+					containerColor = MaterialTheme.colorScheme.errorContainer
 				) {
 					Text(
 						text = stringResource(id = R.string.stop_session),
@@ -70,11 +68,6 @@ fun TimerModeControls(
 		}
 	}
 }
-
-
-class TimerModesPreviewParams : CollectionPreviewParameterProvider<TimerModes>(
-	collection = TimerModes.entries.toList()
-)
 
 @Preview(
 	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
@@ -88,6 +81,9 @@ fun TimerModesControlsPreview(
 	mode: TimerModes
 ) = TimeManagementAppTheme {
 	TimerModeControls(
-		mode = mode, onFocusTimer = { }, onBreakTimer = {}, onStop = {}
+		mode = mode,
+		onFocusTimer = { },
+		onBreakTimer = {},
+		onStop = {}
 	)
 }

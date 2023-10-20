@@ -10,7 +10,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,8 +34,8 @@ fun SettingsSwitchOptions(
 	isEnabled: Boolean = true,
 	contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 	containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+	shape: Shape = MaterialTheme.shapes.small,
 	elevation: Dp = 0.dp,
-	shape: Shape = MaterialTheme.shapes.small
 ) {
 	Card(
 		modifier = modifier,
@@ -67,8 +66,7 @@ fun SettingsSwitchOptions(
 						text = it,
 						style = MaterialTheme.typography.bodyMedium,
 						maxLines = 2,
-						overflow = TextOverflow.Ellipsis,
-						color = MaterialTheme.colorScheme.onSurfaceVariant
+						overflow = TextOverflow.Ellipsis
 					)
 				}
 			}
@@ -77,10 +75,6 @@ fun SettingsSwitchOptions(
 				onCheckedChange = onCheckChange,
 				enabled = isEnabled,
 				modifier = Modifier.weight(.2f),
-				colors = SwitchDefaults.colors(
-					disabledCheckedTrackColor = MaterialTheme.colorScheme.onPrimaryContainer,
-					disabledCheckedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-				)
 			)
 		}
 	}

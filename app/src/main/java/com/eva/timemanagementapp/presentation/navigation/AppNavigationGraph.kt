@@ -25,6 +25,7 @@ import com.eva.timemanagementapp.presentation.timer.TimerScreen
 import com.eva.timemanagementapp.presentation.timer.TimerViewModel
 import com.eva.timemanagementapp.presentation.utils.LocalSnackBarProvider
 import com.eva.timemanagementapp.presentation.utils.UiEvents
+import java.time.LocalTime
 
 @Composable
 fun AppNavigationGraph(
@@ -92,10 +93,16 @@ fun AppNavigationGraph(
 
 				val viewModel = hiltViewModel<TimerViewModel>()
 
-				val timerDuration by service.timerDuration.collectAsStateWithLifecycle()
-				val state by service.stopWatch.state.collectAsStateWithLifecycle()
 				val mode by service.timerMode.collectAsStateWithLifecycle()
-				val elapsedTime by service.stopWatch.elapsedTime.collectAsStateWithLifecycle()
+
+				val state by service.stopWatch.state
+					.collectAsStateWithLifecycle()
+
+				val elapsedTime by service.stopWatch.elapsedTime
+					.collectAsStateWithLifecycle()
+
+				val timerDuration by service.timerDuration
+					.collectAsStateWithLifecycle(initialValue = LocalTime.MIN)
 
 				TimerScreen(
 					state = state,

@@ -37,6 +37,12 @@ class NotificationBuilderHelper(
 			intent = intents.stopPendingIntent
 		)
 
+	private val disMissAction: NotificationCompat.Action
+		get() = buildNotificationAction(
+			title = context.getString(R.string.notification_action_dismiss),
+			intent = intents.dismissPendingIntent
+		)
+
 
 	private var _notificationBuilder =
 		NotificationCompat.Builder(context, context.getString(R.string.channel_id))
@@ -54,7 +60,8 @@ class NotificationBuilderHelper(
 
 	@SuppressLint("RestrictedApi")
 	fun setPauseAction(): NotificationCompat.Builder {
-		return _notificationBuilder.setOngoing(true)
+		return _notificationBuilder
+			.setOngoing(true)
 			.apply {
 				val actions = arrayListOf(pauseAction, stopAction)
 				mActions = actions
@@ -63,7 +70,8 @@ class NotificationBuilderHelper(
 
 	@SuppressLint("RestrictedApi")
 	fun setResumeAction(): NotificationCompat.Builder {
-		return _notificationBuilder.setOngoing(true)
+		return _notificationBuilder
+			.setOngoing(true)
 			.apply {
 				val actions = arrayListOf(resumeAction, stopAction)
 				mActions = actions
@@ -77,10 +85,12 @@ class NotificationBuilderHelper(
 	fun setContentText(text: String) = _notificationBuilder
 		.setContentText(text)
 
+	@SuppressLint("RestrictedApi")
 	fun setCompletedNotification(title: String, text: String) = _notificationBuilder
 		.setOngoing(false)
 		.setContentTitle(title)
 		.setContentText(text)
 		.clearActions()
+		.addAction(disMissAction)
 
 }

@@ -1,6 +1,9 @@
 package com.eva.timemanagementapp.presentation.timer.composables
 
 import android.content.res.Configuration
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.EaseInOutCubic
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -15,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -33,7 +37,7 @@ fun TimerModeBanner(
 	containerColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
 	contentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer,
 	textStyle: TextStyle = MaterialTheme.typography.titleMedium,
-	shadow: Dp = 4.dp,
+	elevation: Dp = 4.dp,
 	shape: Shape = MaterialTheme.shapes.large
 ) {
 	Card(
@@ -43,36 +47,43 @@ fun TimerModeBanner(
 			contentColor = contentColor
 		),
 		shape = shape,
-		elevation = CardDefaults.cardElevation(defaultElevation = shadow)
+		elevation = CardDefaults.cardElevation(defaultElevation = elevation),
 	) {
-		Row(
-			modifier = Modifier.padding(8.dp),
-			horizontalArrangement = Arrangement.spacedBy(12.dp),
-			verticalAlignment = Alignment.CenterVertically
-		) {
-			when (modes) {
-				TimerModes.FOCUS_MODE -> {
-					Image(
-						painter = painterResource(id = R.drawable.ic_focus),
-						contentDescription = "Focus Mode",
-						colorFilter = ColorFilter.tint(color = contentColor)
-					)
-					Text(
-						text = stringResource(id = R.string.timer_focus_mode),
-						style = textStyle
-					)
-				}
+		Crossfade(
+			targetState = modes,
+			label = "Mode Fade Transition",
+			animationSpec = TweenSpec(durationMillis = 200, easing = EaseInOutCubic)
+		) { mode ->
+			Row(
+				horizontalArrangement = Arrangement.spacedBy(12.dp),
+				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier
+					.padding(all = dimensionResource(id = R.dimen.mode_padding)),
+			) {
+				when (mode) {
+					TimerModes.FOCUS_MODE -> {
+						Image(
+							painter = painterResource(id = R.drawable.ic_focus),
+							contentDescription = stringResource(id = R.string.timer_focus_mode),
+							colorFilter = ColorFilter.tint(color = contentColor)
+						)
+						Text(
+							text = stringResource(id = R.string.timer_focus_mode),
+							style = textStyle
+						)
+					}
 
-				TimerModes.BREAK_MODE -> {
-					Image(
-						painter = painterResource(id = R.drawable.ic_break),
-						contentDescription = "Break Mode",
-						colorFilter = ColorFilter.tint(color = contentColor)
-					)
-					Text(
-						text = stringResource(id = R.string.timer_break_mode),
-						style = textStyle
-					)
+					TimerModes.BREAK_MODE -> {
+						Image(
+							painter = painterResource(id = R.drawable.ic_break),
+							contentDescription = stringResource(id = R.string.timer_break_mode),
+							colorFilter = ColorFilter.tint(color = contentColor)
+						)
+						Text(
+							text = stringResource(id = R.string.timer_break_mode),
+							style = textStyle
+						)
+					}
 				}
 			}
 		}
@@ -90,7 +101,6 @@ fun TimerModeBanner(
 fun TimerModeBannerPreview(
 	@PreviewParameter(TimerModesPreviewParams::class)
 	mode: TimerModes
-
 ) = TimeManagementAppTheme {
 	TimerModeBanner(modes = mode)
 }

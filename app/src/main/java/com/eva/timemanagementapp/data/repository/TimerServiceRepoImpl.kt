@@ -5,30 +5,27 @@ import com.eva.timemanagementapp.data.room.dao.DaySessionDao
 import com.eva.timemanagementapp.data.room.dao.SessionInfoDao
 import com.eva.timemanagementapp.data.room.entity.DaySessionEntry
 import com.eva.timemanagementapp.data.room.entity.SessionInfoEntity
-import com.eva.timemanagementapp.data.room.mapper.toModels
 import com.eva.timemanagementapp.domain.models.DurationOption
-import com.eva.timemanagementapp.domain.models.SessionData
 import com.eva.timemanagementapp.domain.models.TimerModes
-import com.eva.timemanagementapp.domain.repository.SessionsRepository
+import com.eva.timemanagementapp.domain.repository.TimerServiceRepository
+import com.eva.timemanagementapp.utils.Resource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalTime
 
-class SessionsRepositoryImpl(
+class TimerServiceRepoImpl(
 	private val dailySessionDao: DaySessionDao,
 	private val sessionDao: SessionInfoDao,
-) : SessionsRepository {
+) : TimerServiceRepository {
 	override suspend fun addTimerSession(
 		option: DurationOption,
 		mode: TimerModes
-	): Boolean = withContext(Dispatchers.IO) {
+	): Resource<Boolean> = withContext(Dispatchers.IO) {
 		try {
 			val today = LocalDate.now()
 			val entity = dailySessionDao.fetchDaysEntryIfExists(today)
-			val entityId = entity?.id ?: kotlin.run {
+			val sessionId = entity?.id ?: kotlin.run {
 				val newEntity = DaySessionEntry(date = today)
 				dailySessionDao.insertDayEntry(newEntity)
 			}
@@ -37,20 +34,17 @@ class SessionsRepositoryImpl(
 				option = option,
 				mode = mode,
 				at = LocalTime.now(),
-				sessionId = entityId
+				sessionId = sessionId
 			)
 			sessionDao.insertSessionEntry(session)
-			true
+			Resource.Success(true)
 		} catch (e: SQLiteConstraintException) {
 			e.printStackTrace()
-			false
+			Resource.Error(errorMessage = e.message ?: "")
 		} catch (e: Exception) {
 			e.printStackTrace()
-			false
+			Resource.Error(errorMessage = e.message ?: "")
 		}
 	}
 
-	override suspend fun sessionInfoFlow(): Flow<List<SessionData>> = withContext(Dispatchers.IO) {
-		sessionDao.fetchSessionWithDate(LocalDate.now()).map { it.toModels() }
-	}
 }

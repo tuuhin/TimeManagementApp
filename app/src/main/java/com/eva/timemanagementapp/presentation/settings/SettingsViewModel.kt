@@ -65,8 +65,8 @@ class SettingsViewModel @Inject constructor(
 				settingsPreferences.setBreakDuration(event.duration)
 			}
 
-			ChangeSettingsEvent.ToggleIsSaveSessionAllowed -> viewModelScope.launch {
-				settingsPreferences.setIsSaveSessions(!isSaveSessionDataAllowed.value)
+			is ChangeSettingsEvent.IsSaveSessionAllowed -> viewModelScope.launch {
+				settingsPreferences.setIsSaveSessions(event.isAllowed)
 			}
 		}
 	}

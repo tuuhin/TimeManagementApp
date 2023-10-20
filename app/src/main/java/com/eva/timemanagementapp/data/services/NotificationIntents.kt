@@ -47,6 +47,15 @@ class NotificationIntents(
 			},
 		)
 
+	val dismissPendingIntent: PendingIntent
+		get() = buildServicePendingIntent(
+			context = context,
+			requestCodes = RequestCodes.DISMISS_TIMER,
+			intent = serviceIntent.apply {
+				action = SessionServiceActions.DISMISS_TIMER_NOTIFICATION.action
+			}
+		)
+
 	val resumePendingIntent: PendingIntent
 		get() = buildServicePendingIntent(
 			context = context,

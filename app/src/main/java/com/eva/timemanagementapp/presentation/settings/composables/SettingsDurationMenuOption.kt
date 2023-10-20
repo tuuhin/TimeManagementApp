@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -47,7 +48,8 @@ fun SessionOptionDuration(
 	modifier: Modifier = Modifier,
 	contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 	containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
-	elevation: Dp = 0.dp, shape: Shape = MaterialTheme.shapes.small
+	shape: Shape = MaterialTheme.shapes.small,
+	elevation: Dp = 0.dp,
 ) {
 	var menuAnchor by remember { mutableStateOf(DpOffset.Zero) }
 
@@ -81,33 +83,34 @@ fun SessionOptionDuration(
 			}
 			Box {
 				IconButton(
-					onClick = { isDropDownVisible = !isDropDownVisible },
-					modifier = Modifier
-						.pointerInput(Unit) {
-							detectTapGestures { offset ->
-								menuAnchor = DpOffset(offset.x.dp, offset.y.dp)
-							}
+					onClick = { isDropDownVisible = true },
+					modifier = Modifier.pointerInput(Unit) {
+						detectTapGestures { offset ->
+							menuAnchor = DpOffset(offset.x.dp, offset.y.dp)
 						}
+					},
 				) {
 					Icon(
 						imageVector = Icons.Default.MoreVert,
-						contentDescription = null,
+						contentDescription = stringResource(id = R.string.settings_option_cnt_desc),
 					)
 				}
 				DropdownMenu(
 					expanded = isDropDownVisible,
-					onDismissRequest = { isDropDownVisible = !isDropDownVisible },
+					onDismissRequest = { isDropDownVisible = false },
 					properties = PopupProperties(
 						dismissOnBackPress = false,
 						dismissOnClickOutside = true
 					),
-					offset = menuAnchor
+					offset = menuAnchor,
 				) {
 					DurationOption.entries.forEach { duration ->
 						DropdownMenuItem(
 							text = { Text(text = "${duration.minutes} ${DurationOption.TIME_UNIT}") },
 							onClick = { onSessionDurationChange(duration) },
-							contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.menu_option_padding))
+							contentPadding = PaddingValues(
+								all = dimensionResource(id = R.dimen.menu_item_padding)
+							),
 						)
 					}
 				}
@@ -116,8 +119,12 @@ fun SessionOptionDuration(
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun SessionOptionDurationPreview() = TimeManagementAppTheme {
 	SessionOptionDuration(

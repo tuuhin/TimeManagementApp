@@ -14,11 +14,10 @@ class UIServiceController(
 ) {
 	private val serviceIntent by lazy { Intent(context, SessionService::class.java) }
 
-	fun startTimer(minutes: Int, mode: TimerModes) {
+	fun startTimer(mode: TimerModes) {
 		serviceIntent.apply {
 			action = SessionServiceActions.START_TIMER.action
 
-			putExtra(ServiceConstants.START_MINUTES_EXTRA_KEY, minutes)
 			when (mode) {
 				TimerModes.FOCUS_MODE -> putExtra(
 					ServiceConstants.START_TIMER_MODE,

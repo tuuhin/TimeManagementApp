@@ -75,12 +75,13 @@ fun TimerClockDial(
 			onDrawBehind {
 
 				val canvasRadius = size.height / 2f
-
+				// the dial circle
 				drawCircle(
 					color = primaryDialColor,
 					style = Stroke(cap = StrokeCap.Round, width = thinDialWidth)
 				)
 
+				//pointer
 				drawCircle(
 					coverDialColor,
 					radius = dialWidth,
@@ -92,7 +93,7 @@ fun TimerClockDial(
 
 				drawIntoCanvas { canvas ->
 					val rect = Rect(Offset.Zero, size)
-
+					// time covered arc
 					canvas.drawArc(
 						rect = rect,
 						startAngle = 270f,
@@ -106,8 +107,12 @@ fun TimerClockDial(
 	)
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun TimerClockDialPreview() = TimeManagementAppTheme {
 	Surface(color = MaterialTheme.colorScheme.background) {

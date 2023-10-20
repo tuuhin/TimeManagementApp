@@ -9,7 +9,7 @@
   <string name="session_count_title">Session Count</string>
   <string name="session_count_text">The number of focus duration for a session to complete</string>
   <string name="session_notification_title">Notification</string>
-  <string name="airplane_mode_title">AirPlane Mode</string>
+  <string name="airplane_mode_title">Airplane Mode</string>
   <string name="airplane_mode_text">Views Current Airplane Mode Status</string>
   <!--  Notification Channel Info-->
   <string name="channel_name">Service Channel</string>
@@ -39,6 +39,7 @@
 
   <string name="database_name">Time Management App Database</string>
   <string name="allow_save_session_data">Save Sessions</string>
+  <string name="allow_save_session_desc">Record Session Data</string>
 
   <!--  Session Highlights-->
   <string name="total_focus_count">Focus Sessions</string>
@@ -48,9 +49,10 @@
   <!--  Statistics Headers-->
   <string name="highlights_text">Highlights</string>
   <string name="highlights_graph">Graph</string>
-<!--  Statistics options-->
+  <!--  Statistics options-->
   <string name="statistics_all">All</string>
   <string name="minutes_short_hand">min</string>
   <string name="statistics_weekly">Weekly</string>
   <string name="statistics_today">Today</string>
+  <string name="settings_option_cnt_desc">Settings Options</string>
 </resources>

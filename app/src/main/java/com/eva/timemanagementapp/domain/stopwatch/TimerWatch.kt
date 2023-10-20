@@ -1,5 +1,6 @@
 package com.eva.timemanagementapp.domain.stopwatch
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -18,11 +19,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import java.time.LocalTime
 
+/**
+ * The Watch that presents the core functionality of the app ie A Timer
+ * @property scope [CoroutineScope] in which the timer will run
+ * @property initialTimerInMillis The initial state of the timer
+ * @property interval The interval at which the timer updates.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class TimerWatch(
-	scope: CoroutineScope,
-	initialTimerInMillis: Long = 1000L,
-	private val interval: Long = 10L,
+	private val scope: CoroutineScope,
+	private val initialTimerInMillis: Long = 1000L,
+	private val interval: Long = 1000L,
 ) {
 
 	private val _elapsedTime = MutableStateFlow(value = initialTimerInMillis)
@@ -32,27 +39,41 @@ class TimerWatch(
 
 	private var timerJob: Job? = null
 
+	/**
+	 * A reverse counter stated from [initialTimerInMillis] and converted to [LocalTime] object
+	 * until the [initialTimerInMillis] reached 0, then [LocalTime.MIN] is received by the subscriber.
+	 */
 	val elapsedTime = _elapsedTime.map { current ->
-		if (current > 0L) LocalTime.ofNanoOfDay(current * 1_000_000)
+		if (current >= 0L) LocalTime.ofNanoOfDay(current * 1_000_000)
 		else LocalTime.MIN
 	}.stateIn(
 		scope = scope,
-		started = SharingStarted.Lazily,
-		initialValue = LocalTime.ofSecondOfDay(initialTimerInMillis)
+		started = SharingStarted.WhileSubscribed(2000L),
+		initialValue = LocalTime.MIN
 	)
 
 	init {
-		timerJob = _states.flatMapLatest { state ->
-			getCurrentTimeInMills(isRunning = state == TimerWatchStates.RUNNING)
-		}.onEach { diff ->
-			val current = _elapsedTime.updateAndGet { current -> current - diff }
-			if (current < 0L) {
-				_states.update { TimerWatchStates.COMPLETED }
+		try {
+			timerJob = _states.flatMapLatest { state ->
+				getCurrentTimeInMills(isRunning = state == TimerWatchStates.RUNNING)
+			}.onEach { diff ->
+				val current = _elapsedTime.updateAndGet { current -> current - diff }
+				if (current < 0L) {
+					_states.update { TimerWatchStates.COMPLETED }
+				}
+			}.launchIn(scope)
+		} catch (e: Exception) {
+			if (e is CancellationException) {
+				throw e
 			}
-		}.launchIn(scope)
-
+		}
 	}
 
+	/**
+	 * Cancels the timerJob that is running.
+	 * Cancelling the job is important as if the parent scope is cancelled.
+	 * May lead to a cancellation Exception
+	 */
 	fun cancelTimerJob() = timerJob?.cancel()
 
 	private fun getCurrentTimeInMills(isRunning: Boolean): Flow<Long> = flow {
@@ -66,24 +87,43 @@ class TimerWatch(
 		}
 	}
 
+	/**
+	 * Sets the [state] to [TimerWatchStates.PAUSED]
+	 */
 	fun onPause() = _states.update { TimerWatchStates.PAUSED }
 
+	/**
+	 * Sets the [state] to [TimerWatchStates.RUNNING]. This should be called if the [state] is
+	 * [TimerWatchStates.PAUSED] otherwise it will have no effect
+	 */
 	fun onResume() = _states.update { TimerWatchStates.RUNNING }
 
+
+	/**
+	 * Reset's the watch ie, setting [elapsedTime] to 0L and [state] to [TimerWatchStates.IDLE]
+	 */
 	fun onReset() {
 		_elapsedTime.update { 0L }
 		_states.update { TimerWatchStates.IDLE }
 	}
 
+
+	/**
+	 * Sets the [state] to [TimerWatchStates.IDLE]
+	 */
 	fun setModeIdle() = _states.update { TimerWatchStates.IDLE }
 
-	fun setTime(minutes: Int) {
-		val time = LocalTime.of(0, minutes, 0)
-		val milliSeconds = time.toSecondOfDay() * 1000L
-		_elapsedTime.update { milliSeconds }
 
-	}
+	/**
+	 * Sets the time for the timer.
+	 * @param minutes Minutes to be set in [Long]
+	 */
+	fun setTime(minutes: Int): Long = _elapsedTime.updateAndGet { minutes * 60 * 1000L }
 
+
+	/**
+	 * Starts the Watch by setting [state] to [TimerWatchStates.RUNNING]
+	 */
 	fun start() = _states.update { TimerWatchStates.RUNNING }
 
 }

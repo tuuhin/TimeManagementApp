@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltipBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,19 +46,14 @@ fun TimerScreen(
 	Scaffold(
 		modifier = modifier,
 		topBar = {
-			CenterAlignedTopAppBar(title = { Text(text = stringResource(id = R.string.navigation_route_timer)) },
+			CenterAlignedTopAppBar(
+				title = {
+					Text(text = stringResource(id = R.string.navigation_route_timer))
+				},
 				actions = {
-					PlainTooltipBox(
-						tooltip = {
-							Text(
-								text = stringResource(id = R.string.turn_on_keep_screen_mode),
-								style = MaterialTheme.typography.labelMedium
-							)
-						},
-					) {
-						KeepScreenOnButton(modifier = Modifier.tooltipAnchor())
-					}
-				})
+					KeepScreenOnButton()
+				}
+			)
 		},
 	) { scPadding ->
 		Column(
@@ -69,23 +62,17 @@ fun TimerScreen(
 				.padding(scPadding)
 				.padding(horizontal = dimensionResource(id = R.dimen.scaffold_padding)),
 			horizontalAlignment = Alignment.CenterHorizontally,
-			verticalArrangement = Arrangement.Center
+			verticalArrangement = Arrangement.SpaceBetween
 		) {
-
-			TimerModeBanner(modes = mode)
 			Spacer(
-				modifier = Modifier
-					.height(height = dimensionResource(id = R.dimen.timer_spacing))
+				modifier = Modifier.height(height = dimensionResource(id = R.dimen.timer_spacing))
 			)
+			TimerModeBanner(modes = mode)
 			TimerClockStyle(
 				currentTime = timerTime,
 				timerTime = timerDuration,
 				state = state,
 				modifier = Modifier.padding(all = dimensionResource(id = R.dimen.timer_watch_padding)),
-			)
-			Spacer(
-				modifier = Modifier
-					.height(height = dimensionResource(id = R.dimen.timer_spacing))
 			)
 			AnimatedVisibility(
 				visible = state in listOf(TimerWatchStates.IDLE, TimerWatchStates.COMPLETED),
@@ -99,21 +86,24 @@ fun TimerScreen(
 					onStop = { onTimerEvents(TimerEvents.OnStopSession) },
 				)
 			}
-			Spacer(
-				modifier = Modifier
-					.height(height = dimensionResource(id = R.dimen.timer_spacing))
-			)
 			TimerPlayPause(
 				state = state,
 				onPause = { onTimerEvents(TimerEvents.OnPause) },
 				onResume = { onTimerEvents(TimerEvents.OnResume) },
 			)
+			Spacer(
+				modifier = Modifier.height(height = dimensionResource(id = R.dimen.timer_spacing))
+			)
 		}
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun TimerScreenPreview(
 	@PreviewParameter(TimerModesPreviewParams::class) mode: TimerModes,

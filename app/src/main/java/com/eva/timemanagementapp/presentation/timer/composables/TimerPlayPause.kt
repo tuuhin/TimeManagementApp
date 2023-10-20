@@ -18,7 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.stopwatch.TimerWatchStates
@@ -71,11 +70,6 @@ fun TimerPlayPause(
 }
 
 
-class TimerPlayPauseStates :
-	CollectionPreviewParameterProvider<TimerWatchStates>(
-		listOf(TimerWatchStates.PAUSED, TimerWatchStates.RUNNING)
-	)
-
 @Preview(
 	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
 )
@@ -84,7 +78,7 @@ class TimerPlayPauseStates :
 )
 @Composable
 fun TimerPlayPausePreview(
-	@PreviewParameter(TimerPlayPauseStates::class)
+	@PreviewParameter(TimerPlayPausePreviewParams::class)
 	state: TimerWatchStates
 ) = TimeManagementAppTheme {
 	TimerPlayPause(state = state, onPause = {}, onResume = { })
