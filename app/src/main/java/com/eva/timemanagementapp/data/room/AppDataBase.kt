@@ -1,6 +1,7 @@
 package com.eva.timemanagementapp.data.room
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -17,12 +18,19 @@ import com.eva.timemanagementapp.data.room.entity.SessionInfoEntity
 
 
 @Database(
-	version = 1,
+	version = 2,
 	entities = [
 		SessionInfoEntity::class,
 		DaySessionEntry::class
 	],
-	exportSchema = true
+	autoMigrations = [
+		AutoMigration(
+			from = 1,
+			to = 2,
+			spec = AppMigrations.RenameSessionDurationField::class
+		)
+	],
+	exportSchema = true,
 )
 @TypeConverters(
 	DateConvertor::class,

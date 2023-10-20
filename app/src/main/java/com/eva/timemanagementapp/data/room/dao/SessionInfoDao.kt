@@ -5,9 +5,8 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import com.eva.timemanagementapp.data.room.entity.SessionInfoEntity
-import com.eva.timemanagementapp.data.room.relations.SessionWithDetailsEntity
+import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.domain.models.TimerModes
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
@@ -23,6 +22,7 @@ interface SessionInfoDao {
 	@Delete
 	suspend fun deleteSessionEntity(entity: SessionInfoEntity)
 
+	//SELECT
 	@Query(
 		"""
 		SELECT COUNT(*) FROM SESSION_INFO_TABLE S_INFO
@@ -32,31 +32,28 @@ interface SessionInfoDao {
  		AND S_INFO.TIMER_MODE =:mode
 		"""
 	)
-	fun fetchSessionWithDetailsCount(from: LocalDate, to: LocalDate, mode: TimerModes): Flow<Int>
-
-	@Query(
-		"""
-		SELECT AVG(*) FROM SESSION_INFO_TABLE
-		JOIN DAILY_SESSION_TABLE 
-		ON SESSION_INFO_TABLE.SESSION_ID = DAILY_SESSION_TABLE.ID
-		AND TIMER_MODE=:mode
-	"""
-	)
-	fun fetchDailyAverage(mode: TimerModes): Flow<Int>
-
+	fun fetchSessionCountFromDateRange(from: LocalDate, to: LocalDate, mode: TimerModes): Flow<Int>
 
 	@Query("SELECT COUNT(*) FROM SESSION_INFO_TABLE WHERE TIMER_MODE=:mode")
 	fun fetchTotalSessions(mode: TimerModes): Flow<Int>
 
-	@Transaction
 	@Query(
 		"""
-		SELECT * FROM SESSION_INFO_TABLE 
-		LEFT JOIN DAILY_SESSION_TABLE 
-		ON SESSION_INFO_TABLE.SESSION_ID == DAILY_SESSION_TABLE.ID 
-		AND DAILY_SESSION_TABLE.DATE=:date;
-		"""
+		SELECT SESSION_DURATION FROM SESSION_INFO_TABLE S_INFO 
+		INNER JOIN DAILY_SESSION_TABLE D_INFO 
+		ON S_INFO.SESSION_ID = D_INFO.ID 
+		WHERE TIMER_MODE=:mode 
+		AND DATE BETWEEN :from AND :to
+	"""
 	)
-	fun fetchSessionWithDate(date: LocalDate): Flow<SessionWithDetailsEntity>
+	fun fetchDurationsFromModeAndDateRange(
+		from: LocalDate,
+		to: LocalDate,
+		mode: TimerModes
+	): Flow<List<DurationOption>>
+
+	@Query("SELECT SESSION_DURATION FROM SESSION_INFO_TABLE WHERE TIMER_MODE=:mode")
+	fun fetchDurationsFromMode(mode: TimerModes): Flow<List<DurationOption>>
+
 
 }

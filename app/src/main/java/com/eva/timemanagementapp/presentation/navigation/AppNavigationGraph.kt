@@ -3,7 +3,9 @@ package com.eva.timemanagementapp.presentation.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,11 +23,14 @@ import com.eva.timemanagementapp.presentation.statistics.StatisticsScreen
 import com.eva.timemanagementapp.presentation.statistics.StatisticsViewModel
 import com.eva.timemanagementapp.presentation.timer.TimerScreen
 import com.eva.timemanagementapp.presentation.timer.TimerViewModel
+import com.eva.timemanagementapp.presentation.utils.LocalSnackBarProvider
+import com.eva.timemanagementapp.presentation.utils.UiEvents
 
 @Composable
 fun AppNavigationGraph(
 	service: SessionService,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	snackBarHostState: SnackbarHostState = LocalSnackBarProvider.current
 ) {
 	val navController = rememberNavController()
 	val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -62,10 +67,22 @@ fun AppNavigationGraph(
 
 				val viewModel = hiltViewModel<StatisticsViewModel>()
 
-				val totalSessions by viewModel.totalSessionCount.collectAsStateWithLifecycle()
-				val dailyAverage by viewModel.averageSessionCount.collectAsStateWithLifecycle()
+				LaunchedEffect(Unit) {
+					viewModel.uiEvents.collect { events ->
+						when (events) {
+							is UiEvents.ShowSnackBar -> snackBarHostState.showSnackbar(events.message)
+						}
+					}
+				}
 
-				StatisticsScreen(totalSessions = totalSessions, averageSessions = dailyAverage)
+				val sessionHighLights by viewModel.sessionHighLight.collectAsStateWithLifecycle()
+				val tabIndex by viewModel.tabIndex.collectAsStateWithLifecycle()
+
+				StatisticsScreen(
+					selectedTab = tabIndex,
+					highlight = sessionHighLights,
+					onTabIndexChanged = viewModel::onTabIndexChanged
+				)
 			}
 			composable(
 				route = Screens.TimerRoute.route,
@@ -99,12 +116,14 @@ fun AppNavigationGraph(
 				val breakDuration by settingsViewModel.breakDuration.collectAsStateWithLifecycle()
 				val sessionCount by settingsViewModel.sessionCount.collectAsStateWithLifecycle()
 				val airplaneMode by settingsViewModel.isAirPlaneModeEnabled.collectAsStateWithLifecycle()
+				val isAllowSave by settingsViewModel.isSaveSessionDataAllowed.collectAsStateWithLifecycle()
 
 				SettingsScreen(
 					focusDuration = focusDuration,
 					breakDuration = breakDuration,
 					sessionCountOption = sessionCount,
 					isAirplaneModeEnabled = airplaneMode,
+					isSaveAllowed = isAllowSave,
 					onChangeSettings = settingsViewModel::onChangeSettingsEvent
 				)
 			}

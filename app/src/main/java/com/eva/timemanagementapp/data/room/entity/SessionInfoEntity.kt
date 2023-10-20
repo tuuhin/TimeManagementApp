@@ -25,7 +25,7 @@ data class SessionInfoEntity(
 	@ColumnInfo(name = "ID")
 	val id: Long? = null,
 
-	@ColumnInfo(name = "SESSION_OPTION")
+	@ColumnInfo(name = "SESSION_DURATION")
 	val option: DurationOption,
 
 	@ColumnInfo(name = "ADDED_AT")

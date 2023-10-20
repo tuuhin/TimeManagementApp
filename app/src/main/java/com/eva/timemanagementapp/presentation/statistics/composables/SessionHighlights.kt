@@ -1,78 +1,67 @@
 package com.eva.timemanagementapp.presentation.statistics.composables
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
+import com.eva.timemanagementapp.domain.models.SessionHighlightModel
+import com.eva.timemanagementapp.presentation.utils.PreviewFakes
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @Composable
 fun SessionHighlights(
-	total: Int,
-	average: Int,
+	highlight: SessionHighlightModel,
 	modifier: Modifier = Modifier
 ) {
-	Row(
-		modifier,
-		horizontalArrangement = Arrangement.SpaceBetween
+	LazyVerticalGrid(
+		modifier = modifier,
+		columns = GridCells.Fixed(2),
+		verticalArrangement = Arrangement.spacedBy(8.dp),
+		horizontalArrangement = Arrangement.spacedBy(8.dp),
+		contentPadding = PaddingValues(vertical = 10.dp),
+		userScrollEnabled = false
 	) {
-		Box(
-			modifier = Modifier
-				.clip(MaterialTheme.shapes.medium)
-				.background(MaterialTheme.colorScheme.secondaryContainer)
-				.padding(20.dp)
-				.aspectRatio(1f)
-				.weight(1f)
-		) {
-			Text(
-				text = "$total", style = MaterialTheme.typography.displaySmall,
-				color = MaterialTheme.colorScheme.onSecondaryContainer,
-				modifier = Modifier.align(Alignment.CenterStart)
-			)
-			Text(
-				text = stringResource(id = R.string.total_session_count),
-				style = MaterialTheme.typography.titleMedium,
-				color = MaterialTheme.colorScheme.onSecondaryContainer,
-				modifier = Modifier.align(Alignment.BottomStart)
+		item {
+			HighLightCard(
+				highlight = "${highlight.totalFocusCount}",
+				highlightText = stringResource(id = R.string.total_focus_count),
+				background = MaterialTheme.colorScheme.primaryContainer,
+				contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+				modifier = Modifier.fillMaxWidth()
 			)
 		}
-		Spacer(modifier = Modifier.width(20.dp))
-		Box(
-			modifier = Modifier
-				.clip(MaterialTheme.shapes.medium)
-				.background(MaterialTheme.colorScheme.tertiaryContainer)
-				.padding(20.dp)
-				.aspectRatio(1f)
-				.weight(1f)
-		) {
-			Text(
-				text = "$average",
-				style = MaterialTheme.typography.displaySmall,
-				color = MaterialTheme.colorScheme.onTertiaryContainer,
-				modifier = Modifier.align(Alignment.CenterStart),
+		item {
+			HighLightCard(
+				highlight = "${highlight.avgFocus}",
+				highlightText = stringResource(id = R.string.average_focus_time),
+				highlightUnit = stringResource(id = R.string.minutes_short_hand),
+				background = MaterialTheme.colorScheme.primaryContainer,
+				contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+				modifier = Modifier.fillMaxWidth()
 			)
-
-			Text(
-				text = stringResource(id = R.string.daily_session_count),
-				style = MaterialTheme.typography.titleMedium,
-				color = MaterialTheme.colorScheme.onTertiaryContainer,
-				modifier = Modifier.align(Alignment.BottomStart),
+		}
+		item {
+			HighLightCard(
+				highlight = "${highlight.totalBreakCount}",
+				highlightText = stringResource(id = R.string.total_break_count),
+				modifier = Modifier.fillMaxWidth()
+			)
+		}
+		item {
+			HighLightCard(
+				highlight = "${highlight.avgBreak}",
+				highlightText = stringResource(id = R.string.average_break_time),
+				highlightUnit = stringResource(id = R.string.minutes_short_hand),
+				modifier = Modifier.fillMaxWidth()
 			)
 		}
 	}
@@ -83,8 +72,6 @@ fun SessionHighlights(
 @Composable
 fun SessionHighlightPreview() = TimeManagementAppTheme {
 	SessionHighlights(
-		total = 25,
-		average = 5,
-		modifier = Modifier.fillMaxWidth(),
+		highlight = PreviewFakes.FAKE_HIGHLIGHT_MODE
 	)
 }

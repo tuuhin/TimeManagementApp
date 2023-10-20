@@ -3,6 +3,7 @@ package com.eva.timemanagementapp.di
 import android.content.Context
 import com.eva.timemanagementapp.data.datastore.SettingsPreferencesImpl
 import com.eva.timemanagementapp.data.receiver.AirPlaneModeDataRetriever
+import com.eva.timemanagementapp.data.room.AppDataBase
 import com.eva.timemanagementapp.domain.facade.ServiceDataRetriever
 import com.eva.timemanagementapp.domain.facade.SettingsPreferences
 import dagger.Module
@@ -14,7 +15,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SettingsModule {
+object AppModule {
+	@Provides
+	@Singleton
+	fun providesAppDataBase(@ApplicationContext context: Context): AppDataBase =
+		AppDataBase.getInstance(context)
 
 	@Provides
 	@Singleton

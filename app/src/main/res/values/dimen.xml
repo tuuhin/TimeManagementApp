@@ -5,4 +5,6 @@
   <dimen name="menu_option_padding">8dp</dimen>
   <dimen name="timer_watch_padding">20dp</dimen>
   <dimen name="timer_spacing">20dp</dimen>
+  <dimen name="timer_button_spacing">16dp</dimen>
+  <dimen name="statistics_item_spacing">8dp</dimen>
 </resources>

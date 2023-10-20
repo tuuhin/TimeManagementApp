@@ -1,6 +1,6 @@
 package com.eva.timemanagementapp.domain.models
 
-enum class SessionDurationOption(val minutes: Int) {
+enum class DurationOption(val minutes: Int) {
 	ONE_MINUTE(1),
 	FIVE_MINUTES(5),
 	TEN_MINUTES(10),
@@ -12,7 +12,7 @@ enum class SessionDurationOption(val minutes: Int) {
 
 		const val TIME_UNIT = "minutes"
 
-		fun fromNumber(minutes: Int): SessionDurationOption = when (minutes) {
+		fun fromNumber(minutes: Int): DurationOption = when (minutes) {
 			ONE_MINUTE.minutes -> ONE_MINUTE
 			FIVE_MINUTES.minutes -> FIVE_MINUTES
 			TEN_MINUTES.minutes -> TEN_MINUTES

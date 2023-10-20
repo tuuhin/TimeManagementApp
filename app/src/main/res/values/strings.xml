@@ -39,4 +39,18 @@
 
   <string name="database_name">Time Management App Database</string>
   <string name="allow_save_session_data">Save Sessions</string>
+
+  <!--  Session Highlights-->
+  <string name="total_focus_count">Focus Sessions</string>
+  <string name="total_break_count">Break Sessions</string>
+  <string name="average_focus_time">Avg. Focus Time</string>
+  <string name="average_break_time">Avg. Break Time</string>
+  <!--  Statistics Headers-->
+  <string name="highlights_text">Highlights</string>
+  <string name="highlights_graph">Graph</string>
+<!--  Statistics options-->
+  <string name="statistics_all">All</string>
+  <string name="minutes_short_hand">min</string>
+  <string name="statistics_weekly">Weekly</string>
+  <string name="statistics_today">Today</string>
 </resources>
