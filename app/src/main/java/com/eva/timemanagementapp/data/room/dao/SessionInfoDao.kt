@@ -3,6 +3,7 @@ package com.eva.timemanagementapp.data.room.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.MapInfo
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.eva.timemanagementapp.data.room.entity.SessionInfoEntity
@@ -26,13 +27,17 @@ interface SessionInfoDao {
 	@Query(
 		"""
 		SELECT COUNT(*) FROM SESSION_INFO_TABLE S_INFO
-		JOIN DAILY_SESSION_TABLE D_INFO 
-		ON S_INFO.SESSION_ID = S_INFO.ID 
-		AND D_INFO.DATE BETWEEN :from AND :to
- 		AND S_INFO.TIMER_MODE =:mode
+		INNER JOIN DAILY_SESSION_TABLE D_INFO 
+		ON S_INFO.SESSION_ID = D_INFO.ID 
+ 		WHERE S_INFO.TIMER_MODE =:mode
+		AND D_INFO.DATE BETWEEN :start AND :end
 		"""
 	)
-	fun fetchSessionCountFromDateRange(from: LocalDate, to: LocalDate, mode: TimerModes): Flow<Int>
+	fun fetchSessionCountFromDateRange(
+		start: LocalDate,
+		end: LocalDate,
+		mode: TimerModes
+	): Flow<Int>
 
 	@Query("SELECT COUNT(*) FROM SESSION_INFO_TABLE WHERE TIMER_MODE=:mode")
 	fun fetchTotalSessions(mode: TimerModes): Flow<Int>
@@ -43,17 +48,35 @@ interface SessionInfoDao {
 		INNER JOIN DAILY_SESSION_TABLE D_INFO 
 		ON S_INFO.SESSION_ID = D_INFO.ID 
 		WHERE TIMER_MODE=:mode 
-		AND DATE BETWEEN :from AND :to
+		AND DATE BETWEEN :start AND :end 
 	"""
 	)
 	fun fetchDurationsFromModeAndDateRange(
-		from: LocalDate,
-		to: LocalDate,
+		start: LocalDate,
+		end: LocalDate,
 		mode: TimerModes
 	): Flow<List<DurationOption>>
 
 	@Query("SELECT SESSION_DURATION FROM SESSION_INFO_TABLE WHERE TIMER_MODE=:mode")
 	fun fetchDurationsFromMode(mode: TimerModes): Flow<List<DurationOption>>
+
+	@MapInfo(keyColumn = "DATE", valueColumn = "S_COUNT")
+	@Query(
+		"""
+		SELECT DATE,COUNT(*) as S_COUNT 
+		FROM SESSION_INFO_TABLE S_INFO 
+		INNER JOIN DAILY_SESSION_TABLE D_INFO 
+		ON S_INFO.SESSION_ID = D_INFO.ID 
+		WHERE TIMER_MODE=:mode 
+		AND DATE BETWEEN :start AND :end 
+		GROUP BY DATE
+	    """
+	)
+	fun fetchMapOfDataAndSessionCount(
+		start: LocalDate,
+		end: LocalDate,
+		mode: TimerModes
+	): Flow<Map<LocalDate, Int>>
 
 
 }

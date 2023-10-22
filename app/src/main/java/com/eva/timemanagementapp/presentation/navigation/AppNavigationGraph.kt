@@ -78,11 +78,16 @@ fun AppNavigationGraph(
 
 				val sessionHighLights by viewModel.sessionHighLight.collectAsStateWithLifecycle()
 				val tabIndex by viewModel.tabIndex.collectAsStateWithLifecycle()
+				val selectedModeGraph by viewModel.graphMode.collectAsStateWithLifecycle()
+				val graphContent by viewModel.weeklyGraph.collectAsStateWithLifecycle()
 
 				StatisticsScreen(
+					selectedMode = selectedModeGraph,
 					selectedTab = tabIndex,
 					highlight = sessionHighLights,
-					onTabIndexChanged = viewModel::onTabIndexChanged
+					graphContent = graphContent,
+					onTabIndexChanged = viewModel::onTabIndexChanged,
+					onModeChanged = viewModel::onTimerModeChanged
 				)
 			}
 			composable(

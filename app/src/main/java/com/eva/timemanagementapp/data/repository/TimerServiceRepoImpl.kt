@@ -18,18 +18,18 @@ class TimerServiceRepoImpl(
 	private val dailySessionDao: DaySessionDao,
 	private val sessionDao: SessionInfoDao,
 ) : TimerServiceRepository {
+
 	override suspend fun addTimerSession(
+		sessionDate: LocalDate,
 		option: DurationOption,
 		mode: TimerModes
 	): Resource<Boolean> = withContext(Dispatchers.IO) {
 		try {
-			val today = LocalDate.now()
-			val entity = dailySessionDao.fetchDaysEntryIfExists(today)
+			val entity = dailySessionDao.fetchDaysEntryIfExists(sessionDate)
 			val sessionId = entity?.id ?: kotlin.run {
-				val newEntity = DaySessionEntry(date = today)
+				val newEntity = DaySessionEntry(date = sessionDate)
 				dailySessionDao.insertDayEntry(newEntity)
 			}
-
 			val session = SessionInfoEntity(
 				option = option,
 				mode = mode,

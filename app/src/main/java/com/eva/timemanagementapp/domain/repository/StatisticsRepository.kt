@@ -1,5 +1,6 @@
 package com.eva.timemanagementapp.domain.repository
 
+import com.eva.timemanagementapp.domain.models.SessionReportModel
 import com.eva.timemanagementapp.domain.models.TimerModes
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
@@ -17,5 +18,11 @@ interface StatisticsRepository {
 		start: LocalDate?,
 		end: LocalDate = LocalDate.now()
 	): Flow<Int>
+
+	fun weeklyReport(
+		mode: TimerModes,
+		start: LocalDate,
+		end: LocalDate = LocalDate.now()
+	): Flow<List<SessionReportModel>>
 
 }

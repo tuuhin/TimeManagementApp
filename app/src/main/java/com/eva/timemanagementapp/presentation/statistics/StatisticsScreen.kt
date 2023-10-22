@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,18 +19,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.SessionHighlightModel
+import com.eva.timemanagementapp.domain.models.SessionReportModel
+import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.presentation.statistics.composables.SessionHighlights
+import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsGraphContainer
+import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsGraphHeading
 import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsTabRow
 import com.eva.timemanagementapp.presentation.statistics.utils.StatisticsTabs
 import com.eva.timemanagementapp.presentation.utils.PreviewFakes
+import com.eva.timemanagementapp.presentation.utils.ShowContent
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatisticsScreen(
+	selectedMode: TimerModes,
 	selectedTab: StatisticsTabs,
 	highlight: SessionHighlightModel,
+	graphContent: ShowContent<List<SessionReportModel>>,
 	onTabIndexChanged: (StatisticsTabs) -> Unit,
+	onModeChanged: (TimerModes) -> Unit,
 	modifier: Modifier = Modifier
 ) {
 
@@ -58,26 +65,25 @@ fun StatisticsScreen(
 			)
 			Text(
 				text = stringResource(id = R.string.highlights_text),
-				style = MaterialTheme.typography.titleLarge,
+				style = MaterialTheme.typography.titleMedium,
 				color = MaterialTheme.colorScheme.onSurface
 			)
 			SessionHighlights(
 				highlight = highlight,
 				modifier = Modifier.fillMaxWidth()
 			)
-			Text(
-				text = stringResource(id = R.string.highlights_graph),
-				style = MaterialTheme.typography.titleLarge,
-				color = MaterialTheme.colorScheme.onSurface
+			StatisticsGraphHeading(
+				selectedMode = selectedMode,
+				onModeChange = onModeChanged,
+				modifier = Modifier.fillMaxWidth()
 			)
-			Card(
-				shape = MaterialTheme.shapes.medium,
+			StatisticsGraphContainer(
+				showLoading = graphContent.isLoading,
+				content = graphContent.content,
 				modifier = Modifier
-					.padding(bottom = dimensionResource(id = R.dimen.scaffold_padding))
 					.fillMaxSize()
-			) {
-
-			}
+					.padding(vertical = dimensionResource(R.dimen.statistics_graph_padding))
+			)
 		}
 	}
 }
@@ -91,8 +97,14 @@ fun StatisticsScreen(
 @Composable
 fun StatisticsScreenPreview() = TimeManagementAppTheme {
 	StatisticsScreen(
+		selectedMode = TimerModes.FOCUS_MODE,
 		selectedTab = StatisticsTabs.All,
 		highlight = PreviewFakes.FAKE_HIGHLIGHT_MODE,
+		graphContent = ShowContent(
+			isLoading = false,
+			content = PreviewFakes.FAKE_SESSION_REPORT_WEEKLY
+		),
+		onModeChanged = {},
 		onTabIndexChanged = { },
 	)
 }

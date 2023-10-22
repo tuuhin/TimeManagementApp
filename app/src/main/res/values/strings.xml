@@ -55,4 +55,5 @@
   <string name="statistics_weekly">Weekly</string>
   <string name="statistics_today">Today</string>
   <string name="settings_option_cnt_desc">Settings Options</string>
+  <string name="statistics_loading">Preparing Graph</string>
 </resources>
