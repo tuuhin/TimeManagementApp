@@ -1,5 +1,6 @@
 package com.eva.timemanagementapp.presentation.statistics.composables
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,11 +14,13 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.SessionReportModel
 import com.eva.timemanagementapp.presentation.utils.PreviewFakes
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
@@ -29,14 +32,16 @@ import java.time.LocalDate
 fun StatisticsGraph(
 	content: List<SessionReportModel>,
 	modifier: Modifier = Modifier,
-	lineWidth: Float = 20f,
-	lineColor: Color = MaterialTheme.colorScheme.primary,
-	axisLineColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+	lineWidth: Float = 12f,
 	axisLineWidth: Float = 4f,
-	axisTextStyle: TextStyle = MaterialTheme.typography.titleSmall,
+	lineColor: Color = MaterialTheme.colorScheme.secondary,
+	onLineColor: Color = MaterialTheme.colorScheme.onSecondary,
+	axisLineColor: Color = MaterialTheme.colorScheme.outline,
 	axisTextColor: Color = MaterialTheme.colorScheme.onSurface,
+	secondaryAxisColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+	axisTextStyle: TextStyle = MaterialTheme.typography.titleSmall,
 	secondaryAxisStyle: TextStyle = MaterialTheme.typography.bodySmall,
-	secondaryAxisColor: Color = MaterialTheme.colorScheme.onSurfaceVariant
+	context: Context = LocalContext.current
 ) {
 
 	val textMeasurer = rememberTextMeasurer()
@@ -50,38 +55,51 @@ fun StatisticsGraph(
 				val randomWeekDay = today.toReadableWeekday()
 				val randomDay = today.toDayOfMonthFormatted()
 
-				val weekDayLayoutResults = textMeasurer.measure(
+				val wDayLayout = textMeasurer.measure(
 					text = randomWeekDay,
 					style = axisTextStyle
 				)
 
-				val dayOfMonthLayoutResults = textMeasurer.measure(
+				val mDayLayout = textMeasurer.measure(
 					text = randomDay,
 					style = secondaryAxisStyle
 				)
 
-				val weekDayLayoutSize = weekDayLayoutResults.size
-				val monthDayLayoutSize = dayOfMonthLayoutResults.size
+				val wDayTextSize = wDayLayout.size
+				val mDayTextSize = mDayLayout.size
 
-				val totalYaxisSize = weekDayLayoutSize.height + monthDayLayoutSize.height
-				val paddingWidth = 10.dp.toPx()
-				val paddingHeight = 10.dp.toPx()
-				val yAxisWeekDayElementOffset = weekDayLayoutSize.width + paddingHeight
-				val yAxisDayOfMonthElementOffset = monthDayLayoutSize.width + paddingHeight
+				val xAxisHeight = wDayTextSize.height + mDayTextSize.height
+				val graphHeight = size.height - xAxisHeight
 
-				val totalYAxisWithPadding = totalYaxisSize + paddingHeight
+				val paddingHeight = 8.dp.toPx()
+				val paddingWidth = 8.dp.toPx()
+
+				val wDayBaseOffsetX = wDayTextSize.width + paddingWidth
+				val mDayBaseOffsetX = mDayTextSize.width + paddingWidth
+
+				val xAxisHeightWithPadding = xAxisHeight + paddingHeight
 
 				onDrawBehind {
+
+					val maxCount = content.maxOf { it.sessionCount }
+
+					//draw max
+					val measureMaxCountLayout = textMeasurer.measure(
+						text = "$maxCount",
+						style = axisTextStyle
+					)
+					val maxCountLayoutSize = measureMaxCountLayout.size
+
 					//y axis
 					drawLine(
 						color = axisLineColor,
 						start = Offset(
-							x = weekDayLayoutSize.width.toFloat(),
+							x = maxCountLayoutSize.width + paddingWidth,
 							y = 0f
 						),
 						end = Offset(
-							x = weekDayLayoutSize.width.toFloat(),
-							y = size.height - totalYaxisSize
+							x = maxCountLayoutSize.width + paddingWidth,
+							y = graphHeight
 						),
 						strokeWidth = axisLineWidth,
 						cap = StrokeCap.Round,
@@ -90,33 +108,37 @@ fun StatisticsGraph(
 					drawLine(
 						color = axisLineColor,
 						start = Offset(
-							x = weekDayLayoutSize.width.toFloat(),
-							y = size.height - totalYaxisSize
+							x = maxCountLayoutSize.width + paddingWidth,
+							y = graphHeight
 						),
-						end = Offset(
-							x = size.width,
-							y = size.height - totalYaxisSize
-						),
+						end = Offset(x = size.width, y = graphHeight),
 						strokeWidth = axisLineWidth,
 						cap = StrokeCap.Round
 					)
 
-					val eachBlockWidth = (size.width - weekDayLayoutSize.width) / content.size
+					val eachBlockWidth = (size.width - wDayTextSize.width) / content.size
 
-					//draw zero as it will be always present
-					val measureZero = textMeasurer.measure(text = "0", style = axisTextStyle)
-
+					//draw zero
 					drawText(
 						textMeasurer = textMeasurer,
 						text = "0",
 						style = axisTextStyle.copy(color = axisTextColor),
 						topLeft = Offset(
-							x = measureZero.size.width.toFloat(),
-							y = size.height - (totalYaxisSize + measureZero.size.height * .5f)
+							x = 0f,
+							y = size.height - (xAxisHeightWithPadding + measureMaxCountLayout.size.height * .5f)
 						)
 					)
-
-					val maxCount = content.maxOf { it.sessionCount }
+					//draw max
+					if (maxCount != 0)
+						drawText(
+							textMeasurer = textMeasurer,
+							text = "$maxCount",
+							style = axisTextStyle.copy(color = axisTextColor),
+							topLeft = Offset(
+								x = 0f,
+								y = measureMaxCountLayout.size.height * .5f
+							)
+						)
 
 					content.forEachIndexed { idx, report ->
 						//weekday
@@ -124,8 +146,8 @@ fun StatisticsGraph(
 						val dayOfMonth = report.date.toDayOfMonthFormatted()
 
 						val weekDayTextPos = Offset(
-							yAxisWeekDayElementOffset + idx * eachBlockWidth,
-							size.height - totalYaxisSize
+							wDayBaseOffsetX + idx * eachBlockWidth,
+							size.height - xAxisHeight
 						)
 
 						drawText(
@@ -135,10 +157,12 @@ fun StatisticsGraph(
 							topLeft = weekDayTextPos,
 						)
 
+						val dayOfMonthX = (wDayTextSize.width + mDayTextSize.width) * .5f
+
 						// day of month
 						val dayOfMonthTextPos = Offset(
-							idx * eachBlockWidth + (yAxisDayOfMonthElementOffset + weekDayLayoutSize.width * .5f),
-							size.height - weekDayLayoutSize.height
+							idx * eachBlockWidth + (mDayBaseOffsetX + dayOfMonthX),
+							size.height - wDayTextSize.height
 						)
 
 						drawText(
@@ -147,50 +171,73 @@ fun StatisticsGraph(
 							style = secondaryAxisStyle.copy(color = secondaryAxisColor),
 							topLeft = dayOfMonthTextPos,
 						)
+					}
 
+					if (maxCount == 0) {
+						val noDataText = context.getString(R.string.statistics_nodata)
+						val noDataLayoutResults =
+							textMeasurer.measure(
+								text = noDataText,
+								style = axisTextStyle.copy(color = lineColor)
+							)
+
+						val textSizeOffset = Offset(
+							noDataLayoutResults.size.width / 2f,
+							noDataLayoutResults.size.height / 2f
+						)
+
+						drawText(
+							textLayoutResult = noDataLayoutResults,
+							topLeft = center - textSizeOffset,
+						)
+
+						return@onDrawBehind
+					}
+
+					content.forEachIndexed { idx, report ->
 						val ratioDivider = maxCount.coerceAtLeast(1)
 
 						val ratio = (maxCount - report.sessionCount).toFloat() / ratioDivider
 
-						val lineStartHeight = ratio * (size.height - totalYAxisWithPadding)
+						val lineEndY = size.height - xAxisHeightWithPadding
+						val lineStartY = ratio * lineEndY
 
-						val lineStart = Offset(
-							x = (weekDayLayoutSize.width * 1.5f) + idx * eachBlockWidth + paddingWidth,
-							y = lineStartHeight
+						val lineStartX =
+							(wDayTextSize.width * 1.5f) + idx * eachBlockWidth + paddingWidth
+
+						val lineStartOffset = Offset(x = lineStartX, y = lineStartY)
+
+						val lineEndOffset = Offset(x = lineStartX, y = lineEndY)
+						//drawing line if count is not zero
+
+						val textColor = if (report.sessionCount == 0) lineColor else onLineColor
+
+						val textLayoutResults = textMeasurer.measure(
+							text = "${report.sessionCount}",
+							style = axisTextStyle.copy(color = textColor)
 						)
-
-						val lineEnd = Offset(
-							x = (weekDayLayoutSize.width * 1.5f) + idx * eachBlockWidth + paddingWidth,
-							y = size.height - totalYAxisWithPadding
-						)
-
-						drawLine(
-							color = lineColor,
-							start = lineStart,
-							end = lineEnd,
-							strokeWidth = lineWidth,
-							cap = StrokeCap.Round
-						)
-
 						if (report.sessionCount != 0) {
-							val countTextLayout = textMeasurer.measure(
-								text = "${report.sessionCount}",
-								style = axisTextStyle.copy(color = axisTextColor),
-							)
-
-							val textHeight =
-								(ratio * (size.height - totalYAxisWithPadding)) - (countTextLayout.size.height * .5f)
-
-							drawText(
-								textMeasurer = textMeasurer,
-								text = "${report.sessionCount}",
-								style = axisTextStyle.copy(color = axisTextColor),
-								topLeft = Offset(
-									x = countTextLayout.size.width.toFloat(),
-									y = textHeight
-								)
+							drawLine(
+								color = lineColor,
+								start = lineStartOffset,
+								end = lineEndOffset,
+								strokeWidth = lineWidth + textLayoutResults.size.width * .5f,
+								cap = StrokeCap.Round
 							)
 						}
+
+						val textCenterOffset = Offset(
+							textLayoutResults.size.width / 2f,
+							textLayoutResults.size.height / 2f
+						)
+						val excessPadding = if (report.sessionCount == 0)
+							Offset.Zero else Offset(0f, 2.dp.toPx())
+
+						drawText(
+							textLayoutResult = textLayoutResults,
+							topLeft = lineStartOffset - textCenterOffset + excessPadding
+						)
+
 					}
 				}
 			}

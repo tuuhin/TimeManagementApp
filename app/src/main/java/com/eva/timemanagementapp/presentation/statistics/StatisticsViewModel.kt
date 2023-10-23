@@ -7,7 +7,6 @@ import com.eva.timemanagementapp.domain.models.SessionHighlightModel
 import com.eva.timemanagementapp.domain.models.SessionReportModel
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.domain.repository.StatisticsRepository
-import com.eva.timemanagementapp.presentation.statistics.utils.StatisticsTabs
 import com.eva.timemanagementapp.presentation.utils.ShowContent
 import com.eva.timemanagementapp.presentation.utils.UiEvents
 import dagger.hilt.android.lifecycle.HiltViewModel

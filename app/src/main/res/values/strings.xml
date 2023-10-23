@@ -56,4 +56,7 @@
   <string name="statistics_today">Today</string>
   <string name="settings_option_cnt_desc">Settings Options</string>
   <string name="statistics_loading">Preparing Graph</string>
+
+  <string name="statistics_graph_subtext">Current week stats</string>
+  <string name="statistics_nodata">No Data Available</string>
 </resources>

@@ -6,7 +6,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.domain.models.TimerModes
-import java.time.LocalTime
 
 @Entity(
 	tableName = "SESSION_INFO_TABLE",
@@ -15,7 +14,8 @@ import java.time.LocalTime
 			entity = DaySessionEntry::class,
 			parentColumns = arrayOf("ID"),
 			childColumns = arrayOf("SESSION_ID"),
-			onDelete = ForeignKey.CASCADE
+			onDelete = ForeignKey.CASCADE,
+			onUpdate = ForeignKey.NO_ACTION
 		)
 	],
 )
@@ -27,9 +27,6 @@ data class SessionInfoEntity(
 
 	@ColumnInfo(name = "SESSION_DURATION")
 	val option: DurationOption,
-
-	@ColumnInfo(name = "ADDED_AT")
-	val at: LocalTime,
 
 	@ColumnInfo(name = "TIMER_MODE")
 	val mode: TimerModes,

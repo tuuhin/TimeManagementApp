@@ -25,7 +25,6 @@ import com.eva.timemanagementapp.presentation.statistics.composables.SessionHigh
 import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsGraphContainer
 import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsGraphHeading
 import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsTabRow
-import com.eva.timemanagementapp.presentation.statistics.utils.StatisticsTabs
 import com.eva.timemanagementapp.presentation.utils.PreviewFakes
 import com.eva.timemanagementapp.presentation.utils.ShowContent
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
@@ -80,6 +79,7 @@ fun StatisticsScreen(
 			StatisticsGraphContainer(
 				showLoading = graphContent.isLoading,
 				content = graphContent.content,
+				shape = MaterialTheme.shapes.medium,
 				modifier = Modifier
 					.fillMaxSize()
 					.padding(vertical = dimensionResource(R.dimen.statistics_graph_padding))

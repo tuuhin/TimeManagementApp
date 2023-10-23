@@ -12,7 +12,6 @@ import com.eva.timemanagementapp.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.time.LocalTime
 
 class TimerServiceRepoImpl(
 	private val dailySessionDao: DaySessionDao,
@@ -33,7 +32,6 @@ class TimerServiceRepoImpl(
 			val session = SessionInfoEntity(
 				option = option,
 				mode = mode,
-				at = LocalTime.now(),
 				sessionId = sessionId
 			)
 			sessionDao.insertSessionEntry(session)

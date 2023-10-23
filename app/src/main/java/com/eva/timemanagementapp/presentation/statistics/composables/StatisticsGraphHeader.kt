@@ -4,17 +4,18 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,9 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
@@ -38,12 +41,14 @@ fun StatisticsGraphHeading(
 	var showDropDown by remember { mutableStateOf(false) }
 
 	Row(
-		modifier = modifier,
+		modifier = modifier
+			.padding(horizontal = dimensionResource(id = R.dimen.statistics_header_padding)),
 		horizontalArrangement = Arrangement.SpaceBetween,
 		verticalAlignment = Alignment.CenterVertically
 	) {
 		Column(
-			verticalArrangement = Arrangement.spacedBy(2.dp)
+			verticalArrangement = Arrangement.spacedBy(2.dp),
+			modifier = Modifier.weight(.7f)
 		) {
 			Text(
 				text = stringResource(id = R.string.highlights_graph),
@@ -51,7 +56,7 @@ fun StatisticsGraphHeading(
 				color = MaterialTheme.colorScheme.onSurface
 			)
 			Text(
-				text = "Current week stats",
+				text = stringResource(id = R.string.statistics_graph_subtext),
 				style = MaterialTheme.typography.bodyMedium,
 				color = MaterialTheme.colorScheme.onSurfaceVariant
 			)
@@ -60,36 +65,52 @@ fun StatisticsGraphHeading(
 			modifier = Modifier.wrapContentSize(),
 			contentAlignment = Alignment.Center
 		) {
-			TextButton(
+			Button(
 				onClick = { showDropDown = true },
 				colors = ButtonDefaults
-					.textButtonColors(
-						contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-						containerColor = MaterialTheme.colorScheme.secondaryContainer
+					.buttonColors(
+						contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+						containerColor = MaterialTheme.colorScheme.tertiaryContainer
 					),
-				modifier = Modifier.padding(vertical = 4.dp)
+				shape = MaterialTheme.shapes.medium,
+				elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+				contentPadding = PaddingValues(6.dp)
 			) {
-				Text(
-					text = when (selectedMode) {
-						TimerModes.FOCUS_MODE -> stringResource(id = R.string.timer_focus_mode)
-						TimerModes.BREAK_MODE -> stringResource(id = R.string.timer_break_mode)
-					},
-					style = MaterialTheme.typography.titleSmall,
-				)
+				when (selectedMode) {
+					TimerModes.FOCUS_MODE -> Text(
+						text = stringResource(id = R.string.timer_focus_mode),
+						style = MaterialTheme.typography.bodyMedium
+					)
+
+					TimerModes.BREAK_MODE -> Text(
+						text = stringResource(id = R.string.timer_break_mode),
+						style = MaterialTheme.typography.bodyMedium
+					)
+				}
 			}
 			DropdownMenu(
 				expanded = showDropDown,
-				onDismissRequest = { showDropDown = !showDropDown },
+				onDismissRequest = { showDropDown = false },
+				properties = PopupProperties(
+					dismissOnClickOutside = true,
+					dismissOnBackPress = true,
+				)
 			) {
 				TimerModes.entries.forEach { item ->
 					DropdownMenuItem(
 						text = {
-							Text(
-								text = when (item) {
-									TimerModes.FOCUS_MODE -> stringResource(id = R.string.timer_focus_mode)
-									TimerModes.BREAK_MODE -> stringResource(id = R.string.timer_break_mode)
-								}
-							)
+							when (item) {
+								TimerModes.FOCUS_MODE -> Text(
+									text = stringResource(id = R.string.timer_focus_mode),
+									style = MaterialTheme.typography.titleSmall
+								)
+
+								TimerModes.BREAK_MODE -> Text(
+									text = stringResource(id = R.string.timer_break_mode),
+									style = MaterialTheme.typography.titleSmall
+								)
+							}
+
 						},
 						onClick = { onModeChange(item) }
 					)

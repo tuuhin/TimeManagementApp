@@ -1,4 +1,4 @@
-package com.eva.timemanagementapp.presentation.statistics.utils
+package com.eva.timemanagementapp.presentation.statistics
 
 import androidx.annotation.StringRes
 import com.eva.timemanagementapp.R

@@ -40,7 +40,7 @@ fun HighLightCard(
 			.cardColors(containerColor = background, contentColor = contentColor)
 	) {
 		Column(
-			modifier = Modifier.padding(16.dp),
+			modifier = Modifier.padding(12.dp),
 			horizontalAlignment = Alignment.Start,
 			verticalArrangement = Arrangement.spacedBy(4.dp)
 		) {

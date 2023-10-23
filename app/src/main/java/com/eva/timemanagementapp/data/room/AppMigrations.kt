@@ -1,5 +1,6 @@
 package com.eva.timemanagementapp.data.room
 
+import androidx.room.DeleteColumn
 import androidx.room.RenameColumn
 import androidx.room.migration.AutoMigrationSpec
 
@@ -11,4 +12,11 @@ object AppMigrations {
 		toColumnName = "SESSION_DURATION"
 	)
 	class RenameSessionDurationField : AutoMigrationSpec
+
+	@DeleteColumn(
+		tableName = "SESSION_INFO_TABLE",
+		columnName = "ADDED_AT"
+	)
+	class DeleteSessionAtField : AutoMigrationSpec
+
 }

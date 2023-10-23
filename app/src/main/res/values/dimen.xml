@@ -14,4 +14,5 @@
   <!--  Statistics-->
   <dimen name="statistics_item_spacing">8dp</dimen>
   <dimen name="statistics_graph_padding">16dp</dimen>
+  <dimen name="statistics_header_padding">8dp</dimen>
 </resources>

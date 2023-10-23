@@ -15,7 +15,7 @@ object PreviewFakes {
 	val FAKE_SESSION_REPORT_WEEKLY = List(7) { idx ->
 		SessionReportModel(
 			date = LocalDate.of(2023, 10, idx + 1),
-			sessionCount = idx
+			sessionCount = 5 + idx
 		)
 	}
 }

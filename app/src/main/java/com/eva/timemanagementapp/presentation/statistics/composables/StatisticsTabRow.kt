@@ -21,14 +21,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.eva.timemanagementapp.presentation.statistics.utils.StatisticsTabs
+import com.eva.timemanagementapp.presentation.statistics.StatisticsTabs
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @Composable
@@ -36,6 +37,9 @@ fun StatisticsTabRow(
 	selectedIndex: Int,
 	onTabChanged: (StatisticsTabs) -> Unit,
 	modifier: Modifier = Modifier,
+	indicatorColor: Color = MaterialTheme.colorScheme.primaryContainer,
+	selectedItemColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+	unSelectedItemColor: Color = MaterialTheme.colorScheme.primary
 ) {
 	val isSystemThemeDark = isSystemInDarkTheme()
 
@@ -47,7 +51,10 @@ fun StatisticsTabRow(
 		)
 	}
 
-	val transition = updateTransition(targetState = selectedIndex, label = "Tab Animation")
+	val transition = updateTransition(
+		targetState = selectedIndex,
+		label = "Tab Indicator Animation"
+	)
 
 	TabRow(
 		selectedTabIndex = selectedIndex,
@@ -77,7 +84,6 @@ fun StatisticsTabRow(
 					}
 				) { tabPositions[it].left }
 
-				val boxColor = MaterialTheme.colorScheme.tertiaryContainer
 				val boxRadius = 20.dp.value
 
 				val customTabOffset = Modifier
@@ -90,41 +96,45 @@ fun StatisticsTabRow(
 					modifier = Modifier
 						.padding(bottom = 4.dp)
 						.then(customTabOffset)
-						.drawWithContent {
+						.drawBehind {
 							drawRoundRect(
-								color = boxColor,
+								color = indicatorColor,
 								cornerRadius = CornerRadius(boxRadius, boxRadius),
-								blendMode = if (isSystemThemeDark)
-									BlendMode.Screen
-								else BlendMode.Multiply
+								blendMode = if (isSystemThemeDark) BlendMode.Screen
+								else BlendMode.Multiply,
 							)
-							drawContent()
 						},
 				)
 			}
+		},
+		tabs = {
+			options.forEach { option ->
+				Tab(
+					selected = selectedIndex == option.tabIndex,
+					onClick = { onTabChanged(option) },
+					text = {
+						Text(
+							text = stringResource(id = option.label),
+							style = MaterialTheme.typography.titleSmall,
+							maxLines = 2,
+							overflow = TextOverflow.Ellipsis,
+						)
+					},
+					selectedContentColor = selectedItemColor,
+					unselectedContentColor = unSelectedItemColor
+				)
+			}
 		}
-	) {
-		options.forEach { option ->
-			Tab(
-				selected = selectedIndex == option.tabIndex,
-				onClick = { onTabChanged(option) },
-				text = {
-					Text(
-						text = stringResource(id = option.label),
-						maxLines = 2,
-						overflow = TextOverflow.Ellipsis,
-					)
-				},
-				selectedContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-				unselectedContentColor = MaterialTheme.colorScheme.secondary,
-			)
-		}
-	}
+	)
 }
 
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun StatisticsTabRowPreview() = TimeManagementAppTheme {
 	StatisticsTabRow(

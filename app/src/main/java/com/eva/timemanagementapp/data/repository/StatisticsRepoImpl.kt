@@ -69,7 +69,8 @@ class StatisticsRepoImpl(
 	): Flow<List<SessionReportModel>> = flow {
 		try {
 			val report =
-				sessionDao.fetchMapOfDataAndSessionCount(start = start, end = end, mode = mode)
+				sessionDao
+					.fetchMapOfDataAndSessionCount(start = start, end = end, mode = mode)
 					.map { resource ->
 						resource.map { entry ->
 							SessionReportModel(date = entry.key, sessionCount = entry.value)
@@ -85,8 +86,9 @@ class StatisticsRepoImpl(
 
 	private fun weeklyReportFlatter(reports: List<SessionReportModel>) = flow {
 		val extraDaysForReport = mutableListOf<SessionReportModel>()
+		//Get the minimum of the report or if its null today only
+		val minimum = reports.minOfOrNull { it.date } ?: LocalDate.now()
 
-		val minimum = reports.minOf { it.date }
 		var extrasRequired = (7 - reports.size).toLong()
 		while (extrasRequired > 0) {
 			val extra = (SessionReportModel(
@@ -97,7 +99,6 @@ class StatisticsRepoImpl(
 			extrasRequired--
 		}
 		val weekReport = extraDaysForReport + reports
-		println(reports.size)
 		emit(weekReport)
 	}
 }

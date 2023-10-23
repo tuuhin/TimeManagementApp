@@ -36,12 +36,13 @@ fun StatisticsGraphContainer(
 	content: List<SessionReportModel>?,
 	modifier: Modifier = Modifier,
 	shape: Shape = MaterialTheme.shapes.extraSmall,
-	containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-	cardElevation: Dp = 2.dp,
+	containerColor: Color = MaterialTheme.colorScheme.inverseOnSurface,
+	cardElevation: Dp = 0.dp,
 	borderStroke: BorderStroke? = null,
 	lineWidth: Float = 20f,
-	lineColor: Color = MaterialTheme.colorScheme.primary,
-	axisLineColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+	lineColor: Color = MaterialTheme.colorScheme.secondary,
+	onLineColor: Color = MaterialTheme.colorScheme.onSecondary,
+	axisLineColor: Color = MaterialTheme.colorScheme.outline,
 	axisLineWidth: Float = 4f,
 	axisTextStyle: TextStyle = MaterialTheme.typography.titleSmall,
 	axisTextColor: Color = MaterialTheme.colorScheme.onSurface,
@@ -84,6 +85,7 @@ fun StatisticsGraphContainer(
 					secondaryAxisColor = secondaryAxisColor,
 					secondaryAxisStyle = secondaryAxisStyle,
 					axisTextStyle = axisTextStyle,
+					onLineColor = onLineColor,
 					modifier = Modifier.fillMaxSize()
 				)
 			}
@@ -107,10 +109,8 @@ class StatisticsPreviewContent :
 )
 @Composable
 fun StatisticsGraphContainerPreview(
-
 	@PreviewParameter(StatisticsPreviewContent::class)
 	content: ShowContent<List<SessionReportModel>>
-
 ) = TimeManagementAppTheme {
 	StatisticsGraphContainer(
 		showLoading = content.isLoading,
