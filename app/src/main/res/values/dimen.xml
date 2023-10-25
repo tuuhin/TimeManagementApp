@@ -5,7 +5,7 @@
   <!--  Settings-->
   <dimen name="settings_card_padding">8dp</dimen>
   <dimen name="menu_item_padding">6dp</dimen>
-  <dimen name="settings_section_padding">8dp</dimen>
+  <dimen name="settings_heading_padding">2dp</dimen>
   <!--  Timer-->
   <dimen name="timer_watch_padding">20dp</dimen>
   <dimen name="timer_spacing">20dp</dimen>

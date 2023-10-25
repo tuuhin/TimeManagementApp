@@ -1,24 +1,14 @@
 package com.eva.timemanagementapp.presentation.settings.composables
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -32,51 +22,25 @@ fun SettingsSwitchOptions(
 	modifier: Modifier = Modifier,
 	subtitle: String? = null,
 	isEnabled: Boolean = true,
-	contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
-	containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+	containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+	contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
 	shape: Shape = MaterialTheme.shapes.small,
 	elevation: Dp = 0.dp,
 ) {
-	Card(
+	SettingsOptionContainer(
+		title = title,
+		subtitle = subtitle,
 		modifier = modifier,
-		elevation = CardDefaults.cardElevation(defaultElevation = elevation),
-		colors = CardDefaults.cardColors(
-			containerColor = containerColor,
-			contentColor = contentColor
-		),
+		containerColor = containerColor,
+		contentColor = contentColor,
 		shape = shape,
+		elevation = elevation,
 	) {
-		Row(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(all = dimensionResource(id = R.dimen.settings_card_padding)),
-			horizontalArrangement = Arrangement.SpaceBetween,
-			verticalAlignment = Alignment.CenterVertically
-		) {
-			Column(
-				verticalArrangement = Arrangement.spacedBy(2.dp),
-				modifier = Modifier.weight(.7f)
-			) {
-				Text(
-					text = title,
-					style = MaterialTheme.typography.titleMedium
-				)
-				subtitle?.let {
-					Text(
-						text = it,
-						style = MaterialTheme.typography.bodyMedium,
-						maxLines = 2,
-						overflow = TextOverflow.Ellipsis
-					)
-				}
-			}
-			Switch(
-				checked = isChecked,
-				onCheckedChange = onCheckChange,
-				enabled = isEnabled,
-				modifier = Modifier.weight(.2f),
-			)
-		}
+		Switch(
+			checked = isChecked,
+			onCheckedChange = onCheckChange,
+			enabled = isEnabled,
+		)
 	}
 }
 

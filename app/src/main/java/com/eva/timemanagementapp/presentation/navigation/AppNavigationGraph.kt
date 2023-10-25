@@ -129,6 +129,7 @@ fun AppNavigationGraph(
 				val sessionCount by settingsViewModel.sessionCount.collectAsStateWithLifecycle()
 				val airplaneMode by settingsViewModel.isAirPlaneModeEnabled.collectAsStateWithLifecycle()
 				val isAllowSave by settingsViewModel.isSaveSessionDataAllowed.collectAsStateWithLifecycle()
+				val reminderTime by settingsViewModel.reminderNotificationTime.collectAsStateWithLifecycle()
 
 				SettingsScreen(
 					focusDuration = focusDuration,
@@ -136,6 +137,7 @@ fun AppNavigationGraph(
 					sessionCountOption = sessionCount,
 					isAirplaneModeEnabled = airplaneMode,
 					isSaveAllowed = isAllowSave,
+					reminderTime = reminderTime,
 					onChangeSettings = settingsViewModel::onChangeSettingsEvent
 				)
 			}

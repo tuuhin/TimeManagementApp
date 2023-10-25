@@ -2,17 +2,10 @@ package com.eva.timemanagementapp.presentation.settings.composables
 
 import android.content.res.Configuration
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -24,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -46,8 +38,8 @@ fun SessionOptionNumber(
 	selected: SessionNumberOption,
 	onSessionNumberChange: (SessionNumberOption) -> Unit,
 	modifier: Modifier = Modifier,
-	contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
-	containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+	containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+	contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
 	shape: Shape = MaterialTheme.shapes.small,
 	elevation: Dp = 0.dp,
 ) {
@@ -55,63 +47,43 @@ fun SessionOptionNumber(
 
 	var isDropDownVisible by remember { mutableStateOf(false) }
 
-	Card(
+	SettingsOptionContainer(
+		title = title,
+		subtitle = "${selected.number}",
 		modifier = modifier,
-		elevation = CardDefaults.cardElevation(defaultElevation = elevation),
-		colors = CardDefaults.cardColors(
-			containerColor = containerColor,
-			contentColor = contentColor
-		),
+		containerColor = containerColor,
+		contentColor = contentColor,
 		shape = shape,
+		elevation = elevation,
 	) {
-		Row(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(all = dimensionResource(id = R.dimen.settings_card_padding)),
-			horizontalArrangement = Arrangement.SpaceBetween,
-			verticalAlignment = Alignment.CenterVertically
+		IconButton(
+			onClick = { isDropDownVisible = true },
+			modifier = Modifier.pointerInput(Unit) {
+				detectTapGestures { offset ->
+					menuAnchor = DpOffset(offset.x.dp, offset.y.dp)
+				}
+			},
 		) {
-			Column(
-				verticalArrangement = Arrangement.spacedBy(4.dp)
-			) {
-				Text(text = title, style = MaterialTheme.typography.titleMedium)
-				Text(
-					text = "${selected.number}",
-					style = MaterialTheme.typography.bodyMedium,
-					color = MaterialTheme.colorScheme.onSurfaceVariant,
+			Icon(
+				imageVector = Icons.Default.MoreVert,
+				contentDescription = stringResource(id = R.string.settings_option_cnt_desc),
+			)
+		}
+		DropdownMenu(
+			expanded = isDropDownVisible,
+			onDismissRequest = { isDropDownVisible = false },
+			properties = PopupProperties(
+				dismissOnBackPress = false,
+				dismissOnClickOutside = true
+			),
+			offset = menuAnchor
+		) {
+			SessionNumberOption.entries.forEach { option ->
+				DropdownMenuItem(
+					text = { Text(text = "${option.number}") },
+					onClick = { onSessionNumberChange(option) },
+					contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.menu_item_padding)),
 				)
-			}
-			Box {
-				IconButton(
-					onClick = { isDropDownVisible = true },
-					modifier = Modifier.pointerInput(Unit) {
-						detectTapGestures { offset ->
-							menuAnchor = DpOffset(offset.x.dp, offset.y.dp)
-						}
-					},
-				) {
-					Icon(
-						imageVector = Icons.Default.MoreVert,
-						contentDescription = stringResource(id = R.string.settings_option_cnt_desc),
-					)
-				}
-				DropdownMenu(
-					expanded = isDropDownVisible,
-					onDismissRequest = { isDropDownVisible = false },
-					properties = PopupProperties(
-						dismissOnBackPress = false,
-						dismissOnClickOutside = true
-					),
-					offset = menuAnchor
-				) {
-					SessionNumberOption.entries.forEach { option ->
-						DropdownMenuItem(
-							text = { Text(text = "${option.number}") },
-							onClick = { onSessionNumberChange(option) },
-							contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.menu_item_padding)),
-						)
-					}
-				}
 			}
 		}
 	}

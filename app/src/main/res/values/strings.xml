@@ -1,16 +1,21 @@
 <resources>
   <string name="app_name">TimeManagementApp</string>
-
+  <!--  Settings-->
   <string name="session_settings_title">Session</string>
   <string name="session_focus_title">Focus Duration</string>
   <string name="session_focus_text">Minutes to focus</string>
   <string name="session_break_title">Break Duration</string>
   <string name="session_break_text">Breaks in between two focus session</string>
-  <string name="session_count_title">Session Count</string>
+  <string name="daily_goal_title">Daily Goal</string>
   <string name="session_count_text">The number of focus duration for a session to complete</string>
   <string name="session_notification_title">Notification</string>
   <string name="airplane_mode_title">Airplane Mode</string>
   <string name="airplane_mode_text">Views Current Airplane Mode Status</string>
+  <string name="statistics_nodata">No Data Available</string>
+  <string name="reminder_time">Daily Reminder Time</string>
+  <string name="reminder_time_desc">Time to remind about session</string>
+  <string name="session_other_settings">Others</string>
+
   <!--  Notification Channel Info-->
   <string name="channel_name">Service Channel</string>
   <string name="channel_id">Service Channel Id</string>
@@ -19,15 +24,15 @@
   <string name="notification_action_stop">Stop</string>
   <string name="notification_action_resume">Resume</string>
 
+  <!--  Timer Control-->
   <string name="icon_pause">Pause Icon</string>
   <string name="icon_play">Play Icon</string>
+
   <!--Navigation-->
   <string name="navigation_route_statistics">Statistics</string>
   <string name="navigation_route_timer">Timer</string>
   <string name="navigation_route_settings">Settings</string>
-  <!--Statistics-->
-  <string name="total_session_count">Total Session </string>
-  <string name="daily_session_count">Daily Average</string>
+
   <!--  Timer-->
   <string name="turn_on_keep_screen_mode">Keep the screen on</string>
   <string name="timer_focus_mode">Focus Mode</string>
@@ -46,9 +51,11 @@
   <string name="total_break_count">Break Sessions</string>
   <string name="average_focus_time">Avg. Focus Time</string>
   <string name="average_break_time">Avg. Break Time</string>
+
   <!--  Statistics Headers-->
   <string name="highlights_text">Highlights</string>
   <string name="highlights_graph">Graph</string>
+
   <!--  Statistics options-->
   <string name="statistics_all">All</string>
   <string name="minutes_short_hand">min</string>
@@ -56,7 +63,10 @@
   <string name="statistics_today">Today</string>
   <string name="settings_option_cnt_desc">Settings Options</string>
   <string name="statistics_loading">Preparing Graph</string>
-
   <string name="statistics_graph_subtext">Current week stats</string>
-  <string name="statistics_nodata">No Data Available</string>
+  <string name="time_picker_heading">Pick Time</string>
+
+  <!--  Goals Notification-->
+  <string name="reminder_notification_title">Session Goals</string>
+  <string name="reminder_notification_text">You have successfully completed your today\'s goal</string>
 </resources>

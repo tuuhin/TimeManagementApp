@@ -2,14 +2,11 @@ package com.eva.timemanagementapp.presentation.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,10 +18,11 @@ import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.domain.models.SessionNumberOption
-import com.eva.timemanagementapp.presentation.settings.composables.SessionOptionDuration
-import com.eva.timemanagementapp.presentation.settings.composables.SessionOptionNumber
-import com.eva.timemanagementapp.presentation.settings.composables.SettingsSwitchOptions
+import com.eva.timemanagementapp.presentation.settings.composables.otherSettings
+import com.eva.timemanagementapp.presentation.settings.composables.setNotificationSettings
+import com.eva.timemanagementapp.presentation.settings.composables.setSessionSettings
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
+import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,10 +32,10 @@ fun SettingsScreen(
 	sessionCountOption: SessionNumberOption,
 	isSaveAllowed: Boolean,
 	isAirplaneModeEnabled: Boolean,
+	reminderTime: LocalTime,
 	onChangeSettings: (ChangeSettingsEvent) -> Unit,
 	modifier: Modifier = Modifier
 ) {
-
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(
@@ -53,71 +51,20 @@ fun SettingsScreen(
 				.fillMaxSize()
 				.padding(horizontal = dimensionResource(id = R.dimen.scaffold_padding))
 		) {
-			item(key = R.string.session_settings_title) {
-				Text(
-					text = stringResource(id = R.string.session_settings_title),
-					style = MaterialTheme.typography.titleLarge,
-					color = MaterialTheme.colorScheme.onSurface,
-				)
-			}
-			item(key = R.string.session_focus_title) {
-				SessionOptionDuration(
-					title = stringResource(id = R.string.session_focus_title),
-					selected = focusDuration,
-					onSessionDurationChange = { duration ->
-						onChangeSettings(ChangeSettingsEvent.OnFocusDurationChange(duration))
-					}
-				)
-			}
-			item(key = R.string.session_break_title) {
-				SessionOptionDuration(
-					title = stringResource(id = R.string.session_break_title),
-					selected = breakDuration,
-					onSessionDurationChange = { duration ->
-						onChangeSettings(ChangeSettingsEvent.OnBreakDurationChange(duration))
-					}
-				)
-			}
-			item(key = R.string.session_count_title) {
-				SessionOptionNumber(
-					title = stringResource(id = R.string.session_count_title),
-					selected = sessionCountOption,
-					onSessionNumberChange = { number ->
-						onChangeSettings(ChangeSettingsEvent.OnSessionCountChange(number))
-					}
-				)
-			}
-			item(key = R.string.allow_save_session_data) {
-				SettingsSwitchOptions(
-					title = stringResource(id = R.string.allow_save_session_data),
-					subtitle = stringResource(id = R.string.allow_save_session_desc),
-					isChecked = isSaveAllowed,
-					onCheckChange = { isAllowed ->
-						onChangeSettings(ChangeSettingsEvent.IsSaveSessionAllowed(isAllowed))
-					}
-				)
-			}
-			item {
-				Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.settings_section_padding)))
-			}
-			item(key = R.string.session_notification_title) {
-				Text(
-					text = stringResource(id = R.string.session_notification_title),
-					style = MaterialTheme.typography.titleLarge,
-					color = MaterialTheme.colorScheme.onSurface,
-				)
-			}
-			item(key = R.string.airplane_mode_title) {
-				SettingsSwitchOptions(
-					title = stringResource(id = R.string.airplane_mode_title),
-					subtitle = stringResource(id = R.string.airplane_mode_text),
-					isChecked = isAirplaneModeEnabled,
-					onCheckChange = {},
-					isEnabled = false,
-					contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-					containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-				)
-			}
+			setSessionSettings(
+				focusDuration = focusDuration,
+				breakDuration = breakDuration,
+				isSaveAllowed = isSaveAllowed,
+				onChangeSettings = onChangeSettings
+			)
+			setNotificationSettings(
+				reminderTime = reminderTime,
+				sessionCountOption = sessionCountOption,
+				onChangeSettings = onChangeSettings
+			)
+			otherSettings(
+				isAirplaneModeEnabled = isAirplaneModeEnabled
+			)
 		}
 	}
 }
@@ -137,6 +84,7 @@ fun SettingsScreenPreview() = TimeManagementAppTheme {
 		breakDuration = DurationOption.TEN_MINUTES,
 		sessionCountOption = SessionNumberOption.TWO_TIMES,
 		isAirplaneModeEnabled = false,
+		reminderTime = LocalTime.of(0, 0),
 		onChangeSettings = {},
 		isSaveAllowed = true
 	)
