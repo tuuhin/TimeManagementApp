@@ -29,8 +29,7 @@ object RepositoryModule {
 	fun providesSessionStatisticsRepo(
 		dataBase: AppDataBase
 	): StatisticsRepository = StatisticsRepoImpl(
-		sessionDao = dataBase.sessionDao
+		sessionDao = dataBase.sessionDao()
 	)
-
 
 }

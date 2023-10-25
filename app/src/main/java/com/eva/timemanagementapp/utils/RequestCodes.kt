@@ -6,5 +6,6 @@ enum class RequestCodes(val code: Int) {
 	PAUSE_TIMER(102),
 	RESUME_TIMER(103),
 	STOP_TIMER(104),
-	DISMISS_TIMER(105);
+	DISMISS_TIMER(105),
+	REMINDER_ALARM(106);
 }

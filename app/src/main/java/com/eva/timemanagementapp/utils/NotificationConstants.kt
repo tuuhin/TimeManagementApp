@@ -2,6 +2,7 @@ package com.eva.timemanagementapp.utils
 
 object NotificationConstants {
 	const val NOTIFICATION_ID = 1
+	const val REMINDER_NOTIFICATION_ID = 2
 	const val PAUSED_NOTIFICATION_TITLE = "Timer is Paused"
 
 	const val TIMER_RUNNING_FOCUS_MODE_TEXT = "Focus Mode Running"

@@ -3,7 +3,7 @@ package com.eva.timemanagementapp.data.room.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.MapInfo
+import androidx.room.MapColumn
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.eva.timemanagementapp.data.room.entity.SessionInfoEntity
@@ -60,7 +60,6 @@ interface SessionInfoDao {
 	@Query("SELECT SESSION_DURATION FROM SESSION_INFO_TABLE WHERE TIMER_MODE=:mode")
 	fun fetchDurationsFromMode(mode: TimerModes): Flow<List<DurationOption>>
 
-	@MapInfo(keyColumn = "DATE", valueColumn = "S_COUNT")
 	@Query(
 		"""
 		SELECT DATE,COUNT(*) as S_COUNT 
@@ -76,7 +75,21 @@ interface SessionInfoDao {
 		start: LocalDate,
 		end: LocalDate,
 		mode: TimerModes
-	): Flow<Map<LocalDate, Int>>
+	): Flow<Map<@MapColumn("DATE") LocalDate, @MapColumn("S_COUNT") Int>>
 
+	@Query(
+		"""
+		SELECT COUNT(*)
+		FROM SESSION_INFO_TABLE S_INFO 
+		INNER JOIN DAILY_SESSION_TABLE D_INFO 
+		ON S_INFO.SESSION_ID = D_INFO.ID
+		WHERE S_INFO.TIMER_MODE =:mode
+		AND D_INFO.DATE =:date
+	"""
+	)
+	suspend fun getSessionCountToday(
+		date: LocalDate = LocalDate.now(),
+		mode: TimerModes = TimerModes.FOCUS_MODE
+	): Int
 
 }

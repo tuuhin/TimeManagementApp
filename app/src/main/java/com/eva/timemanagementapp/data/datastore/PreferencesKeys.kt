@@ -6,4 +6,5 @@ object PreferencesKeys {
 	const val BREAK_DURATION = "BREAK_DURATION"
 	const val SESSION_COUNT = "SESSION_COUNT"
 	const val ALLOW_SAVE_SESSIONS = "ALLOW_SAVE_SESSIONS"
+	const val REMINDER_TIME = "REMINDER_TIME"
 }

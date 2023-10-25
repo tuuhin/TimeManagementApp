@@ -2,10 +2,10 @@ package com.eva.timemanagementapp.domain.facade
 
 import kotlinx.coroutines.flow.Flow
 
-interface ServiceDataRetriever {
+interface SettingsInfoFacade {
 
 	val initialValue: Boolean
 
-	val serviceStatus: Flow<Boolean>
+	val status: Flow<Boolean>
 
 }

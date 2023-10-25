@@ -28,7 +28,7 @@ object TimerServiceModule {
 	fun providesSessionServiceRepo(
 		dataBase: AppDataBase
 	): TimerServiceRepository = TimerServiceRepoImpl(
-		dailySessionDao = dataBase.dailySession,
-		sessionDao = dataBase.sessionDao
+		dailySessionDao = dataBase.dailySession(),
+		sessionDao = dataBase.sessionDao()
 	)
 }

@@ -43,9 +43,9 @@ import com.eva.timemanagementapp.data.room.entity.SessionInfoEntity
 )
 abstract class AppDataBase : RoomDatabase() {
 
-	abstract val sessionDao: SessionInfoDao
+	abstract fun sessionDao(): SessionInfoDao
 
-	abstract val dailySession: DaySessionDao
+	abstract fun dailySession(): DaySessionDao
 
 	companion object {
 		fun getInstance(context: Context): AppDataBase =

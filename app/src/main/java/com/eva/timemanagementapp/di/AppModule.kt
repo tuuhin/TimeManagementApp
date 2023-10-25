@@ -2,9 +2,12 @@ package com.eva.timemanagementapp.di
 
 import android.content.Context
 import com.eva.timemanagementapp.data.datastore.SettingsPreferencesImpl
-import com.eva.timemanagementapp.data.receiver.AirPlaneModeDataRetriever
+import com.eva.timemanagementapp.data.repository.AirPlaneSettingsInfo
+import com.eva.timemanagementapp.data.repository.SessionReminderAlarm
 import com.eva.timemanagementapp.data.room.AppDataBase
-import com.eva.timemanagementapp.domain.facade.ServiceDataRetriever
+import com.eva.timemanagementapp.data.room.dao.SessionInfoDao
+import com.eva.timemanagementapp.domain.facade.SessionReminderFacade
+import com.eva.timemanagementapp.domain.facade.SettingsInfoFacade
 import com.eva.timemanagementapp.domain.facade.SettingsPreferences
 import dagger.Module
 import dagger.Provides
@@ -16,10 +19,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
 	@Provides
 	@Singleton
-	fun providesAppDataBase(@ApplicationContext context: Context): AppDataBase =
-		AppDataBase.getInstance(context)
+	fun providesAppDataBase(
+		@ApplicationContext context: Context
+	): AppDataBase = AppDataBase.getInstance(context)
+
+	@Provides
+	@Singleton
+	fun providesSessionInfoDao(
+		dataBase: AppDataBase
+	): SessionInfoDao = dataBase.sessionDao()
 
 	@Provides
 	@Singleton
@@ -31,5 +42,11 @@ object AppModule {
 	@Singleton
 	fun providesAirplaneListener(
 		@ApplicationContext context: Context
-	): ServiceDataRetriever = AirPlaneModeDataRetriever(context)
+	): SettingsInfoFacade = AirPlaneSettingsInfo(context)
+
+	@Provides
+	@Singleton
+	fun providesReminderAlarm(
+		@ApplicationContext context: Context
+	): SessionReminderFacade = SessionReminderAlarm(context)
 }
