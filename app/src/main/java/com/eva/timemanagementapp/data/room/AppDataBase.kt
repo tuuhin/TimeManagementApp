@@ -45,7 +45,7 @@ abstract class AppDataBase : RoomDatabase() {
 
 	abstract fun sessionDao(): SessionInfoDao
 
-	abstract fun dailySession(): DaySessionDao
+	abstract fun daySessionDao(): DaySessionDao
 
 	companion object {
 		fun getInstance(context: Context): AppDataBase =

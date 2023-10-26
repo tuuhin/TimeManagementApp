@@ -2,6 +2,7 @@ package com.eva.timemanagementapp.presentation.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -45,11 +46,11 @@ fun SettingsScreen(
 		modifier = modifier
 	) { scPadding ->
 		LazyColumn(
-			contentPadding = scPadding,
+			contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.scaffold_padding)),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 			modifier = Modifier
 				.fillMaxSize()
-				.padding(horizontal = dimensionResource(id = R.dimen.scaffold_padding))
+				.padding(scPadding)
 		) {
 			setSessionSettings(
 				focusDuration = focusDuration,

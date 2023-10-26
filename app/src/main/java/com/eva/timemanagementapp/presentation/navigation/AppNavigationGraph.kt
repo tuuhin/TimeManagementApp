@@ -35,12 +35,14 @@ fun AppNavigationGraph(
 ) {
 	val navController = rememberNavController()
 	val navBackStackEntry by navController.currentBackStackEntryAsState()
+
 	Scaffold(
 		bottomBar = {
 			AppBottomNavigationBar(
 				onRouteSelected = { screen ->
 					navController.navigate(screen.route) {
-						popUpTo(navController.graph.findStartDestination().id) {
+						val startDestination = navController.graph.findStartDestination()
+						popUpTo(id = startDestination.id) {
 							saveState = true
 						}
 						launchSingleTop = true
@@ -80,14 +82,17 @@ fun AppNavigationGraph(
 				val tabIndex by viewModel.tabIndex.collectAsStateWithLifecycle()
 				val selectedModeGraph by viewModel.graphMode.collectAsStateWithLifecycle()
 				val graphContent by viewModel.weeklyGraph.collectAsStateWithLifecycle()
+				val deleteState by viewModel.deleteState.collectAsStateWithLifecycle()
 
 				StatisticsScreen(
 					selectedMode = selectedModeGraph,
 					selectedTab = tabIndex,
 					highlight = sessionHighLights,
+					deleteState = deleteState,
 					graphContent = graphContent,
 					onTabIndexChanged = viewModel::onTabIndexChanged,
-					onModeChanged = viewModel::onTimerModeChanged
+					onModeChanged = viewModel::onTimerModeChanged,
+					onDeleteEvents = viewModel::onDeleteOptions
 				)
 			}
 			composable(

@@ -29,13 +29,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.eva.timemanagementapp.presentation.statistics.StatisticsTabs
+import com.eva.timemanagementapp.presentation.statistics.utils.StatisticsType
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @Composable
 fun StatisticsTabRow(
 	selectedIndex: Int,
-	onTabChanged: (StatisticsTabs) -> Unit,
+	onTabChanged: (StatisticsType) -> Unit,
 	modifier: Modifier = Modifier,
 	indicatorColor: Color = MaterialTheme.colorScheme.primaryContainer,
 	selectedItemColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -45,9 +45,9 @@ fun StatisticsTabRow(
 
 	val options = remember {
 		listOf(
-			StatisticsTabs.All,
-			StatisticsTabs.Weekly,
-			StatisticsTabs.Today
+			StatisticsType.All,
+			StatisticsType.Weekly,
+			StatisticsType.Today
 		)
 	}
 

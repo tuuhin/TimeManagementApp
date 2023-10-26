@@ -21,10 +21,15 @@ import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.SessionHighlightModel
 import com.eva.timemanagementapp.domain.models.SessionReportModel
 import com.eva.timemanagementapp.domain.models.TimerModes
+import com.eva.timemanagementapp.presentation.statistics.composables.DeleteStatisticsDialog
 import com.eva.timemanagementapp.presentation.statistics.composables.SessionHighlights
 import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsGraphContainer
 import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsGraphHeading
 import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsTabRow
+import com.eva.timemanagementapp.presentation.statistics.composables.StatisticsTopBarOptions
+import com.eva.timemanagementapp.presentation.statistics.utils.DeleteEvents
+import com.eva.timemanagementapp.presentation.statistics.utils.DeleteStatisticsState
+import com.eva.timemanagementapp.presentation.statistics.utils.StatisticsType
 import com.eva.timemanagementapp.presentation.utils.PreviewFakes
 import com.eva.timemanagementapp.presentation.utils.ShowContent
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
@@ -33,18 +38,34 @@ import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 @Composable
 fun StatisticsScreen(
 	selectedMode: TimerModes,
-	selectedTab: StatisticsTabs,
+	selectedTab: StatisticsType,
 	highlight: SessionHighlightModel,
+	deleteState: DeleteStatisticsState,
 	graphContent: ShowContent<List<SessionReportModel>>,
-	onTabIndexChanged: (StatisticsTabs) -> Unit,
+	onTabIndexChanged: (StatisticsType) -> Unit,
+	onDeleteEvents: (DeleteEvents) -> Unit,
 	onModeChanged: (TimerModes) -> Unit,
 	modifier: Modifier = Modifier
 ) {
+
+	if (deleteState.showDialog && deleteState.option != null) {
+		DeleteStatisticsDialog(
+			option = deleteState.option,
+			onDelete = { type -> onDeleteEvents(DeleteEvents.OnConfirmDelete(type)) },
+			onDismissRequest = { onDeleteEvents(DeleteEvents.OnUnSelect) })
+	}
 
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(
 				title = { Text(text = stringResource(id = R.string.navigation_route_statistics)) },
+				actions = {
+					StatisticsTopBarOptions(
+						onOptionSelect = { type ->
+							onDeleteEvents(DeleteEvents.OnSelect(type))
+						},
+					)
+				}
 			)
 		},
 		modifier = modifier
@@ -98,13 +119,15 @@ fun StatisticsScreen(
 fun StatisticsScreenPreview() = TimeManagementAppTheme {
 	StatisticsScreen(
 		selectedMode = TimerModes.FOCUS_MODE,
-		selectedTab = StatisticsTabs.All,
+		selectedTab = StatisticsType.All,
 		highlight = PreviewFakes.FAKE_HIGHLIGHT_MODE,
 		graphContent = ShowContent(
 			isLoading = false,
 			content = PreviewFakes.FAKE_SESSION_REPORT_WEEKLY
 		),
+		deleteState = DeleteStatisticsState(),
 		onModeChanged = {},
 		onTabIndexChanged = { },
+		onDeleteEvents = {}
 	)
 }

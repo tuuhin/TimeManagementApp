@@ -59,7 +59,7 @@
   <!--  Statistics options-->
   <string name="statistics_all">All</string>
   <string name="minutes_short_hand">min</string>
-  <string name="statistics_weekly">Weekly</string>
+  <string name="statistics_weekly">Week</string>
   <string name="statistics_today">Today</string>
   <string name="settings_option_cnt_desc">Settings Options</string>
   <string name="statistics_loading">Preparing Graph</string>
@@ -69,4 +69,15 @@
   <!--  Goals Notification-->
   <string name="reminder_notification_title">Session Goals</string>
   <string name="reminder_notification_text">You have successfully completed your today\'s goal</string>
+  <string name="no_notification_perms_title">No notification permissions allowed</string>
+  <string name="no_notification_perms_text">The app required the notification permissions to work</string>
+  <string name="request_permission_button_text">Request Permissions</string>
+
+  <string name="clear_last_week_data">Clear Week Data</string>
+  <string name="clear_today_data">Clear Today\'s Data</string>
+  <string name="delete_statistics_title">Delete Sessions Data</string>
+  <string name="delete_statistics_confirm_button_text">Delete</string>
+  <string name="delete_statistics_dismissbutton_text">Cancel</string>
+  <string name="delete_statistics_text_week">Are you sure? You want to delete this week data,once deleted the data cannot be recovered</string>
+  <string name="delete_statistics_text_today">Are you sure? You want to delete today\'s session data,once deleted the data cannot be recovered</string>
 </resources>

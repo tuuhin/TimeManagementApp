@@ -87,6 +87,8 @@ dependencies {
 	implementation("androidx.room:room-runtime:2.6.0")
 	annotationProcessor("androidx.room:room-compiler:2.6.0")
 	ksp("androidx.room:room-compiler:2.6.0")
+	//downloadable-font
+	implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
 	//tests
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.5")

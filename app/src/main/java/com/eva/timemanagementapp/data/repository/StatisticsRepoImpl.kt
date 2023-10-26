@@ -1,10 +1,12 @@
 package com.eva.timemanagementapp.data.repository
 
 import android.database.sqlite.SQLiteConstraintException
+import com.eva.timemanagementapp.data.room.dao.DaySessionDao
 import com.eva.timemanagementapp.data.room.dao.SessionInfoDao
 import com.eva.timemanagementapp.domain.models.SessionReportModel
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.domain.repository.StatisticsRepository
+import com.eva.timemanagementapp.utils.Resource
 import com.eva.timemanagementapp.utils.extensions.toTwoDecimalFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,12 +16,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 class StatisticsRepoImpl(
 	private val sessionDao: SessionInfoDao,
+	private val daySessionDao: DaySessionDao,
 ) : StatisticsRepository {
-
 
 	override fun sessionAvgMinutes(
 		mode: TimerModes,
@@ -61,6 +64,22 @@ class StatisticsRepoImpl(
 			e.printStackTrace()
 		}
 	}.flowOn(Dispatchers.IO)
+
+	override suspend fun deleteStatisticsData(start: LocalDate?, end: LocalDate): Resource<Unit> {
+		return withContext(Dispatchers.IO) {
+			try {
+				start?.let {
+					daySessionDao.removeDayEntryWithDateRange(start, end)
+				} ?: daySessionDao.removeDayEntryWithDate(end)
+				Resource.Success(Unit, extras = "Deleted Successfully")
+			} catch (e: SQLiteConstraintException) {
+				e.printStackTrace()
+				Resource.Error(errorMessage = e.message ?: "SQL ERROR")
+			} catch (e: Exception) {
+				Resource.Error(errorMessage = "Some Other other occurred")
+			}
+		}
+	}
 
 
 	@OptIn(ExperimentalCoroutinesApi::class)

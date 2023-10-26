@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.eva.timemanagementapp.ui.theme.PromptFontFamily
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 import java.time.LocalTime
 
@@ -54,6 +55,7 @@ fun TimerClockFace(
 				text = "$hour".padStart(2, '0'),
 				style = hourTextStyle.copy(fontFamily = timeFontFamily),
 				color = hourColor,
+				fontFamily = PromptFontFamily,
 			)
 		}
 		Text(
@@ -71,6 +73,7 @@ fun TimerClockFace(
 				text = "$minutes".padStart(2, '0'),
 				style = minuteTextStyle.copy(fontFamily = timeFontFamily),
 				color = minutesColor,
+				fontFamily = PromptFontFamily,
 			)
 		}
 		Text(
@@ -88,6 +91,7 @@ fun TimerClockFace(
 				text = "$seconds".padStart(2, '0'),
 				style = secondsTextStyle.copy(fontFamily = timeFontFamily),
 				color = secondsColor,
+				fontFamily = PromptFontFamily,
 			)
 		}
 	}

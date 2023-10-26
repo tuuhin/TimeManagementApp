@@ -7,8 +7,12 @@ import com.eva.timemanagementapp.domain.models.SessionHighlightModel
 import com.eva.timemanagementapp.domain.models.SessionReportModel
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.domain.repository.StatisticsRepository
+import com.eva.timemanagementapp.presentation.statistics.utils.DeleteEvents
+import com.eva.timemanagementapp.presentation.statistics.utils.DeleteStatisticsState
+import com.eva.timemanagementapp.presentation.statistics.utils.StatisticsType
 import com.eva.timemanagementapp.presentation.utils.ShowContent
 import com.eva.timemanagementapp.presentation.utils.UiEvents
+import com.eva.timemanagementapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +25,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -44,20 +49,23 @@ class StatisticsViewModel @Inject constructor(
 	private val _weeklyGraph = MutableStateFlow(ShowContent<List<SessionReportModel>>())
 	val weeklyGraph = _weeklyGraph.asStateFlow()
 
+	private val _deleteState = MutableStateFlow(DeleteStatisticsState())
+	val deleteState = _deleteState.asStateFlow()
+
 	val tabIndex = savedStateHandle.getStateFlow(key = tabIndexKey, initialValue = 0).map { index ->
 		when (index) {
-			0 -> StatisticsTabs.All
-			1 -> StatisticsTabs.Weekly
-			else -> StatisticsTabs.Today
+			0 -> StatisticsType.All
+			1 -> StatisticsType.Weekly
+			else -> StatisticsType.Today
 		}
 	}.stateIn(
 		scope = viewModelScope,
 		started = SharingStarted.WhileSubscribed(2000L),
-		initialValue = StatisticsTabs.All
+		initialValue = StatisticsType.Weekly
 	)
 
 
-	fun onTabIndexChanged(tab: StatisticsTabs) = savedStateHandle.set(tabIndexKey, tab.tabIndex)
+	fun onTabIndexChanged(tab: StatisticsType) = savedStateHandle.set(tabIndexKey, tab.tabIndex)
 
 	init {
 		tabIndex
@@ -71,9 +79,9 @@ class StatisticsViewModel @Inject constructor(
 			.launchIn(viewModelScope)
 	}
 
-	private fun evaluateStartDate(tab: StatisticsTabs): LocalDate? = when (tab) {
-		StatisticsTabs.Today -> LocalDate.now()
-		StatisticsTabs.Weekly -> LocalDate.now().minusDays(7)
+	private fun evaluateStartDate(tab: StatisticsType): LocalDate? = when (tab) {
+		StatisticsType.Today -> LocalDate.now()
+		StatisticsType.Weekly -> LocalDate.now().minusDays(7)
 		else -> null
 	}
 
@@ -88,8 +96,8 @@ class StatisticsViewModel @Inject constructor(
 		combine(
 			tFocusFlow, tBreakFlow, aFocusFlow, aBreakFlow
 		) { totalFocus, totalBreak, avgFocus, avgBreak ->
-			_sessionHighLight.update {
-				it.copy(
+			_sessionHighLight.update { model ->
+				model.copy(
 					totalFocusCount = totalFocus,
 					totalBreakCount = totalBreak,
 					avgFocus = avgFocus,
@@ -101,15 +109,42 @@ class StatisticsViewModel @Inject constructor(
 
 	fun onTimerModeChanged(mode: TimerModes) = _graphMode.update { mode }
 
-	private fun loadWeeklyReport(mode: TimerModes) = repository.weeklyReport(
-		mode = mode,
-		start = LocalDate.now().minusDays(7)
-	).onEach { report ->
-		_weeklyGraph.update { state ->
-			state.copy(isLoading = false, content = report)
+	private fun loadWeeklyReport(mode: TimerModes) {
+		val weekStart = LocalDate.now().minusDays(7)
+
+		repository.weeklyReport(mode = mode, start = weekStart)
+			.onEach { report ->
+				_weeklyGraph.update { state ->
+					state.copy(isLoading = false, content = report)
+				}
+			}
+			.launchIn(viewModelScope)
+	}
+
+	fun onDeleteOptions(events: DeleteEvents) {
+		when (events) {
+			is DeleteEvents.OnConfirmDelete -> deleteSessionData(events.type)
+
+			is DeleteEvents.OnSelect -> _deleteState.update { state ->
+				state.copy(showDialog = true, option = events.type)
+			}
+
+			DeleteEvents.OnUnSelect -> _deleteState.update { state ->
+				state.copy(showDialog = false, option = null)
+			}
 		}
 	}
-		.launchIn(viewModelScope)
 
+	private fun deleteSessionData(type: StatisticsType) = viewModelScope.launch {
+		val startDate = evaluateStartDate(type)
+
+		when (val results = repository.deleteStatisticsData(startDate)) {
+			is Resource.Error -> _uiEvents.emit(UiEvents.ShowSnackBar(results.errorMessage))
+			is Resource.Success -> results.extras?.let { message ->
+				_uiEvents.emit(UiEvents.ShowSnackBar(message))
+				_deleteState.update { state -> state.copy(showDialog = false, option = null) }
+			}
+		}
+	}
 
 }
