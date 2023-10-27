@@ -1,19 +1,16 @@
 package com.eva.timemanagementapp.presentation.timer.composables
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,43 +25,55 @@ fun TimerPlayPause(
 	state: TimerWatchStates,
 	onPause: () -> Unit,
 	onResume: () -> Unit,
-	modifier: Modifier = Modifier
+	onStop: () -> Unit,
+	modifier: Modifier = Modifier,
+	primaryIconColor: Color = MaterialTheme.colorScheme.primaryContainer,
+	onPrimaryIconColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+	secondaryIconColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+	onSecondaryIconColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 ) {
-	AnimatedVisibility(
-		visible = state !in listOf(TimerWatchStates.IDLE, TimerWatchStates.COMPLETED),
-		enter = fadeIn() + slideInHorizontally(),
-		exit = fadeOut() + slideOutHorizontally()
+	Row(
+		modifier = modifier,
+		horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
+		verticalAlignment = Alignment.CenterVertically
 	) {
-		Row(
-			modifier = modifier,
-			horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
-			verticalAlignment = Alignment.CenterVertically
-		) {
-			FloatingActionButton(
-				onClick = {
-					when (state) {
-						TimerWatchStates.RUNNING -> onPause()
-						TimerWatchStates.PAUSED -> onResume()
-						else -> {}
-					}
-				},
-				contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-				containerColor = MaterialTheme.colorScheme.primaryContainer,
+		when (state) {
+			TimerWatchStates.RUNNING -> FloatingActionButton(
+				onClick = onPause,
+				contentColor = onPrimaryIconColor,
+				containerColor = primaryIconColor,
+				elevation = FloatingActionButtonDefaults.loweredElevation()
 			) {
-				when (state) {
-					TimerWatchStates.RUNNING -> Icon(
-						painter = painterResource(id = R.drawable.ic_pause),
-						contentDescription = stringResource(id = R.string.icon_pause)
-					)
-
-					TimerWatchStates.PAUSED -> Icon(
-						painter = painterResource(id = R.drawable.ic_play),
-						contentDescription = stringResource(id = R.string.icon_play)
-					)
-
-					else -> {}
-				}
+				Icon(
+					painter = painterResource(id = R.drawable.ic_pause),
+					contentDescription = stringResource(id = R.string.icon_pause)
+				)
 			}
+
+			TimerWatchStates.PAUSED -> FloatingActionButton(
+				onClick = onResume,
+				contentColor = onPrimaryIconColor,
+				containerColor = primaryIconColor,
+				elevation = FloatingActionButtonDefaults.loweredElevation()
+			) {
+				Icon(
+					painter = painterResource(id = R.drawable.ic_play),
+					contentDescription = stringResource(id = R.string.icon_play)
+				)
+			}
+
+			else -> {}
+		}
+		FloatingActionButton(
+			onClick = onStop,
+			contentColor = onSecondaryIconColor,
+			containerColor = secondaryIconColor,
+			elevation = FloatingActionButtonDefaults.loweredElevation()
+		) {
+			Icon(
+				painter = painterResource(id = R.drawable.ic_stop),
+				contentDescription = "stop icon"
+			)
 		}
 	}
 }
@@ -81,5 +90,5 @@ fun TimerPlayPausePreview(
 	@PreviewParameter(TimerPlayPausePreviewParams::class)
 	state: TimerWatchStates
 ) = TimeManagementAppTheme {
-	TimerPlayPause(state = state, onPause = {}, onResume = { })
+	TimerPlayPause(state = state, onPause = {}, onResume = { }, onStop = {})
 }

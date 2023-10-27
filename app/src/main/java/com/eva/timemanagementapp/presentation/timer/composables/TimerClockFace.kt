@@ -31,7 +31,6 @@ import java.time.LocalTime
 fun TimerClockFace(
 	time: LocalTime,
 	modifier: Modifier = Modifier,
-	timeFontFamily: FontFamily = FontFamily.Default,
 	hourTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
 	minuteTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
 	separatorStyle: TextStyle = MaterialTheme.typography.displaySmall,
@@ -40,6 +39,7 @@ fun TimerClockFace(
 	minutesColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 	secondsColor: Color = MaterialTheme.colorScheme.onTertiaryContainer,
 	separatorColor: Color = MaterialTheme.colorScheme.tertiary,
+	fontFamily: FontFamily = PromptFontFamily,
 ) {
 	Row(
 		modifier = modifier,
@@ -53,9 +53,9 @@ fun TimerClockFace(
 		) { hour ->
 			Text(
 				text = "$hour".padStart(2, '0'),
-				style = hourTextStyle.copy(fontFamily = timeFontFamily),
+				style = hourTextStyle,
 				color = hourColor,
-				fontFamily = PromptFontFamily,
+				fontFamily = fontFamily,
 			)
 		}
 		Text(
@@ -71,9 +71,9 @@ fun TimerClockFace(
 		) { minutes ->
 			Text(
 				text = "$minutes".padStart(2, '0'),
-				style = minuteTextStyle.copy(fontFamily = timeFontFamily),
+				style = minuteTextStyle,
 				color = minutesColor,
-				fontFamily = PromptFontFamily,
+				fontFamily = fontFamily,
 			)
 		}
 		Text(
@@ -89,12 +89,13 @@ fun TimerClockFace(
 		) { seconds ->
 			Text(
 				text = "$seconds".padStart(2, '0'),
-				style = secondsTextStyle.copy(fontFamily = timeFontFamily),
+				style = secondsTextStyle,
 				color = secondsColor,
-				fontFamily = PromptFontFamily,
+				fontFamily = fontFamily,
 			)
 		}
 	}
+
 }
 
 private fun AnimatedContentTransitionScope<Int>.incrementAnimation(): ContentTransform {

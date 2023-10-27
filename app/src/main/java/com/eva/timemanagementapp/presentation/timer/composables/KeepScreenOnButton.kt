@@ -35,8 +35,8 @@ fun KeepScreenOnButton(
 	modifier: Modifier = Modifier,
 	onChange: ((Boolean) -> Unit)? = null,
 	view: View = LocalView.current,
-	containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-	contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+	containerColor: Color = MaterialTheme.colorScheme.background,
+	contentColor: Color = MaterialTheme.colorScheme.onBackground,
 ) {
 
 	var isFlagSet by remember { mutableStateOf(false) }
@@ -56,9 +56,7 @@ fun KeepScreenOnButton(
 				modifier = Modifier.padding(4.dp)
 			)
 		},
-		shape = MaterialTheme.shapes.extraSmall,
-		containerColor = MaterialTheme.colorScheme.inverseSurface,
-		contentColor = MaterialTheme.colorScheme.inverseOnSurface
+		shape = MaterialTheme.shapes.extraSmall
 	) {
 		IconButton(
 			onClick = {

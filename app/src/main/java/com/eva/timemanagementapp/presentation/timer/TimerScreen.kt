@@ -1,17 +1,25 @@
 package com.eva.timemanagementapp.presentation.timer
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +29,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.TimerModes
 import com.eva.timemanagementapp.domain.stopwatch.TimerWatchStates
@@ -30,6 +39,8 @@ import com.eva.timemanagementapp.presentation.timer.composables.TimerModeBanner
 import com.eva.timemanagementapp.presentation.timer.composables.TimerModeControls
 import com.eva.timemanagementapp.presentation.timer.composables.TimerModesPreviewParams
 import com.eva.timemanagementapp.presentation.timer.composables.TimerPlayPause
+import com.eva.timemanagementapp.presentation.timer.composables.timerModeEnter
+import com.eva.timemanagementapp.presentation.timer.composables.timerModeExit
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 import java.time.LocalTime
 
@@ -43,6 +54,7 @@ fun TimerScreen(
 	modifier: Modifier = Modifier,
 	onTimerEvents: (TimerEvents) -> Unit,
 ) {
+
 	Scaffold(
 		modifier = modifier,
 		topBar = {
@@ -55,45 +67,83 @@ fun TimerScreen(
 				}
 			)
 		},
+		floatingActionButtonPosition = FabPosition.Center,
+		floatingActionButton = {
+			AnimatedContent(
+				targetState = state,
+				label = "Something",
+				transitionSpec = {
+					val noTransition = ContentTransform(
+						targetContentEnter = EnterTransition.None,
+						initialContentExit = ExitTransition.None
+					)
+
+					val fromPlayToPause =
+						initialState == TimerWatchStates.RUNNING && targetState == TimerWatchStates.PAUSED
+					val fromPauseToPlay =
+						initialState == TimerWatchStates.PAUSED && targetState == TimerWatchStates.RUNNING
+					if (fromPauseToPlay || fromPlayToPause)
+						return@AnimatedContent noTransition
+
+					if (targetState > initialState) {
+						slideInVertically { height -> height } + fadeIn() togetherWith
+								slideOutVertically { height -> -height } +
+								fadeOut()
+					} else {
+						slideInVertically { height -> -height } + fadeIn() togetherWith
+								slideOutVertically { height -> height } +
+								fadeOut()
+					} using SizeTransform(clip = false)
+				},
+				modifier = Modifier.wrapContentSize(),
+			) { watchStates ->
+				when (watchStates) {
+					TimerWatchStates.IDLE, TimerWatchStates.COMPLETED -> TimerModeControls(
+						mode = mode,
+						onFocusTimer = { onTimerEvents(TimerEvents.OnFocusModeStart) },
+						onBreakTimer = { onTimerEvents(TimerEvents.OnBreakModeStart) },
+						onStop = { onTimerEvents(TimerEvents.OnStopSession) },
+						modifier = Modifier.padding(20.dp)
+					)
+
+					else -> TimerPlayPause(
+						state = watchStates,
+						onPause = { onTimerEvents(TimerEvents.OnPause) },
+						onResume = { onTimerEvents(TimerEvents.OnResume) },
+						onStop = { onTimerEvents(TimerEvents.OnStopSession) },
+						modifier = Modifier.padding(20.dp)
+					)
+				}
+			}
+		}
 	) { scPadding ->
-		Column(
+		Box(
 			modifier = Modifier
-				.fillMaxSize()
 				.padding(scPadding)
-				.padding(horizontal = dimensionResource(id = R.dimen.scaffold_padding)),
-			horizontalAlignment = Alignment.CenterHorizontally,
-			verticalArrangement = Arrangement.SpaceBetween
+				.fillMaxSize()
+				.padding(all = dimensionResource(id = R.dimen.scaffold_padding)),
 		) {
-			Spacer(
-				modifier = Modifier.height(height = dimensionResource(id = R.dimen.timer_spacing))
-			)
-			TimerModeBanner(modes = mode)
+			AnimatedVisibility(
+				visible = state in listOf(TimerWatchStates.RUNNING, TimerWatchStates.PAUSED),
+				enter = timerModeEnter,
+				exit = timerModeExit,
+				modifier = Modifier.align(Alignment.TopCenter)
+			) {
+				TimerModeBanner(
+					mode = mode,
+					elevation = 2.dp,
+					shape = MaterialTheme.shapes.large,
+				)
+			}
 			TimerClockStyle(
 				currentTime = timerTime,
 				timerTime = timerDuration,
 				state = state,
-				modifier = Modifier.padding(all = dimensionResource(id = R.dimen.timer_watch_padding)),
+				modifier = Modifier
+					.align(Alignment.Center)
+					.padding(all = dimensionResource(id = R.dimen.timer_watch_padding)),
 			)
-			AnimatedVisibility(
-				visible = state in listOf(TimerWatchStates.IDLE, TimerWatchStates.COMPLETED),
-				enter = slideInVertically(),
-				exit = slideOutVertically()
-			) {
-				TimerModeControls(
-					mode = mode,
-					onFocusTimer = { onTimerEvents(TimerEvents.OnFocusModeStart) },
-					onBreakTimer = { onTimerEvents(TimerEvents.OnBreakModeStart) },
-					onStop = { onTimerEvents(TimerEvents.OnStopSession) },
-				)
-			}
-			TimerPlayPause(
-				state = state,
-				onPause = { onTimerEvents(TimerEvents.OnPause) },
-				onResume = { onTimerEvents(TimerEvents.OnResume) },
-			)
-			Spacer(
-				modifier = Modifier.height(height = dimensionResource(id = R.dimen.timer_spacing))
-			)
+
 		}
 	}
 }
