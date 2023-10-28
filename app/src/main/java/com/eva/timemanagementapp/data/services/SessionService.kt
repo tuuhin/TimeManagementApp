@@ -118,9 +118,7 @@ class SessionService : Service() {
 	}
 
 	private fun updateNotificationData() = scope.launch(Dispatchers.Main) {
-		combine(
-			stopWatch.state, stopWatch.elapsedTime
-		) { state, time ->
+		combine(stopWatch.state, stopWatch.elapsedTime) { state, time ->
 			when (state) {
 				TimerWatchStates.RUNNING -> {
 					val formattedTIme = time.toHMSFormat()
@@ -221,6 +219,7 @@ class SessionService : Service() {
 	}
 
 	private fun pauseTimer() {
+		Log.i(SERVICE_LOG_TAG, "PAUSE_TIMER")
 		stopWatch.onPause()
 
 		val updatedNotification = notificationHelper
@@ -234,6 +233,7 @@ class SessionService : Service() {
 	}
 
 	private fun onResumeTimer() {
+		Log.i(SERVICE_LOG_TAG, "RESUME_TIMER")
 		stopWatch.onResume()
 
 		val updatedNotification = notificationHelper
@@ -251,9 +251,10 @@ class SessionService : Service() {
 	}
 
 	private fun stopTimer() {
+		Log.i(SERVICE_LOG_TAG, "STOP_TIMER")
+		_timerMode.update { TimerModes.FOCUS_MODE }
 		stopWatch.onReset()
 		stopForeground(STOP_FOREGROUND_REMOVE)
-		_timerMode.update { TimerModes.FOCUS_MODE }
 		// if the app is not in foreground kill the service if stop is clicked
 		stopSelf()
 	}

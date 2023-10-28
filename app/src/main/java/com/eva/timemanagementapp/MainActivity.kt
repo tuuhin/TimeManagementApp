@@ -67,8 +67,11 @@ class MainActivity : ComponentActivity() {
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		installSplashScreen()
+		val splash = installSplashScreen()
+
 		super.onCreate(savedInstanceState)
+
+		splash.setKeepOnScreenCondition { hasServiceBounded.value }
 
 		setContent {
 			TimeManagementAppTheme {

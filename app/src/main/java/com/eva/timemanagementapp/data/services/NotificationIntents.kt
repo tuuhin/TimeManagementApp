@@ -79,7 +79,7 @@ class NotificationIntents(
 			context = context,
 			requestCodes = RequestCodes.START_ACTIVITY,
 			intent = activityIntent.apply {
-				flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+				flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
 			}
 		)
 }
