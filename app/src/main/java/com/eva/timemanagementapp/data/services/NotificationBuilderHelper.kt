@@ -85,9 +85,8 @@ class NotificationBuilderHelper(
 	fun setContentText(text: String) = _notificationBuilder
 		.setContentText(text)
 
-	@SuppressLint("RestrictedApi")
+
 	fun setCompletedNotification(title: String, text: String) = _notificationBuilder
-		.setOngoing(false)
 		.setContentTitle(title)
 		.setContentText(text)
 		.clearActions()

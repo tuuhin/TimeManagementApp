@@ -37,7 +37,10 @@ fun TimerClockStyle(
 	val angle by remember(currentTime, timerTime) {
 		derivedStateOf {
 			val currentTimeSeconds = currentTime.toNanoOfDay().toFloat()
-			val timerTimeSeconds = timerTime.toNanoOfDay().toFloat()
+
+			val timerTimeSeconds = timerTime.toNanoOfDay()
+				.coerceAtLeast(1L).toFloat()
+
 			val angle = (timerTimeSeconds - currentTimeSeconds) / timerTimeSeconds * 360f
 			angle
 		}

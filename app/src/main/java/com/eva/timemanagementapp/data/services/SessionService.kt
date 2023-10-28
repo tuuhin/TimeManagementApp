@@ -75,6 +75,7 @@ class SessionService : Service() {
 			preferences.focusDuration, preferences.breakDuration, _timerMode, stopWatch.state
 		) { focusDuration, breakDuration, mode, state ->
 			if (state != TimerWatchStates.IDLE) return@combine
+			Log.i(SERVICE_LOG_TAG,"UPDATE DURATION AND SET TIMER $mode ")
 			when (mode) {
 				TimerModes.FOCUS_MODE -> {
 					_timerDuration.update { focusDuration }
@@ -119,6 +120,7 @@ class SessionService : Service() {
 
 	private fun updateNotificationData() = scope.launch(Dispatchers.Main) {
 		combine(stopWatch.state, stopWatch.elapsedTime) { state, time ->
+			Log.i(SERVICE_LOG_TAG,"UPDATE NOTIFICATION $state $time ")
 			when (state) {
 				TimerWatchStates.RUNNING -> {
 					val formattedTIme = time.toHMSFormat()
@@ -147,7 +149,7 @@ class SessionService : Service() {
 
 				else -> {}
 			}
-		}.launchIn(scope)
+		}.launchIn(this)
 	}
 
 	override fun onCreate() {

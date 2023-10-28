@@ -112,7 +112,7 @@ fun AppNavigationGraph(
 					.collectAsStateWithLifecycle()
 
 				val timerDuration by service.timerDuration
-					.collectAsStateWithLifecycle(initialValue = LocalTime.MIN)
+					.collectAsStateWithLifecycle(initialValue = LocalTime.of(0, 0, 1))
 
 				TimerScreen(
 					state = state,

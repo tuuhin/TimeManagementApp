@@ -1,3 +1,5 @@
 package com.eva.timemanagementapp.utils.extensions
 
-fun Float.toRadians(): Float = (Math.PI / 180f).toFloat() * this.coerceAtLeast(0f)
+fun Float.toRadians(): Float {
+	return Math.toRadians(this.toDouble()).toFloat()
+}
