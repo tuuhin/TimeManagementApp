@@ -1,6 +1,6 @@
 package com.eva.timemanagementapp.domain.stopwatch
 
-import kotlinx.coroutines.CancellationException
+import com.eva.timemanagementapp.utils.extensions.toMillisOfDay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import java.time.LocalTime
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * The Watch that presents the core functionality of the app ie A Timer
@@ -29,8 +30,9 @@ import java.time.LocalTime
 class TimerWatch(
 	private val scope: CoroutineScope,
 	private val initialTimerInMillis: Long = 1000L,
-	private val interval: Long = 1000L,
 ) {
+
+	private val interval = 1.seconds
 
 	private val _elapsedTime = MutableStateFlow(value = initialTimerInMillis)
 
@@ -55,18 +57,20 @@ class TimerWatch(
 	init {
 		try {
 			timerJob = _states.flatMapLatest { state ->
-				getCurrentTimeInMills(isRunning = state == TimerWatchStates.RUNNING)
+				timeInMillsToSubtract(isRunning = state == TimerWatchStates.RUNNING)
 			}.onEach { diff ->
-				val current = _elapsedTime.updateAndGet { current -> current - diff }
-				if (current < 0L) {
+				val current = _elapsedTime.updateAndGet { current ->
+					(current - diff).coerceAtLeast(0L)
+				}
+				if (current <= 0L) {
 					_states.update { TimerWatchStates.COMPLETED }
+					return@onEach
 				}
 			}.launchIn(scope)
 		} catch (e: Exception) {
-			if (e is CancellationException) {
-				throw e
-			}
+			e.printStackTrace()
 		}
+
 	}
 
 	/**
@@ -76,14 +80,10 @@ class TimerWatch(
 	 */
 	fun cancelTimerJob() = timerJob?.cancel()
 
-	private fun getCurrentTimeInMills(isRunning: Boolean): Flow<Long> = flow {
-		var timeOld = System.currentTimeMillis()
+	private fun timeInMillsToSubtract(isRunning: Boolean): Flow<Long> = flow {
 		while (isRunning) {
+			emit(interval.inWholeMilliseconds)
 			delay(interval)
-			val timeNow = System.currentTimeMillis()
-			val diff = if (timeNow > timeOld) timeNow - timeOld else 0L
-			emit(diff)
-			timeOld = System.currentTimeMillis()
 		}
 	}
 
@@ -119,6 +119,12 @@ class TimerWatch(
 	 * @param minutes Minutes to be set in [Long]
 	 */
 	fun setTime(minutes: Int): Long = _elapsedTime.updateAndGet { minutes * 60 * 1000L }
+
+	/**
+	 * Sets the time for the timer.
+	 * @param time the [LocalTime] to which it's to be set
+	 */
+	fun setTime(time: LocalTime) = _elapsedTime.updateAndGet { time.toMillisOfDay() }
 
 
 	/**

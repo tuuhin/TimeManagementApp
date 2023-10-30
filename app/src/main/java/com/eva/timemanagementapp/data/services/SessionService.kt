@@ -18,7 +18,6 @@ import com.eva.timemanagementapp.utils.Resource
 import com.eva.timemanagementapp.utils.ServiceConstants
 import com.eva.timemanagementapp.utils.SessionServiceActions
 import com.eva.timemanagementapp.utils.extensions.toHMSFormat
-import com.eva.timemanagementapp.utils.extensions.toLocalTime
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 private const val SERVICE_LOG_TAG = "SERVICE_LOG"
@@ -66,7 +66,7 @@ class SessionService : Service() {
 	val timerMode = _timerMode.asStateFlow()
 
 	private val _timerDuration = MutableStateFlow(DurationOption.ONE_MINUTE)
-	val timerDuration = _timerDuration.map { option -> option.minutes.toLocalTime() }
+	val timerDuration = _timerDuration.map { option -> LocalTime.of(0, option.minutes) }
 
 	override fun onBind(intent: Intent): IBinder = binder
 
@@ -156,7 +156,7 @@ class SessionService : Service() {
 		super.onCreate()
 		Log.i(SERVICE_LOG_TAG, "CREATED")
 
-		stopWatch = TimerWatch(scope = scope, interval = 800L)
+		stopWatch = TimerWatch(scope = scope)
 		try {
 			//updates the duration timer
 			updateDurationAndUpdateTimer()
