@@ -59,14 +59,17 @@ class SessionService : Service() {
 	@Inject
 	lateinit var timerRepository: TimerServiceRepository
 
-
 	lateinit var stopWatch: TimerWatch
 
 	private val _timerMode = MutableStateFlow(TimerModes.FOCUS_MODE)
 	val timerMode = _timerMode.asStateFlow()
 
 	private val _timerDuration = MutableStateFlow(DurationOption.ONE_MINUTE)
-	val timerDuration = _timerDuration.map { option -> LocalTime.of(0, option.minutes) }
+	val timerDuration = _timerDuration.map { option ->
+		if (option != DurationOption.ONE_HOUR)
+			LocalTime.of(0, option.minutes)
+		else LocalTime.of(1, 0, 0)
+	}
 
 	override fun onBind(intent: Intent): IBinder = binder
 
@@ -75,7 +78,7 @@ class SessionService : Service() {
 			preferences.focusDuration, preferences.breakDuration, _timerMode, stopWatch.state
 		) { focusDuration, breakDuration, mode, state ->
 			if (state != TimerWatchStates.IDLE) return@combine
-			Log.i(SERVICE_LOG_TAG,"UPDATE DURATION AND SET TIMER $mode ")
+			Log.i(SERVICE_LOG_TAG, "UPDATE DURATION AND SET TIMER $mode ")
 			when (mode) {
 				TimerModes.FOCUS_MODE -> {
 					_timerDuration.update { focusDuration }
@@ -120,7 +123,7 @@ class SessionService : Service() {
 
 	private fun updateNotificationData() = scope.launch(Dispatchers.Main) {
 		combine(stopWatch.state, stopWatch.elapsedTime) { state, time ->
-			Log.i(SERVICE_LOG_TAG,"UPDATE NOTIFICATION $state $time ")
+			Log.i(SERVICE_LOG_TAG, "UPDATE NOTIFICATION $state $time ")
 			when (state) {
 				TimerWatchStates.RUNNING -> {
 					val formattedTIme = time.toHMSFormat()

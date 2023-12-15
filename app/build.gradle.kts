@@ -12,7 +12,6 @@ android {
 	defaultConfig {
 		applicationId = "com.eva.timemanagementapp"
 		minSdk = 26
-		//noinspection EditedTargetSdkVersion
 		targetSdk = 34
 		versionCode = 1
 		versionName = "1.0"
@@ -62,15 +61,15 @@ dependencies {
 
 	implementation("androidx.core:core-ktx:1.12.0")
 	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-	implementation("androidx.activity:activity-compose:1.8.0")
+	implementation("androidx.activity:activity-compose:1.8.2")
 	implementation(platform("androidx.compose:compose-bom:2023.10.01"))
 	implementation("androidx.compose.ui:ui")
 	implementation("androidx.compose.ui:ui-graphics")
 	implementation("androidx.compose.ui:ui-tooling-preview")
 	implementation("androidx.compose.material3:material3")
 	//navigation
-	implementation("androidx.navigation:navigation-compose:2.7.4")
-	implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+	implementation("androidx.navigation:navigation-compose:2.7.6")
+	implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 	//lifecycle runtime compose
 	implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 	//hilt
@@ -81,12 +80,12 @@ dependencies {
 	//splash -api
 	implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 	// material3-mdc only used for theme colors
-	implementation("com.google.android.material:material:1.10.0")
+	implementation("com.google.android.material:material:1.11.0")
 	//room
-	implementation("androidx.room:room-ktx:2.6.0")
-	implementation("androidx.room:room-runtime:2.6.0")
-	annotationProcessor("androidx.room:room-compiler:2.6.0")
-	ksp("androidx.room:room-compiler:2.6.0")
+	implementation("androidx.room:room-ktx:2.6.1")
+	implementation("androidx.room:room-runtime:2.6.1")
+	annotationProcessor("androidx.room:room-compiler:2.6.1")
+	ksp("androidx.room:room-compiler:2.6.1")
 	//downloadable-font
 	implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
 	//tests

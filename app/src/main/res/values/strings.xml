@@ -81,4 +81,6 @@
   <string name="delete_statistics_text_week">Are you sure? You want to delete this week data,once deleted the data cannot be recovered</string>
   <string name="delete_statistics_text_today">Are you sure? You want to delete today\'s session data,once deleted the data cannot be recovered</string>
   <string name="statistics_extra_options">Other Options</string>
+
+  <string name="special_use_case_fro_fgs">This service will be used as to show the current timer time as a notification</string>
 </resources>
