@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -30,7 +32,8 @@ fun AppBottomNavigationBar(
 
 	NavigationBar(
 		modifier = modifier,
-		containerColor = containerColor
+		containerColor = containerColor,
+		windowInsets = WindowInsets.navigationBars
 	) {
 		items.forEach { screen ->
 			val isSelected = isRouteSelected(screen)

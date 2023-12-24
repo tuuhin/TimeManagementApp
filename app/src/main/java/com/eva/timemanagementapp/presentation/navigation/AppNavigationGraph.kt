@@ -60,7 +60,7 @@ fun AppNavigationGraph(
 		NavHost(
 			navController = navController,
 			startDestination = Screens.TimerRoute.route,
-			modifier = modifier.padding(scPadding)
+			modifier = modifier.padding(bottom = scPadding.calculateBottomPadding())
 		) {
 			composable(
 				route = Screens.StatisticsRoute.route,

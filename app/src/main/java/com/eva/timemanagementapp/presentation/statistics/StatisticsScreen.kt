@@ -92,6 +92,7 @@ fun StatisticsScreen(
 				highlight = highlight,
 				modifier = Modifier.fillMaxWidth()
 			)
+			Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.statistics_item_spacing)))
 			StatisticsGraphHeading(
 				selectedMode = selectedMode,
 				onModeChange = onModeChanged,

@@ -2,7 +2,6 @@ package com.eva.timemanagementapp.presentation.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,8 +9,10 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,20 +38,25 @@ fun SettingsScreen(
 	onChangeSettings: (ChangeSettingsEvent) -> Unit,
 	modifier: Modifier = Modifier
 ) {
+
+	val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(
-				title = { Text(text = stringResource(id = R.string.navigation_route_settings)) }
+				title = { Text(text = stringResource(id = R.string.navigation_route_settings)) },
+				scrollBehavior = scrollBehavior
 			)
 		},
 		modifier = modifier
 	) { scPadding ->
 		LazyColumn(
-			contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.scaffold_padding)),
+			contentPadding = scPadding,
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 			modifier = Modifier
 				.fillMaxSize()
-				.padding(scPadding)
+				.nestedScroll(scrollBehavior.nestedScrollConnection)
+				.padding(horizontal = dimensionResource(id = R.dimen.scaffold_padding))
 		) {
 			setSessionSettings(
 				focusDuration = focusDuration,
