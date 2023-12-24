@@ -46,7 +46,7 @@ fun DeleteStatisticsDialog(
 				onClick = onDismissRequest,
 				colors = ButtonDefaults.textButtonColors(contentColor = contentColor)
 			) {
-				Text(text = stringResource(id = R.string.delete_statistics_dismissbutton_text))
+				Text(text = stringResource(id = R.string.delete_statistics_dismiss_button_text))
 			}
 		},
 		title = {

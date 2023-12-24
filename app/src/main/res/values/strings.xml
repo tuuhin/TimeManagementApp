@@ -77,7 +77,7 @@
   <string name="clear_today_data">Clear Today\'s Data</string>
   <string name="delete_statistics_title">Delete Sessions Data</string>
   <string name="delete_statistics_confirm_button_text">Delete</string>
-  <string name="delete_statistics_dismissbutton_text">Cancel</string>
+  <string name="delete_statistics_dismiss_button_text">Cancel</string>
   <string name="delete_statistics_text_week">Are you sure? You want to delete this week data,once deleted the data cannot be recovered</string>
   <string name="delete_statistics_text_today">Are you sure? You want to delete today\'s session data,once deleted the data cannot be recovered</string>
   <string name="statistics_extra_options">Other Options</string>

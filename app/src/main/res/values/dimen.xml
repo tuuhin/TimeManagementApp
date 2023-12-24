@@ -13,6 +13,6 @@
   <dimen name="timer_mode_padding">8dp</dimen>
   <!--  Statistics-->
   <dimen name="statistics_item_spacing">8dp</dimen>
-  <dimen name="statistics_graph_padding">16dp</dimen>
+  <dimen name="statistics_graph_padding">4dp</dimen>
   <dimen name="statistics_header_padding">8dp</dimen>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="surface">#ff1a1b1f</color>
-  <color name="surface_variant">#ff44474e</color>
+  <color name="background">#ff1a1b1f</color>
+  <color name="primary_container">#FF00458F</color>
+  <color name="on_primary_container">#FFD7E2FF</color>
 </resources>
