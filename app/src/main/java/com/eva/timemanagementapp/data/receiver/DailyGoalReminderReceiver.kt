@@ -70,7 +70,7 @@ class DailyGoalReminderReceiver : BroadcastReceiver() {
 				else "You still need to sit for ${notificationData.difference} sessions to reach today's goal"
 
 				val notification =
-					NotificationCompat.Builder(context, context.getString(R.string.channel_id))
+					NotificationCompat.Builder(context, NotificationConstants.CHANNEL_ID)
 						.setContentTitle(context.getString(R.string.reminder_notification_title))
 						.setSmallIcon(R.drawable.ic_timer)
 						.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

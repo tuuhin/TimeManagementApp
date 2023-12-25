@@ -60,7 +60,7 @@ fun AppNavigationGraph(
 		NavHost(
 			navController = navController,
 			startDestination = Screens.TimerRoute.route,
-			modifier = modifier.padding(scPadding)
+			modifier = modifier.padding(bottom = scPadding.calculateBottomPadding())
 		) {
 			composable(
 				route = Screens.StatisticsRoute.route,
@@ -135,6 +135,7 @@ fun AppNavigationGraph(
 				val airplaneMode by settingsViewModel.isAirPlaneModeEnabled.collectAsStateWithLifecycle()
 				val isAllowSave by settingsViewModel.isSaveSessionDataAllowed.collectAsStateWithLifecycle()
 				val reminderTime by settingsViewModel.reminderNotificationTime.collectAsStateWithLifecycle()
+				val isGoalsNotificationActive by settingsViewModel.isGoalsNotificationActive.collectAsStateWithLifecycle()
 
 				SettingsScreen(
 					focusDuration = focusDuration,
@@ -143,6 +144,7 @@ fun AppNavigationGraph(
 					isAirplaneModeEnabled = airplaneMode,
 					isSaveAllowed = isAllowSave,
 					reminderTime = reminderTime,
+					isGoalsNotificationActive = isGoalsNotificationActive,
 					onChangeSettings = settingsViewModel::onChangeSettingsEvent
 				)
 			}

@@ -13,6 +13,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.ui.window.PopupProperties
 import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.SessionNumberOption
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
+import java.text.NumberFormat
 
 @Composable
 fun SessionOptionNumber(
@@ -47,9 +49,17 @@ fun SessionOptionNumber(
 
 	var isDropDownVisible by remember { mutableStateOf(false) }
 
+	val subTitleText by remember(selected) {
+		derivedStateOf {
+			val formatter = NumberFormat.getInstance()
+			val number = formatter.format(selected.number)
+			number
+		}
+	}
+
 	SettingsOptionContainer(
 		title = title,
-		subtitle = "${selected.number}",
+		subtitle = subTitleText,
 		modifier = modifier,
 		containerColor = containerColor,
 		contentColor = contentColor,
@@ -79,8 +89,15 @@ fun SessionOptionNumber(
 			offset = menuAnchor
 		) {
 			SessionNumberOption.entries.forEach { option ->
+				val dropDownItemText by remember {
+					derivedStateOf {
+						val formatter = NumberFormat.getInstance()
+						val number = formatter.format(option.number)
+						number
+					}
+				}
 				DropdownMenuItem(
-					text = { Text(text = "${option.number}") },
+					text = { Text(text = dropDownItemText) },
 					onClick = { onSessionNumberChange(option) },
 					contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.menu_item_padding)),
 				)

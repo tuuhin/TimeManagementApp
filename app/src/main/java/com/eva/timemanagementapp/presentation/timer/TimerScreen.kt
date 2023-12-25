@@ -14,15 +14,18 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -55,6 +58,12 @@ fun TimerScreen(
 	onTimerEvents: (TimerEvents) -> Unit,
 ) {
 
+	val isTimerRunningOrPaused by remember(state) {
+		derivedStateOf {
+			state == TimerWatchStates.RUNNING || state == TimerWatchStates.PAUSED
+		}
+	}
+
 	Scaffold(
 		modifier = modifier,
 		topBar = {
@@ -62,16 +71,43 @@ fun TimerScreen(
 				title = {
 					Text(text = stringResource(id = R.string.navigation_route_timer))
 				},
-				actions = {
-					KeepScreenOnButton()
-				}
+				actions = { KeepScreenOnButton() }
 			)
 		},
-		floatingActionButtonPosition = FabPosition.Center,
-		floatingActionButton = {
+	) { scPadding ->
+		Box(
+			modifier = Modifier
+				.padding(scPadding)
+				.fillMaxSize()
+				.padding(all = dimensionResource(id = R.dimen.scaffold_padding)),
+		) {
+			AnimatedVisibility(
+				visible = isTimerRunningOrPaused,
+				enter = timerModeEnter,
+				exit = timerModeExit,
+				modifier = Modifier.align(Alignment.TopCenter)
+			) {
+				TimerModeBanner(
+					mode = mode,
+					elevation = 2.dp,
+					shape = MaterialTheme.shapes.large,
+				)
+			}
+			TimerClockStyle(
+				currentTime = timerTime,
+				timerTime = timerDuration,
+				state = state,
+				modifier = Modifier
+					.align(Alignment.Center)
+					.fillMaxWidth(0.9f)
+					.padding(all = dimensionResource(id = R.dimen.timer_watch_padding)),
+			)
 			AnimatedContent(
 				targetState = state,
-				label = "Something",
+				label = "Translate the type of actions",
+				modifier = Modifier
+					.align(Alignment.BottomCenter)
+					.offset(y = 20.dp),
 				transitionSpec = {
 					val noTransition = ContentTransform(
 						targetContentEnter = EnterTransition.None,
@@ -95,7 +131,6 @@ fun TimerScreen(
 								fadeOut()
 					} using SizeTransform(clip = false)
 				},
-				modifier = Modifier.wrapContentSize(),
 			) { watchStates ->
 				when (watchStates) {
 					TimerWatchStates.IDLE, TimerWatchStates.COMPLETED -> TimerModeControls(
@@ -115,34 +150,6 @@ fun TimerScreen(
 					)
 				}
 			}
-		}
-	) { scPadding ->
-		Box(
-			modifier = Modifier
-				.padding(scPadding)
-				.fillMaxSize()
-				.padding(all = dimensionResource(id = R.dimen.scaffold_padding)),
-		) {
-			AnimatedVisibility(
-				visible = state in listOf(TimerWatchStates.RUNNING, TimerWatchStates.PAUSED),
-				enter = timerModeEnter,
-				exit = timerModeExit,
-				modifier = Modifier.align(Alignment.TopCenter)
-			) {
-				TimerModeBanner(
-					mode = mode,
-					elevation = 2.dp,
-					shape = MaterialTheme.shapes.large,
-				)
-			}
-			TimerClockStyle(
-				currentTime = timerTime,
-				timerTime = timerDuration,
-				state = state,
-				modifier = Modifier
-					.align(Alignment.Center)
-					.padding(all = dimensionResource(id = R.dimen.timer_watch_padding)),
-			)
 
 		}
 	}

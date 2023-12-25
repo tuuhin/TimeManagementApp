@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,12 +17,15 @@ import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.models.SessionHighlightModel
 import com.eva.timemanagementapp.presentation.utils.PreviewFakes
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
+import java.text.NumberFormat
 
 @Composable
 fun SessionHighlights(
 	highlight: SessionHighlightModel,
 	modifier: Modifier = Modifier
 ) {
+	val formatter = remember { NumberFormat.getInstance() }
+
 	LazyVerticalGrid(
 		modifier = modifier,
 		columns = GridCells.Fixed(2),
@@ -32,7 +36,7 @@ fun SessionHighlights(
 	) {
 		item {
 			HighLightCard(
-				highlight = "${highlight.totalFocusCount}",
+				highlight = formatter.format(highlight.totalFocusCount),
 				highlightText = stringResource(id = R.string.total_focus_count),
 				background = MaterialTheme.colorScheme.primaryContainer,
 				contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -41,7 +45,7 @@ fun SessionHighlights(
 		}
 		item {
 			HighLightCard(
-				highlight = "${highlight.avgFocus}",
+				highlight = formatter.format(highlight.avgFocus),
 				highlightText = stringResource(id = R.string.average_focus_time),
 				highlightUnit = stringResource(id = R.string.minutes_short_hand),
 				background = MaterialTheme.colorScheme.primaryContainer,
@@ -51,14 +55,14 @@ fun SessionHighlights(
 		}
 		item {
 			HighLightCard(
-				highlight = "${highlight.totalBreakCount}",
+				highlight = formatter.format(highlight.totalBreakCount),
 				highlightText = stringResource(id = R.string.total_break_count),
 				modifier = Modifier.fillMaxWidth()
 			)
 		}
 		item {
 			HighLightCard(
-				highlight = "${highlight.avgBreak}",
+				highlight = formatter.format(highlight.avgBreak),
 				highlightText = stringResource(id = R.string.average_break_time),
 				highlightUnit = stringResource(id = R.string.minutes_short_hand),
 				modifier = Modifier.fillMaxWidth()

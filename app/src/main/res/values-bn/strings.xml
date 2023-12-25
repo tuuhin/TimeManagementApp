@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!--  Settings-->
+  <string name="session_settings_title">সেশন</string>
+  <string name="session_focus_title">ফোকাস সময়কাল</string>
+  <string name="session_focus_text">ফোকাস করার জন্য মিনিট</string>
+  <string name="session_break_title">বিরতি সময়কাল</string>
+  <string name="session_break_text">দুটি ফোকাস সেশনের মধ্যে বিরতি</string>
+  <string name="daily_goal_title">দৈনিক লক্ষ্য</string>
+  <string name="session_count_text">একটি সেশন সম্পূর্ণ করার জন্য ফোকাস সময়কালের সংখ্যা</string>
+  <string name="session_notification_title">বিজ্ঞপ্তি</string>
+  <string name="airplane_mode_title">বিমান মোড</string>
+  <string name="airplane_mode_text">বর্তমান বিমান মোড স্থিতি দেখে</string>
+  <string name="statistics_no_data">কোন তথ্য নেই</string>
+  <string name="reminder_time">দৈনিক অনুস্মারক সময়</string>
+  <string name="reminder_time_desc">সেশন সম্পর্কে মনে করিয়ে দেওয়ার সময়</string>
+  <string name="session_other_settings">অন্যান্য</string>
+
+  <!--  Timer-->
+  <string name="turn_on_keep_screen_mode">ডিভাইসের স্ক্রীন চালু রাখুন</string>
+  <string name="timer_focus_mode">ফোকাস মোড</string>
+  <string name="timer_break_mode">ব্রেক মোড</string>
+  <string name="timer_start_focus">ফোকাস শুরু</string>
+  <string name="timer_start_break">বিরতি শুরু করুন</string>
+  <string name="stop_session">সেশন বন্ধ করুন</string>
+  <string name="notification_action_dismiss">বাতিল</string>
+
+  <string name="allow_save_session_data">সেশন সংরক্ষণ করুন</string>
+  <string name="allow_save_session_desc">সেশন ডেটা রেকর্ড করুন</string>
+
+  <!--  Notifications-->
+  <string name="notification_action_pause">বিরতি</string>
+  <string name="notification_action_stop">থামো</string>
+  <string name="notification_action_resume">পুনরায় শুরু</string>
+  <string name="timer_completed_title">টাইমার সম্পূর্ণ</string>
+  <string name="timer_paused_title">টাইমার পজ করা হয়েছে</string>
+  <string name="timer_running_focus_mode_text">ফোকাস মোড চলছে</string>
+  <string name="timer_running_break_mode_text">ব্রেক মোড চলছে</string>
+  <string name="timer_completed_text">আপনি আপনার টাইমার সম্পন্ন করেছেন</string>
+  <string name="notification_active">বিজ্ঞপ্তি দেখান</string>
+  <string name="notification_active_subtitle">সেশন লক্ষ্য সম্পর্কে দৈনিক বিজ্ঞপ্তি</string>
+
+  <!--Navigation-->
+  <string name="navigation_route_statistics">পরিসংখ্যান</string>
+  <string name="navigation_route_timer">টাইমার</string>
+  <string name="navigation_route_settings">সেটিংস</string>
+
+  <!--  Session Highlights-->
+  <string name="total_focus_count">ফোকাস সেশন</string>
+  <string name="total_break_count">ব্রেক সেশন</string>
+  <string name="average_focus_time">গড় ফোকাস সময়</string>
+  <string name="average_break_time">গড় বিরতি</string>
+  <!--  Timer Clock Description-->
+  <string name="timer_running">চলছে</string>
+  <string name="timer_paused">পজ</string>
+  <string name="timer_completed">সম্পন্ন</string>
+  <!--  Statistics Headers-->
+  <string name="highlights_text">হাইলাইট</string>
+  <string name="highlights_graph">চিত্রলেখ</string>
+
+  <!--  Time Units-->
+  <string name="hour_unit">ঘন্টা</string>
+  <string name="minutes_unit">মিনিট</string>
+
+  <!--  Statistics options-->
+  <string name="statistics_all">সব</string>
+  <string name="minutes_short_hand">মিনিট</string>
+  <string name="statistics_weekly">সপ্তাহ</string>
+  <string name="statistics_today">আজ</string>
+  <string name="settings_option_cnt_desc">সেটিংস বিকল্প</string>
+  <string name="statistics_loading">গ্রাফ প্রস্তুত করা হচ্ছে</string>
+  <string name="statistics_graph_subtext">চলতি সপ্তাহের পরিসংখ্যান</string>
+  <string name="time_picker_heading">সময় বেছে নিন</string>
+
+  <!--  Goals Notification-->
+  <string name="reminder_notification_title">সেশনের লক্ষ্য</string>
+  <string name="reminder_notification_text">আপনি আপনার আজকের লক্ষ্য সফলভাবে সম্পন্ন করেছেন</string>
+  <string name="no_notification_perms_title">কোন বিজ্ঞপ্তি অনুমতি অনুমোদিত</string>
+  <string name="no_notification_perms_text">অ্যাপটির কাজ করার জন্য বিজ্ঞপ্তির অনুমতি প্রয়োজন</string>
+  <string name="request_permission_button_text">অনুমতি অনুরোধ</string>
+
+  <string name="clear_last_week_data">সপ্তাহের ডেটা সাফ করুন</string>
+  <string name="clear_today_data">আজকের ডেটা সাফ করুন</string>
+  <string name="delete_statistics_title">সেশন ডেটা মুছুন</string>
+  <string name="delete_statistics_confirm_button_text">মুছে ফেলা</string>
+  <string name="delete_statistics_dismiss_button_text">বাতিল করুন</string>
+  <string name="delete_statistics_text_week">তুমি কি নিশ্চিত? আপনি এই সপ্তাহের ডেটা মুছতে চান, একবার মুছে ফেলা হলে ডেটা পুনরুদ্ধার করা যাবে না</string>
+  <string name="delete_statistics_text_today">তুমি কি নিশ্চিত? আপনি আজকের সেশনের ডেটা মুছতে চান, একবার মুছে ফেলা হলে ডেটা পুনরুদ্ধার করা যাবে না</string>
+  <string name="statistics_extra_options">अन्य विकल्प</string>
+
+  <!--  Dialog Actions Text-->
+  <string name="dialog_confirm_text">সম্পন্ন</string>
+  <string name="dialog_dismiss_text">বাতিল</string>
+</resources>

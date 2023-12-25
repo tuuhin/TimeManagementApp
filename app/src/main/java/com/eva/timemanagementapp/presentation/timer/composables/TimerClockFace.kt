@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.ui.theme.PromptFontFamily
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
+import java.text.NumberFormat
 import java.time.LocalTime
 
 @Composable
@@ -41,6 +43,10 @@ fun TimerClockFace(
 	separatorColor: Color = MaterialTheme.colorScheme.tertiary,
 	fontFamily: FontFamily = PromptFontFamily,
 ) {
+	val numberFormatter = remember { NumberFormat.getInstance() }
+
+	val paddingCharacter = remember { numberFormatter.format(0).first() }
+
 	Row(
 		modifier = modifier,
 		horizontalArrangement = Arrangement.Center,
@@ -52,7 +58,7 @@ fun TimerClockFace(
 			transitionSpec = { incrementAnimation() },
 		) { hour ->
 			Text(
-				text = "$hour".padStart(2, '0'),
+				text = numberFormatter.format(hour).padStart(2, paddingCharacter),
 				style = hourTextStyle,
 				color = hourColor,
 				fontFamily = fontFamily,
@@ -70,7 +76,7 @@ fun TimerClockFace(
 			transitionSpec = { incrementAnimation() },
 		) { minutes ->
 			Text(
-				text = "$minutes".padStart(2, '0'),
+				text = numberFormatter.format(minutes).padStart(2, paddingCharacter),
 				style = minuteTextStyle,
 				color = minutesColor,
 				fontFamily = fontFamily,
@@ -88,7 +94,7 @@ fun TimerClockFace(
 			transitionSpec = { incrementAnimation() },
 		) { seconds ->
 			Text(
-				text = "$seconds".padStart(2, '0'),
+				text = numberFormatter.format(seconds).padStart(2, paddingCharacter),
 				style = secondsTextStyle,
 				color = secondsColor,
 				fontFamily = fontFamily,

@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.eva.timemanagementapp.R
+import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 
 @Composable
 fun NoPermissionsFound(
@@ -63,6 +64,6 @@ fun NoPermissionsFound(
 	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
 @Composable
-fun NoPermissionsFoundPreview() {
+fun NoPermissionsFoundPreview() = TimeManagementAppTheme {
 	NoPermissionsFound(checkPerms = {})
 }

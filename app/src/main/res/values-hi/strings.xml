@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="session_settings_title">सत्र</string>
+  <string name="session_focus_title">फोकस अवधि</string>
+  <string name="session_focus_text">ध्यान केंद्रित करने के लिए मिनट</string>
+  <string name="session_break_title">ब्रेक अवधि</string>
+  <string name="session_break_text">दो फोकस सत्रों के बीच में ब्रेक</string>
+  <string name="daily_goal_title">दैनिक लक्ष्य</string>
+  <string name="session_count_text">किसी सत्र को पूरा करने के लिए फोकस अवधि की संख्या</string>
+  <string name="session_notification_title">अधिसूचना</string>
+  <string name="airplane_mode_title">विमान मोड</string>
+  <string name="airplane_mode_text">वर्तमान हवाई जहाज मोड स्थिति को देखता है</string>
+  <string name="statistics_no_data">कोई डेटा मौजूद नहीं</string>
+  <string name="reminder_time">दैनिक अनुस्मारक समय</string>
+  <string name="reminder_time_desc">सत्र के बारे में याद दिलाने का समय</string>
+  <string name="session_other_settings">अन्य</string>
+
+  <!--  Notification -->
+  <string name="notification_action_pause">विराम</string>
+  <string name="notification_action_stop">रुकना</string>
+  <string name="notification_action_resume">फिर से शुरू</string>
+  <string name="timer_completed_title">टाइमर पूरा हो गया है</string>
+  <string name="timer_paused_title">टाइमर रुका हुआ है</string>
+  <string name="timer_running_focus_mode_text">फोकस मोड चल रहा है</string>
+  <string name="timer_running_break_mode_text">ब्रेक मोड चल रहा है</string>
+  <string name="timer_completed_text">आपने अपना टाइमर पूरा कर लिया है</string>
+  <string name="notification_active">अधिसूचना दिखाएं</string>
+  <string name="notification_active_subtitle">सत्र लक्ष्यों के बारे में प्रतिदिन सूचना</string>
+
+  <!--  Timer Clock Description-->
+  <string name="timer_running">चल रही है</string>
+  <string name="timer_paused">रोके गए</string>
+  <string name="timer_completed">पुरा होना।</string>
+
+  <!--Navigation-->
+  <string name="navigation_route_statistics">आंकड़े</string>
+  <string name="navigation_route_timer">घड़ी</string>
+  <string name="navigation_route_settings">समायोजन</string>
+
+  <!--  Timer-->
+  <string name="turn_on_keep_screen_mode">स्क्रीन चालू रखें</string>
+  <string name="timer_focus_mode">संकेन्द्रित विधि</string>
+  <string name="timer_break_mode">ब्रेक मोड</string>
+  <string name="timer_start_focus">फोकस प्रारंभ करें</string>
+  <string name="timer_start_break">ब्रेक प्रारंभ करें</string>
+  <string name="stop_session">सत्र रोकें</string>
+  <string name="notification_action_dismiss">नकार</string>
+
+  <string name="allow_save_session_data">सत्र सहेजें</string>
+  <string name="allow_save_session_desc">सत्र डेटा रिकॉर्ड करेंा</string>
+
+  <!--  Session Highlights-->
+  <string name="total_focus_count">फोकस सत्र</string>
+  <string name="total_break_count">ब्रेक सत्र</string>
+  <string name="average_focus_time">औसत फोकस समय</string>
+  <string name="average_break_time">औसत विराम समय</string>
+
+  <!--  Statistics Headers-->
+  <string name="highlights_text">हाइलाइट</string>
+  <string name="highlights_graph">ग्राफ़</string>
+
+  <!--  Time Units-->
+  <string name="hour_unit">घंटा</string>
+  <string name="minutes_unit">मिनट</string>
+
+  <!--  Statistics options-->
+  <string name="statistics_all">सभी</string>
+  <string name="minutes_short_hand">मिनट</string>
+  <string name="statistics_weekly">सप्ताह</string>
+  <string name="statistics_today">आज</string>
+  <string name="settings_option_cnt_desc">सेटिंग्स विकल्प</string>
+  <string name="statistics_loading">ग्राफ तैयार हो रहा है</string>
+  <string name="statistics_graph_subtext">वर्तमान सप्ताह के आँकड़े</string>
+  <string name="time_picker_heading">समय चुनें</string>
+
+  <!--  Goals Notification-->
+  <string name="reminder_notification_title">सत्र लक्ष्य</string>
+  <string name="reminder_notification_text">आपने अपना आज का लक्ष्य सफलतापूर्वक पूरा कर लिया है</string>
+  <string name="no_notification_perms_title">किसी अधिसूचना अनुमति की अनुमति नहीं है</string>
+  <string name="no_notification_perms_text">ऐप को काम करने के लिए अधिसूचना अनुमतियों की आवश्यकता है</string>
+  <string name="request_permission_button_text">अनुमतियाँ अनुरोध करें</string>
+
+  <string name="clear_last_week_data">सप्ताह डेटा साफ़ करें</string>
+  <string name="clear_today_data">आज का डेटा साफ़ करें</string>
+  <string name="delete_statistics_title">सत्र डेटा हटाएँ</string>
+  <string name="delete_statistics_confirm_button_text">हटाएँ</string>
+  <string name="delete_statistics_dismiss_button_text">रद्द करें</string>
+  <string name="delete_statistics_text_week">क्या आपको यकीन है? आप इस सप्ताह का डेटा हटाना चाहते हैं, एक बार डिलीट होने के बाद डेटा पुनर्प्राप्त नहीं किया जा सकता है</string>
+  <string name="delete_statistics_text_today">क्या आपको यकीन है? आप आज के सत्र का डेटा हटाना चाहते हैं, एक बार डिलीट होने के बाद डेटा पुनर्प्राप्त नहीं किया जा सकता</string>
+  <string name="statistics_extra_options">अन्य विकल्प</string>
+
+  <!--  Dialog Actions Text-->
+  <string name="dialog_confirm_text">हो गया</string>
+  <string name="dialog_dismiss_text">नकार</string>
+</resources>

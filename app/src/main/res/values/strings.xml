@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">TimeManagementApp</string>
+  <string name="app_name" translatable="false">TimeManagementApp</string>
   <!--  Settings-->
   <string name="session_settings_title">Session</string>
   <string name="session_focus_title">Focus Duration</string>
@@ -11,22 +11,30 @@
   <string name="session_notification_title">Notification</string>
   <string name="airplane_mode_title">Airplane Mode</string>
   <string name="airplane_mode_text">Views Current Airplane Mode Status</string>
-  <string name="statistics_nodata">No Data Available</string>
+  <string name="statistics_no_data">No Data Available</string>
   <string name="reminder_time">Daily Reminder Time</string>
   <string name="reminder_time_desc">Time to remind about session</string>
   <string name="session_other_settings">Others</string>
 
-  <!--  Notification Channel Info-->
-  <string name="channel_name">Service Channel</string>
-  <string name="channel_id">Service Channel Id</string>
-  <string name="channel_desc">A channel to show the current outgoing session</string>
+  <!--  Notification -->
   <string name="notification_action_pause">Pause</string>
   <string name="notification_action_stop">Stop</string>
   <string name="notification_action_resume">Resume</string>
+  <string name="timer_completed_title">Timer is Complete</string>
+  <string name="timer_paused_title">Timer is Paused</string>
+  <string name="timer_running_focus_mode_text">Focus Mode is Running</string>
+  <string name="timer_running_break_mode_text">Break Mode is Running</string>
+  <string name="timer_completed_text">You have completed your timer</string>
+  <string name="notification_active">Show Notification</string>
+  <string name="notification_active_subtitle">Knock Daily About Goals</string>
 
   <!--  Timer Control-->
-  <string name="icon_pause">Pause Icon</string>
-  <string name="icon_play">Play Icon</string>
+  <string name="icon_pause" translatable="false">Pause Icon</string>
+  <string name="icon_play" translatable="false">Play Icon</string>
+  <!--  Timer Clock Description-->
+  <string name="timer_running">RUNNING</string>
+  <string name="timer_paused">PAUSED</string>
+  <string name="timer_completed">COMPLETED</string>
 
   <!--Navigation-->
   <string name="navigation_route_statistics">Statistics</string>
@@ -42,7 +50,6 @@
   <string name="stop_session">Stop Session</string>
   <string name="notification_action_dismiss">Dismiss</string>
 
-  <string name="database_name">Time Management App Database</string>
   <string name="allow_save_session_data">Save Sessions</string>
   <string name="allow_save_session_desc">Record Session Data</string>
 
@@ -56,9 +63,14 @@
   <string name="highlights_text">Highlights</string>
   <string name="highlights_graph">Graph</string>
 
+
+  <!--  Time Units-->
+  <string name="hour_unit">Hour</string>
+  <string name="minutes_unit">Minutes</string>
+
   <!--  Statistics options-->
   <string name="statistics_all">All</string>
-  <string name="minutes_short_hand">min</string>
+  <string name="minutes_short_hand">Min</string>
   <string name="statistics_weekly">Week</string>
   <string name="statistics_today">Today</string>
   <string name="settings_option_cnt_desc">Settings Options</string>
@@ -77,10 +89,17 @@
   <string name="clear_today_data">Clear Today\'s Data</string>
   <string name="delete_statistics_title">Delete Sessions Data</string>
   <string name="delete_statistics_confirm_button_text">Delete</string>
-  <string name="delete_statistics_dismissbutton_text">Cancel</string>
+  <string name="delete_statistics_dismiss_button_text">Cancel</string>
   <string name="delete_statistics_text_week">Are you sure? You want to delete this week data,once deleted the data cannot be recovered</string>
   <string name="delete_statistics_text_today">Are you sure? You want to delete today\'s session data,once deleted the data cannot be recovered</string>
   <string name="statistics_extra_options">Other Options</string>
 
-  <string name="special_use_case_fro_fgs">This service will be used as to show the current timer time as a notification</string>
+  <!--  Dialog Actions Text-->
+  <string name="dialog_confirm_text">Done</string>
+  <string name="dialog_dismiss_text">Dismiss</string>
+  <!--  Service Special Use case description-->
+  <string name="special_use_case_fro_fgs" translatable="false">This service will be used as to show the current timer time as a notification</string>
+  <!--  DataBase-->
+  <string name="database_name" translatable="false">Time Management App Database</string>
+
 </resources>

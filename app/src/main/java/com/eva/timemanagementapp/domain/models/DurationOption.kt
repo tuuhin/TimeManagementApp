@@ -10,8 +10,6 @@ enum class DurationOption(val minutes: Int) {
 
 	companion object {
 
-		const val TIME_UNIT = "minutes"
-
 		fun fromNumber(minutes: Int): DurationOption = when (minutes) {
 			ONE_MINUTE.minutes -> ONE_MINUTE
 			FIVE_MINUTES.minutes -> FIVE_MINUTES

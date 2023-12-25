@@ -7,6 +7,7 @@ import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import androidx.core.content.getSystemService
+import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.facade.SettingsPreferences
 import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.domain.models.TimerModes
@@ -123,7 +124,6 @@ class SessionService : Service() {
 
 	private fun updateNotificationData() = scope.launch(Dispatchers.Main) {
 		combine(stopWatch.state, stopWatch.elapsedTime) { state, time ->
-			Log.i(SERVICE_LOG_TAG, "UPDATE NOTIFICATION $state $time ")
 			when (state) {
 				TimerWatchStates.RUNNING -> {
 					val formattedTIme = time.toHMSFormat()
@@ -137,8 +137,8 @@ class SessionService : Service() {
 
 				TimerWatchStates.COMPLETED -> {
 					val notification = notificationHelper.setCompletedNotification(
-						title = NotificationConstants.TIMER_COMPLETED_TITLE,
-						text = NotificationConstants.TIMER_COMPLETED_TEXT
+						title = getString(R.string.timer_completed_title),
+						text = getString(R.string.timer_completed_text)
 					)
 
 					notificationManager?.notify(
@@ -149,8 +149,7 @@ class SessionService : Service() {
 					//setting the idle is important as it sets the duration for the next focus or break duration
 					stopWatch.setModeIdle()
 				}
-
-				else -> {}
+				else -> return@combine
 			}
 		}.launchIn(this)
 	}
@@ -208,10 +207,10 @@ class SessionService : Service() {
 		_timerMode.updateAndGet { mode }
 		when (mode) {
 			TimerModes.FOCUS_MODE -> notificationHelper
-				.setContentText(NotificationConstants.TIMER_RUNNING_FOCUS_MODE_TEXT)
+				.setContentText(text = getString(R.string.timer_running_focus_mode_text))
 
 			TimerModes.BREAK_MODE -> notificationHelper
-				.setContentText(NotificationConstants.TIMER_RUNNING_BREAK_MODE_TEXT)
+				.setContentText(text = getString(R.string.timer_running_break_mode_text))
 		}
 
 		notificationHelper.setPauseAction()
@@ -229,7 +228,7 @@ class SessionService : Service() {
 
 		val updatedNotification = notificationHelper
 			.setResumeAction()
-			.setContentText(NotificationConstants.PAUSED_NOTIFICATION_TITLE)
+			.setContentText(getString(R.string.timer_paused_title))
 
 		notificationManager?.notify(
 			NotificationConstants.NOTIFICATION_ID,
@@ -245,8 +244,8 @@ class SessionService : Service() {
 			.setPauseAction()
 			.apply {
 				if (_timerMode.value == TimerModes.FOCUS_MODE)
-					setContentText(NotificationConstants.TIMER_RUNNING_FOCUS_MODE_TEXT)
-				else setContentText(NotificationConstants.TIMER_RUNNING_BREAK_MODE_TEXT)
+					setContentText(getString(R.string.timer_running_focus_mode_text))
+				else setContentText(getString(R.string.timer_running_break_mode_text))
 			}
 
 		notificationManager?.notify(

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.eva.timemanagementapp.R
+import com.eva.timemanagementapp.utils.NotificationConstants
 
 class NotificationBuilderHelper(
 	private val context: Context,
@@ -45,7 +46,7 @@ class NotificationBuilderHelper(
 
 
 	private var _notificationBuilder =
-		NotificationCompat.Builder(context, context.getString(R.string.channel_id))
+		NotificationCompat.Builder(context, NotificationConstants.CHANNEL_ID)
 			.setSmallIcon(R.drawable.ic_timer)
 			.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 			.setPriority(NotificationCompat.PRIORITY_DEFAULT)

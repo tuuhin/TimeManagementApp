@@ -53,6 +53,12 @@ class SettingsViewModel @Inject constructor(
 		initialValue = LocalTime.of(0, 0)
 	)
 
+	val isGoalsNotificationActive = settingsPreferences.isGoalReminderActive.stateIn(
+		viewModelScope,
+		SharingStarted.WhileSubscribed(2000L),
+		initialValue = false
+	)
+
 	val isAirPlaneModeEnabled = airPlaneSettingsInfo.status
 		.stateIn(
 			scope = viewModelScope,
@@ -80,7 +86,19 @@ class SettingsViewModel @Inject constructor(
 
 			is ChangeSettingsEvent.OnReminderTimeChanged -> viewModelScope.launch {
 				settingsPreferences.setReminderTime(event.time)
-				reminderFacade.setGoalReminderAlarm(event.time)
+				val currentValue = isGoalsNotificationActive.value
+				if (currentValue) reminderFacade.setGoalReminderAlarm(event.time)
+
+			}
+
+			ChangeSettingsEvent.ToggleReminderNotification -> viewModelScope.launch {
+				// Toggled
+				val isActive = isGoalsNotificationActive.value
+				settingsPreferences.setIsGoalsReminderActiveness(!isActive)
+				// Set ot canceled the timer
+				val currentTime = reminderNotificationTime.value
+				if (isActive) reminderFacade.stopAlarm()
+				else reminderFacade.setGoalReminderAlarm(currentTime)
 			}
 		}
 	}

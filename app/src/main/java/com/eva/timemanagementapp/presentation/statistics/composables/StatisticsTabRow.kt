@@ -1,6 +1,7 @@
 package com.eva.timemanagementapp.presentation.statistics.composables
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
@@ -66,9 +67,15 @@ fun StatisticsTabRow(
 					label = "Indicator End",
 					transitionSpec = {
 						if (initialState < targetState) {
-							spring(dampingRatio = 1f, stiffness = 100f)
+							spring(
+								dampingRatio = Spring.DampingRatioLowBouncy,
+								stiffness = Spring.StiffnessLow
+							)
 						} else {
-							spring(dampingRatio = 1f, stiffness = 50f)
+							spring(
+								dampingRatio = Spring.DampingRatioLowBouncy,
+								stiffness = Spring.StiffnessVeryLow
+							)
 						}
 					}
 				) { tabPositions[it].right }
@@ -76,10 +83,16 @@ fun StatisticsTabRow(
 				val indicatorStart by transition.animateDp(
 					label = "Indicator Start",
 					transitionSpec = {
-						if (initialState < targetState) {
-							spring(dampingRatio = 1f, stiffness = 50f)
+						if (initialState > targetState) {
+							spring(
+								dampingRatio = Spring.DampingRatioLowBouncy,
+								stiffness = Spring.StiffnessLow
+							)
 						} else {
-							spring(dampingRatio = 1f, stiffness = 100f)
+							spring(
+								dampingRatio = Spring.DampingRatioLowBouncy,
+								stiffness = Spring.StiffnessVeryLow
+							)
 						}
 					}
 				) { tabPositions[it].left }
