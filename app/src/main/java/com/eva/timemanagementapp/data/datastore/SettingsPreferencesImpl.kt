@@ -9,7 +9,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.eva.timemanagementapp.domain.facade.SettingsPreferences
 import com.eva.timemanagementapp.domain.models.DurationOption
 import com.eva.timemanagementapp.domain.models.SessionNumberOption
-import com.eva.timemanagementapp.utils.extensions.toHMFormat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalTime
@@ -29,16 +28,17 @@ class SettingsPreferencesImpl(
 	private val isSaveSessionKey = booleanPreferencesKey(name = PreferencesKeys.ALLOW_SAVE_SESSIONS)
 	private val reminderTimer = stringPreferencesKey(name = PreferencesKeys.REMINDER_TIME)
 
+	private val goalNotificationActive =
+		booleanPreferencesKey(name = PreferencesKeys.IS_DAILY_NOTIFICATION_ACTIVE)
+
 	override val focusDuration: Flow<DurationOption>
 		get() = context.datastore.data.map { pref ->
-			pref[focusDurationKey]?.let(DurationOption::fromNumber)
-				?: DurationOption.TEN_MINUTES
+			pref[focusDurationKey]?.let(DurationOption::fromNumber) ?: DurationOption.TEN_MINUTES
 		}
 
 	override val breakDuration: Flow<DurationOption>
 		get() = context.datastore.data.map { pref ->
-			pref[breakDurationKey]?.let(DurationOption::fromNumber)
-				?: DurationOption.FIVE_MINUTES
+			pref[breakDurationKey]?.let(DurationOption::fromNumber) ?: DurationOption.FIVE_MINUTES
 		}
 
 	override val sessionCount: Flow<SessionNumberOption>
@@ -47,14 +47,14 @@ class SettingsPreferencesImpl(
 				?: SessionNumberOption.TWO_TIMES
 		}
 	override val isSaveSessions: Flow<Boolean>
-		get() = context.datastore.data.map { pref ->
-			pref[isSaveSessionKey] ?: false
-		}
+		get() = context.datastore.data.map { pref -> pref[isSaveSessionKey] ?: false }
 
 	override val reminderTime: Flow<LocalTime>
 		get() = context.datastore.data.map { pref ->
 			pref[reminderTimer]?.toLocalTime() ?: LocalTime.of(0, 0)
 		}
+	override val isGoalReminderActive: Flow<Boolean>
+		get() = context.datastore.data.map { pref -> pref[goalNotificationActive] ?: false }
 
 
 	override suspend fun setFocusDuration(duration: DurationOption) {
@@ -74,9 +74,17 @@ class SettingsPreferencesImpl(
 	}
 
 	override suspend fun setReminderTime(time: LocalTime) {
-		context.datastore.edit { pref -> pref[reminderTimer] = time.toHMFormat() }
+		context.datastore.edit { pref ->
+			pref[reminderTimer] = time.format(DateTimeFormatter.ISO_TIME)
+		}
+	}
+
+	override suspend fun setIsGoalsReminderActiveness(isActive: Boolean) {
+		context.datastore.edit { pref ->
+			pref[goalNotificationActive] = isActive
+		}
 	}
 }
 
 private fun String.toLocalTime(): LocalTime =
-	LocalTime.parse(this, DateTimeFormatter.ofPattern("HH:mm"))
+	LocalTime.parse(this, DateTimeFormatter.ISO_TIME)

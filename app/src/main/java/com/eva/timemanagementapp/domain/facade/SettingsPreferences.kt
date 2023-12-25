@@ -17,6 +17,8 @@ interface SettingsPreferences {
 
 	val reminderTime: Flow<LocalTime>
 
+	val isGoalReminderActive: Flow<Boolean>
+
 	suspend fun setFocusDuration(duration: DurationOption)
 
 	suspend fun setBreakDuration(duration: DurationOption)
@@ -26,4 +28,6 @@ interface SettingsPreferences {
 	suspend fun setIsSaveSessions(allow: Boolean)
 
 	suspend fun setReminderTime(time: LocalTime)
+
+	suspend fun setIsGoalsReminderActiveness(isActive: Boolean)
 }

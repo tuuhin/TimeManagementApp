@@ -35,6 +35,7 @@ fun SettingsScreen(
 	isSaveAllowed: Boolean,
 	isAirplaneModeEnabled: Boolean,
 	reminderTime: LocalTime,
+	isGoalsNotificationActive: Boolean,
 	onChangeSettings: (ChangeSettingsEvent) -> Unit,
 	modifier: Modifier = Modifier
 ) {
@@ -65,6 +66,7 @@ fun SettingsScreen(
 				onChangeSettings = onChangeSettings
 			)
 			setNotificationSettings(
+				isGoalReminderActive = isGoalsNotificationActive,
 				reminderTime = reminderTime,
 				sessionCountOption = sessionCountOption,
 				onChangeSettings = onChangeSettings
@@ -83,7 +85,6 @@ fun SettingsScreen(
 @Preview(
 	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
-@Preview
 @Composable
 fun SettingsScreenPreview() = TimeManagementAppTheme {
 	SettingsScreen(
@@ -91,8 +92,9 @@ fun SettingsScreenPreview() = TimeManagementAppTheme {
 		breakDuration = DurationOption.TEN_MINUTES,
 		sessionCountOption = SessionNumberOption.TWO_TIMES,
 		isAirplaneModeEnabled = false,
-		reminderTime = LocalTime.of(0, 0),
+		reminderTime = LocalTime.of(1, 0),
 		onChangeSettings = {},
-		isSaveAllowed = true
+		isSaveAllowed = true,
+		isGoalsNotificationActive = false
 	)
 }

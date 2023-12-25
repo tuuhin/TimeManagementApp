@@ -14,6 +14,7 @@ import java.time.LocalTime
 
 fun LazyListScope.setNotificationSettings(
 	reminderTime: LocalTime,
+	isGoalReminderActive: Boolean,
 	sessionCountOption: SessionNumberOption,
 	onChangeSettings: (ChangeSettingsEvent) -> Unit,
 ) {
@@ -43,6 +44,14 @@ fun LazyListScope.setNotificationSettings(
 			onTimeChanged = {
 				onChangeSettings(ChangeSettingsEvent.OnReminderTimeChanged(it))
 			},
+		)
+	}
+	item(key = R.string.notification_active) {
+		SettingsSwitchOptions(
+			title = stringResource(id = R.string.notification_active),
+			subtitle = stringResource(id = R.string.notification_active_subtitle),
+			isChecked = isGoalReminderActive,
+			onCheckChange = { onChangeSettings(ChangeSettingsEvent.ToggleReminderNotification) },
 		)
 	}
 }

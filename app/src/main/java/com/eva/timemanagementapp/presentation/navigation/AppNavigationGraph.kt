@@ -135,6 +135,7 @@ fun AppNavigationGraph(
 				val airplaneMode by settingsViewModel.isAirPlaneModeEnabled.collectAsStateWithLifecycle()
 				val isAllowSave by settingsViewModel.isSaveSessionDataAllowed.collectAsStateWithLifecycle()
 				val reminderTime by settingsViewModel.reminderNotificationTime.collectAsStateWithLifecycle()
+				val isGoalsNotificationActive by settingsViewModel.isGoalsNotificationActive.collectAsStateWithLifecycle()
 
 				SettingsScreen(
 					focusDuration = focusDuration,
@@ -143,6 +144,7 @@ fun AppNavigationGraph(
 					isAirplaneModeEnabled = airplaneMode,
 					isSaveAllowed = isAllowSave,
 					reminderTime = reminderTime,
+					isGoalsNotificationActive = isGoalsNotificationActive,
 					onChangeSettings = settingsViewModel::onChangeSettingsEvent
 				)
 			}
