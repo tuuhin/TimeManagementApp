@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -26,6 +27,7 @@ import com.eva.timemanagementapp.presentation.utils.PreviewFakes
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 import com.eva.timemanagementapp.utils.extensions.toDayOfMonthFormatted
 import com.eva.timemanagementapp.utils.extensions.toReadableWeekday
+import java.text.NumberFormat
 import java.time.LocalDate
 
 @Composable
@@ -45,6 +47,8 @@ fun StatisticsGraph(
 ) {
 
 	val textMeasurer = rememberTextMeasurer()
+
+	val numberFormatter = remember { NumberFormat.getInstance() }
 
 	Box(
 		modifier = modifier
@@ -83,9 +87,11 @@ fun StatisticsGraph(
 
 					val maxCount = content.maxOf { it.sessionCount }
 
+					val formattedMaxCount = numberFormatter.format(maxCount)
+
 					//draw max
 					val measureMaxCountLayout = textMeasurer.measure(
-						text = "$maxCount",
+						text = formattedMaxCount,
 						style = axisTextStyle
 					)
 					val maxCountLayoutSize = measureMaxCountLayout.size
@@ -119,9 +125,11 @@ fun StatisticsGraph(
 					val eachBlockWidth = (size.width - wDayTextSize.width) / content.size
 
 					//draw zero
+					val formattedZero = numberFormatter.format(0)
+
 					drawText(
 						textMeasurer = textMeasurer,
-						text = "0",
+						text = formattedZero,
 						style = axisTextStyle.copy(color = axisTextColor),
 						topLeft = Offset(
 							x = 0f,
@@ -129,16 +137,17 @@ fun StatisticsGraph(
 						)
 					)
 					//draw max
-					if (maxCount != 0)
+					if (maxCount != 0) {
 						drawText(
 							textMeasurer = textMeasurer,
-							text = "$maxCount",
+							text = formattedMaxCount,
 							style = axisTextStyle.copy(color = axisTextColor),
 							topLeft = Offset(
 								x = 0f,
 								y = measureMaxCountLayout.size.height * .5f
 							)
 						)
+					}
 
 					content.forEachIndexed { idx, report ->
 						//weekday
@@ -174,7 +183,7 @@ fun StatisticsGraph(
 					}
 
 					if (maxCount == 0) {
-						val noDataText = context.getString(R.string.statistics_nodata)
+						val noDataText = context.getString(R.string.statistics_no_data)
 						val noDataLayoutResults =
 							textMeasurer.measure(
 								text = noDataText,
@@ -212,8 +221,10 @@ fun StatisticsGraph(
 
 						val textColor = if (report.sessionCount == 0) lineColor else onLineColor
 
+						val formattedSessionCount = numberFormatter.format(report.sessionCount)
+
 						val textLayoutResults = textMeasurer.measure(
-							text = "${report.sessionCount}",
+							text = formattedSessionCount,
 							style = axisTextStyle.copy(color = textColor)
 						)
 						if (report.sessionCount != 0) {
@@ -251,6 +262,7 @@ fun StatisticsGraph(
 @Preview(
 	uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
+@Preview(locale = "bn")
 @Composable
 fun StatisticsGraphPreview() = TimeManagementAppTheme {
 	Surface(

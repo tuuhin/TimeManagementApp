@@ -1,5 +1,6 @@
 package com.eva.timemanagementapp.presentation.timer.composables
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -19,10 +20,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.eva.timemanagementapp.R
 import com.eva.timemanagementapp.domain.stopwatch.TimerWatchStates
 import com.eva.timemanagementapp.ui.theme.TimeManagementAppTheme
 import java.time.LocalTime
@@ -33,6 +36,7 @@ fun TimerClockStyle(
 	timerTime: LocalTime,
 	state: TimerWatchStates,
 	modifier: Modifier = Modifier,
+	context: Context = LocalContext.current
 ) {
 	val angle by remember(currentTime, timerTime) {
 		derivedStateOf {
@@ -44,6 +48,10 @@ fun TimerClockStyle(
 			val angle = (timerTimeSeconds - currentTimeSeconds) / timerTimeSeconds * 360f
 			angle
 		}
+	}
+
+	val showTimerState by remember(state) {
+		derivedStateOf { state != TimerWatchStates.IDLE }
 	}
 
 	Box(
@@ -58,7 +66,7 @@ fun TimerClockStyle(
 			shadowColor = MaterialTheme.colorScheme.onPrimaryContainer
 		)
 		AnimatedVisibility(
-			visible = state != TimerWatchStates.IDLE,
+			visible = showTimerState,
 			enter = fadeIn(),
 			exit = fadeOut(),
 			modifier = Modifier
@@ -66,7 +74,12 @@ fun TimerClockStyle(
 				.offset(y = (-40).dp),
 		) {
 			Text(
-				text = state.name,
+				text = when (state) {
+					TimerWatchStates.RUNNING -> context.getString(R.string.timer_running)
+					TimerWatchStates.PAUSED -> context.getString(R.string.timer_paused)
+					TimerWatchStates.COMPLETED -> context.getString(R.string.timer_completed)
+					else -> ""
+				},
 				style = MaterialTheme.typography.titleLarge,
 				color = MaterialTheme.colorScheme.onBackground,
 				fontFamily = FontFamily.Monospace

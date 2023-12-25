@@ -70,7 +70,7 @@ fun SettingsReminderOption(
 					)
 				) {
 					Text(
-						text = "Done",
+						text = stringResource(id = R.string.dialog_confirm_text),
 						style = MaterialTheme.typography.titleSmall
 					)
 				}
@@ -83,7 +83,7 @@ fun SettingsReminderOption(
 					)
 				) {
 					Text(
-						text = "Dismiss",
+						text = stringResource(id = R.string.dialog_dismiss_text),
 						style = MaterialTheme.typography.titleSmall
 					)
 				}

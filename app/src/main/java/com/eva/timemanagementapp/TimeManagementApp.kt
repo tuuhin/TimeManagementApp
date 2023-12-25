@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import com.eva.timemanagementapp.utils.NotificationConstants
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -14,9 +15,9 @@ class TimeManagementApp : Application() {
 	override fun onCreate() {
 		super.onCreate()
 
-		val channelId = getString(R.string.channel_id)
-		val channelName = getString(R.string.channel_name)
-		val channelDescription = getString(R.string.channel_desc)
+		val channelId = NotificationConstants.CHANNEL_ID
+		val channelName = NotificationConstants.CHANNEL_NAME
+		val channelDescription = NotificationConstants.CHANNEL_DESCRIPTION
 
 		val channel = NotificationChannel(
 			channelId,
